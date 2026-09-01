@@ -3,10 +3,10 @@ using System;
 using UdonSharp;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using VGC.Attributes.Runtime;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using VGC.Attributes.Runtime;
 #endif
 
 namespace VGC.Attributes.Udon.Runtime

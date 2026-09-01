@@ -2,10 +2,10 @@
 using System;
 using UdonSharp;
 using UnityEngine;
+using VGC.Attributes.Runtime;
 
 #if UNITY_EDITOR
 using UnityEditor;
-using VGC.Attributes.Runtime;
 using System.Reflection;
 using UnityEngine.UI;
 #endif
