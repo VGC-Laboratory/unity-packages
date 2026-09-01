@@ -66,7 +66,8 @@ sequenceDiagram
 ### Host の選出と引き継ぎ
 
 - `_autoHostSetup`（既定 true）: `Start()` 時に Owner なら自分を Host に設定。
-- `_RequestSetHost()` → `_SetHostOwner(playerId)`（`us_hostPlayerId == -1` のときのみ受理）で明示的に取得も可能。
+- `_RequestSetHost()` → `_SetHostOwner(playerId)` で明示的に取得できる。ゲーム開始前のみ。
+  既にホストが居ても奪い取れる（協調的な引き受けを想定した設計で、奪取の拒否はしない）。
 - Host が退出すると `OnOwnershipTransferred` → `_LeftPlayerCheck()` が発火し、
   `_autoHostSetup` 時はエントリー中プレイヤーの誰か、いなければ自分を新 Host に再割り当てして `RequestSerialization()`。
 
@@ -98,7 +99,12 @@ sequenceDiagram
   **初期値は必ず `-1`**。既定の `0` だと「ホスト未設定」の判定（`== -1`）が全て外れ、
   `_SetHostOwner` が常に失敗し、`OnChangeHost` が `0` を「誰かがホスト」とみなしてしまう。
 - `_autoHostSetup`（既定 true）。
-- `_RequestSetHost()` → `SendCustomNetworkEvent(Owner, _SetHostOwner)` → `[NetworkCallable] _SetHostOwner(playerId)`（未設定時のみ受理）。
+- `_RequestSetHost()` → `SendCustomNetworkEvent(Owner, _SetHostOwner)` → `[NetworkCallable] _SetHostOwner(playerId)`。
+  **既に他プレイヤーがホストでも奪い取れる**（ゲーム開始前に限る）。
+  高性能なPCの参加者が自主的にホストを引き受ける、といった用途を想定している。
+  `US_IsGameStarted` が true の間は受理しない。進行中にホストが変わるとフェーズ管理が破綻するため。
+  この判定は **Owner 側にも置いてある** — UI でボタンを無効化しても
+  `[NetworkCallable]` は直接呼べるので、UI 側のガードだけでは強制できない。
 - `OnChangeHost()` … 次の2段階で動く。
   1. **状態確定** … `_isHost` の更新と、ホストになった場合の `Networking.SetOwner`。
      コールバック件数に依存しないよう foreach の外で行う。
