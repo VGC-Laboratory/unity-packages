@@ -1,0 +1,11 @@
+{
+  "name": "com.vgc-laboratory.attributes",
+  "displayName": "VGC Attributes",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+  "author": { "name": "VGC-Laboratory", "url": "https://github.com/VGC-Laboratory" },
+  "license": "MIT",
+  "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "vpmDependencies": { "com.vrchat.worlds": "^3.10.4" }
+}

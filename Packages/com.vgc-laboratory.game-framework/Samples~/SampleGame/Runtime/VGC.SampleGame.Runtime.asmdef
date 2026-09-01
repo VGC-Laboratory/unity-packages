@@ -1,0 +1,20 @@
+{
+    "name": "VGC.SampleGame.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:99835874ee819da44948776e0df4ff1d",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:a49572adb1211f54ab5b1418fdeb26bd",
+        "GUID:9d322dca0aab95f49ac581d8cb11de8c",
+        "GUID:0d366875c461bfe459495de43db9203d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,23 @@
+{
+  "name": "com.vgc-laboratory.game-framework",
+  "displayName": "VGC Game Framework",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+  "author": { "name": "VGC-Laboratory", "url": "https://github.com/VGC-Laboratory" },
+  "license": "MIT",
+  "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "vpmDependencies": {
+    "com.vrchat.worlds": "^3.10.4",
+    "com.vgc-laboratory.attributes": "^0.1.0",
+    "com.vgc-laboratory.core": "^0.1.0",
+    "com.vgc-laboratory.ui-extension": "^0.1.0"
+  },
+  "samples": [
+    {
+      "displayName": "Sample Game",
+      "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+      "path": "Samples~/SampleGame"
+    }
+  ]
+}
