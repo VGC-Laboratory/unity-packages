@@ -19,6 +19,8 @@ UdonSharpBehaviour を含むため、asmdef と対になる U# Assembly Definiti
 | `Runtime/GameMain.cs` | フェーズ状態機械の本体（partial） |
 | `Runtime/Phase/GameMain.*Phase.cs` | 各フェーズの `Initialize` / `Update`（partial 分割） |
 | `Runtime/GamePlayerSample.cs` | `GamePlayerBase` を継承しただけの枠マーカー |
+| `Scenes/GameSystemSample.unity` | 動作確認用シーン |
+| `Materials/SampleFloor.mat` | 床。Unity組み込みシェーダのみ使用（外部依存なし） |
 
 `GameMain` は `partial class GameMain : UdonSharpBehaviour`、`BehaviourSyncMode.Manual`。
 `IGameHostChanged` / `IGameStateChanged` / `IGamePlayerChanged` を実装。
