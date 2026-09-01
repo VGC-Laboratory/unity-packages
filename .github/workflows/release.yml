@@ -67,3 +67,12 @@ jobs:
             --generate-notes \
             --repo "${GITHUB_REPOSITORY}" || \
           gh release upload "v${V}" out/* --clobber --repo "${GITHUB_REPOSITORY}"
+
+  # GITHUB_TOKEN が作った Release は on: release: を発火させないため、ここから直接呼ぶ
+  listing:
+    needs: release
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/listing.yml

@@ -2,9 +2,11 @@ name: Build VPM Listing
 
 # 全 Release の version entry を集めて index.json を作り、GitHub Pages で配信する。
 # Release から毎回作り直すので、手で index.json を管理する必要はない。
+#
+# on: release: では起動しない。GITHUB_TOKEN が作成した Release は
+# 他のワークフローをトリガーしない仕様のため、release.yml から uses: で呼ぶ。
 on:
-  release:
-    types: [ published, edited, deleted ]
+  workflow_call:
   workflow_dispatch:
 
 permissions:
