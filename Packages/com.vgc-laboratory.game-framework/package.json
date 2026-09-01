@@ -15,9 +15,9 @@
   },
   "samples": [
     {
-      "displayName": "Sample Game",
+      "displayName": "Game Framework Sample",
       "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
-      "path": "Samples~/SampleGame"
+      "path": "Samples~/GameFrameworkSample"
     }
   ]
 }

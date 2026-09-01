@@ -5,7 +5,7 @@ using VGC.Attributes.Runtime;
 using VGC.GameFramework.Runtime;
 using VRC.SDKBase;
 
-namespace VGC.SampleGame.Runtime
+namespace VGC.GameFrameworkSample.Runtime
 {
     public enum GamePhaseSample
     {

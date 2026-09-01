@@ -87,3 +87,14 @@ Thumbs.db
 /Assets/XR.meta
 /Assets/SerializedUdonPrograms/
 /Assets/SerializedUdonPrograms.meta
+
+# Package Manager が Samples~ から展開したもの（正本は Packages/*/Samples~ 側）
+/Assets/Samples/
+/Assets/Samples.meta
+
+# TMP Essentials（利用者が Import するもの）
+/Assets/TextMesh Pro/
+/Assets/TextMesh Pro.meta
+
+# ClientSim の実行時データ
+/ClientSimStorage/

@@ -257,7 +257,7 @@ MonoBehaviour:
       Data: 17|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VGC.SampleGame.Runtime.GamePlayerSample[], VGC.SampleGame.Runtime
+      Data: VGC.GameFrameworkSample.Runtime.GamePlayerSample[], VGC.GameFrameworkSample.Runtime
     - Name: 
       Entry: 8
       Data: 
@@ -389,7 +389,7 @@ MonoBehaviour:
       Data: 27|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: VGC.SampleGame.Runtime.GamePhaseSample, VGC.SampleGame.Runtime
+      Data: VGC.GameFrameworkSample.Runtime.GamePhaseSample, VGC.GameFrameworkSample.Runtime
     - Name: 
       Entry: 8
       Data: 

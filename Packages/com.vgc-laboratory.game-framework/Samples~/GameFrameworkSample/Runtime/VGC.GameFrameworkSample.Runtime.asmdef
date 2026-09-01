@@ -1,5 +1,5 @@
 {
-    "name": "VGC.SampleGame.Runtime",
+    "name": "VGC.GameFrameworkSample.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:99835874ee819da44948776e0df4ff1d",

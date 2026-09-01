@@ -1,6 +1,6 @@
-# VGC.SampleGame
+# Game Framework Sample
 
-[`VGC.GameFramework`](../GameFramework/README.md) の最小リファレンス実装。
+[`com.vgc-laboratory.game-framework`](../../README.md) の最小リファレンス実装。
 
 > ゲーム開始前に 3 秒のカウントダウンをして、10 秒カウントし、ゲームを終了するサンプル
 
@@ -8,10 +8,10 @@
 
 ## 構成
 
-asmdef: `VGC.SampleGame.Runtime`（参照: `UdonSharp.Runtime`, `Unity.TextMeshPro`,
+asmdef: `VGC.GameFrameworkSample.Runtime`（参照: `UdonSharp.Runtime`, `Unity.TextMeshPro`,
 `VGC.Attributes.Runtime`, `VGC.GameFramework.Runtime`, `VGC.Core.Runtime`）。
 UdonSharpBehaviour を含むため、asmdef と対になる U# Assembly Definition
-（`VGC.SampleGame.Runtime.asset`）の Source Assembly も設定すること。
+（`VGC.GameFrameworkSample.Runtime.asset`）の Source Assembly も設定すること。
 
 
 | ファイル | 内容 |

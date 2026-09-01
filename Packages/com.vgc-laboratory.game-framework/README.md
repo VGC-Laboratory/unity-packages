@@ -248,7 +248,7 @@ sequenceDiagram
 4. ゲーム固有ロジックの `UdonSharpBehaviour`（`IGameHostChanged` / `IGamePlayerChanged` / `IGameStateChanged` 実装）を子に配置。
 5. Attribute Executor を実行（メニュートグル ON、またはビルド時）して参照を自動配線。
 
-実装例は [`../SampleGame`](../SampleGame/README.md) を参照。
+実装例は [`Samples~/GameFrameworkSample`](Samples~/GameFrameworkSample/README.md) を参照（Package Manager の Samples から Import できる）。
 
 ---
 

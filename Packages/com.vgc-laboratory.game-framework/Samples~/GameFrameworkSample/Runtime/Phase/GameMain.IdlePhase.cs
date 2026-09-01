@@ -1,4 +1,4 @@
-namespace VGC.SampleGame.Runtime
+namespace VGC.GameFrameworkSample.Runtime
 {
     public partial class GameMain
     {
