@@ -1,0 +1,86 @@
+name: Build VPM Listing
+
+# 全 Release の version entry を集めて index.json を作り、GitHub Pages で配信する。
+# Release から毎回作り直すので、手で index.json を管理する必要はない。
+on:
+  release:
+    types: [ published, edited, deleted ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: index.json を組み立てる
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p site entries
+          # 各 Release に付いている <package id>-<version>.json を集める
+          for tag in $(gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName -q '.[].tagName'); do
+            gh release download "$tag" --repo "$GITHUB_REPOSITORY" \
+              --pattern 'com.vgc-laboratory.*.json' --dir entries --clobber || true
+          done
+          ls entries | sed 's/^/  取得: /'
+
+          # {name, author, url, id, packages:{ <id>:{ versions:{ <ver>: entry } } }}
+          jq -n \
+            --arg url "https://vgc-laboratory.github.io/${GITHUB_REPOSITORY#*/}/index.json" \
+            '{
+               name: "VGC Laboratory",
+               id: "com.vgc-laboratory.listing",
+               author: "VGC-Laboratory",
+               url: $url,
+               packages: {}
+             }' > site/index.json
+
+          for f in entries/*.json; do
+            [ -e "$f" ] || continue
+            id=$(jq -r .name "$f")
+            ver=$(jq -r .version "$f")
+            jq --arg id "$id" --arg ver "$ver" --slurpfile e "$f" \
+               '.packages[$id].versions[$ver] = $e[0]' site/index.json > site/tmp.json
+            mv site/tmp.json site/index.json
+          done
+
+          jq '.packages | to_entries[] | "  \(.key): \(.value.versions | keys | join(", "))"' -r site/index.json
+
+      - name: 動作確認用の index.html
+        run: |
+          cat > site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8">
+          <title>VGC Laboratory VPM Listing</title>
+          <h1>VGC Laboratory VPM Listing</h1>
+          <p>VCC に次の URL を追加してください。</p>
+          <pre id="u"></pre>
+          <p><a href="index.json">index.json</a> /
+             <a href="https://github.com/VGC-Laboratory/unity-packages">リポジトリ</a></p>
+          <script>document.getElementById('u').textContent =
+            location.origin + location.pathname.replace(/index\.html$/, '') + 'index.json';</script>
+          HTML
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

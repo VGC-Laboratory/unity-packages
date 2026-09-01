@@ -46,6 +46,33 @@ VCC のワールドテンプレートを読み込むこと。
 > 全ディレクトリを無視する。自作パッケージを `!com.vgc-laboratory.*/` で除外解除して
 > いないと、**新規ファイルが git status に出ない**。編集する際は消さないこと。
 
+## インストール
+
+VCC の Settings > Packages > Add Repository に次の URL を追加する。
+
+```
+https://vgc-laboratory.github.io/unity-packages/index.json
+```
+
+## リリース手順
+
+全パッケージを同一バージョンで揃えて出す（lockstep）。相互依存が強く、
+片方だけ上げても結局まとめて検証することになるため。
+
+1. 4つの `package.json` の `version` を同じ値に上げる
+2. 依存側の `vpmDependencies` のバージョン範囲も必要なら更新する
+3. commit / push
+4. タグを打つ
+
+```bash
+git tag v0.2.0 && git push origin v0.2.0
+```
+
+`release.yml` が全 package.json のバージョンとタグの一致を確認したうえで、
+パッケージごとに ZIP と listing 用の version entry を作り、Release に添付する。
+Release が publish されると `listing.yml` が全 Release から `index.json` を
+作り直して Pages へ配信する。手で `index.json` を管理する必要はない。
+
 ## TODO
 
 - [ ] `AttributeExecutor` から UdonSharp への直接参照を外し、`attributes` を
