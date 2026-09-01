@@ -75,3 +75,15 @@ crashlytics-build.properties
 # OS
 .DS_Store
 Thumbs.db
+
+# VCC / VRChat SDK が自動生成するプロジェクト側アセット。
+# このリポジトリで管理するのは Packages/com.vgc-laboratory.* のみ。
+# （個別指定にしてあるので、手で追加したテスト用アセットは通常どおり追跡される）
+/Assets/Scenes/
+/Assets/Scenes.meta
+/Assets/UdonSharp/
+/Assets/UdonSharp.meta
+/Assets/XR/
+/Assets/XR.meta
+/Assets/SerializedUdonPrograms/
+/Assets/SerializedUdonPrograms.meta

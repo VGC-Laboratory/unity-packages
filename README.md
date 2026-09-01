@@ -37,6 +37,11 @@ core（VRChat base）
 クローンして Unity で開けば、`Packages/com.vgc-laboratory.*` が埋め込みパッケージとして
 読み込まれ、そのままコンパイル・動作確認できる。
 
+`Assets/` 配下は VCC / VRChat SDK が自動生成するもの（ワールドテンプレート、
+UtilityScripts、XR 設定など）なので追跡していない。クローン直後は空で、
+Unity と VCC が再生成する。Build & Test には自分でシーンを作るか、
+VCC のワールドテンプレートを読み込むこと。
+
 > `Packages/.gitignore` は VCC が生成したもので、1行目の `/*/` が `Packages/` 直下の
 > 全ディレクトリを無視する。自作パッケージを `!com.vgc-laboratory.*/` で除外解除して
 > いないと、**新規ファイルが git status に出ない**。編集する際は消さないこと。
