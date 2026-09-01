@@ -59,6 +59,31 @@ VCC のワールドテンプレートを読み込むこと。
 https://vgc-laboratory.github.io/unity-packages/index.json
 ```
 
+## AI コーディング支援（Claude Code スキル）
+
+`AutoPopulateField` などの属性は、存在を知らないと使われない。
+`.claude/skills/vgc-attributes/` に「いつどれを選ぶか」をまとめた
+Claude Code 用スキルを同梱している。
+
+導入するとエージェントが `GetComponentInParent` を `Start()` に書く代わりに
+属性で解決するようになり、Inspector での手作業も減る。
+
+```bash
+npx skills add VGC-Laboratory/unity-packages
+```
+
+複数プロジェクトで使うならユーザーレベルに置いてもよい。
+
+```bash
+# Windows
+mkdir %USERPROFILE%.claudeskillsvgc-attributes
+copy .claudeskillsvgc-attributesSKILL.md %USERPROFILE%.claudeskillsvgc-attributes
+```
+
+スキルは「選択の指針」だけを持ち、実装詳細は
+[`Packages/com.vgc-laboratory.attributes/README.md`](Packages/com.vgc-laboratory.attributes/README.md)
+に委ねている。内容が二重管理にならないようにするため。
+
 ## リリース手順
 
 全パッケージを同一バージョンで揃えて出す（lockstep）。相互依存が強く、
