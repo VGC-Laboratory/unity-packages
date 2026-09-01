@@ -48,7 +48,12 @@ VCC のワールドテンプレートを読み込むこと。
 
 ## インストール
 
-VCC の Settings > Packages > Add Repository に次の URL を追加する。
+**[→ VCC に追加](https://vgc-laboratory.github.io/unity-packages/)**
+
+上のページの「VCC に追加」ボタンを押すと `vcc://` スキームで VCC が起動し、
+リポジトリ追加の確認が出る。
+
+手動で追加する場合は、VCC の Settings > Packages > Add Repository に次の URL を入れる。
 
 ```
 https://vgc-laboratory.github.io/unity-packages/index.json

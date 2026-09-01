@@ -58,18 +58,57 @@ jobs:
 
           jq '.packages | to_entries[] | "  \(.key): \(.value.versions | keys | join(", "))"' -r site/index.json
 
-      - name: 動作確認用の index.html
+      - name: 案内用の index.html
         run: |
           cat > site/index.html <<'HTML'
-          <!doctype html><meta charset="utf-8">
+          <!doctype html><html lang="ja"><meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
           <title>VGC Laboratory VPM Listing</title>
+          <style>
+            :root { color-scheme: light dark; }
+            body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 3rem auto;
+                   padding: 0 1rem; line-height: 1.7; }
+            code, pre { background: #8883; padding: .15em .4em; border-radius: 4px; }
+            pre { padding: .8em; overflow-x: auto; }
+            .btn { display: inline-block; background: #2b6cb0; color: #fff; text-decoration: none;
+                   padding: .7em 1.4em; border-radius: 6px; font-weight: 600; }
+            .btn:hover { background: #2c5282; }
+          </style>
           <h1>VGC Laboratory VPM Listing</h1>
-          <p>VCC に次の URL を追加してください。</p>
+
+          <p><a class="btn" id="add" href="#">VCC に追加</a></p>
+          <p><small>VRChat Creator Companion がインストールされている環境で開いてください。</small></p>
+
+          <h2>手動で追加する場合</h2>
+          <p>VCC の Settings &gt; Packages &gt; Add Repository に次の URL を入力します。</p>
           <pre id="u"></pre>
+
+          <h2>収録パッケージ</h2>
+          <ul id="pkgs"><li>読み込み中…</li></ul>
+
           <p><a href="index.json">index.json</a> /
              <a href="https://github.com/VGC-Laboratory/unity-packages">リポジトリ</a></p>
-          <script>document.getElementById('u').textContent =
-            location.origin + location.pathname.replace(/index\.html$/, '') + 'index.json';</script>
+
+          <script>
+            var listing = location.origin + location.pathname.replace(/index\.html$/, '') + 'index.json';
+            document.getElementById('u').textContent = listing;
+            // VCC のカスタムURIスキーム。クリックで VCC が起動しリポジトリ追加を確認してくる
+            document.getElementById('add').href = 'vcc://vpm/addRepo?url=' + encodeURIComponent(listing);
+            fetch('index.json').then(function (r) { return r.json(); }).then(function (j) {
+              var ul = document.getElementById('pkgs'); ul.innerHTML = '';
+              Object.keys(j.packages || {}).forEach(function (id) {
+                var vers = Object.keys(j.packages[id].versions);
+                var latest = j.packages[id].versions[vers[vers.length - 1]];
+                var li = document.createElement('li');
+                li.innerHTML = '<strong>' + latest.displayName + '</strong> <code>' + id + '</code> ' +
+                               vers.join(', ') + '<br><small>' + (latest.description || '') + '</small>';
+                ul.appendChild(li);
+              });
+            }).catch(function () {
+              document.getElementById('pkgs').innerHTML = '<li>取得に失敗しました</li>';
+            });
+          </script>
+          </html>
           HTML
 
       - uses: actions/configure-pages@v5
