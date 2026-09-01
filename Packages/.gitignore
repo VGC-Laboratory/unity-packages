@@ -1,0 +1,10 @@
+# VCC が生成したもの。1行目の /*/ が Packages/ 直下の全ディレクトリを無視するため、
+# 自作パッケージを明示的に除外解除しないと新規ファイルが追跡されなくなる
+/*/
+com.vrchat.*/
+!com.vrchat.core.*/
+!vpm-manifest.json
+!manifest.json
+
+# このリポジトリで管理する埋め込みパッケージ
+!com.vgc-laboratory.*/

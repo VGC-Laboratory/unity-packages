@@ -33,9 +33,13 @@ core（VRChat base）
 
 ## 開発
 
-このリポジトリ単体では Unity プロジェクトになっていない。
-動作確認は、VRChat ワールドプロジェクトの `Packages/` にシンボリックリンクを張るか、
-VPM listing 経由でインストールして行う。
+このリポジトリ自体が VRChat Worlds プロジェクトになっている。
+クローンして Unity で開けば、`Packages/com.vgc-laboratory.*` が埋め込みパッケージとして
+読み込まれ、そのままコンパイル・動作確認できる。
+
+> `Packages/.gitignore` は VCC が生成したもので、1行目の `/*/` が `Packages/` 直下の
+> 全ディレクトリを無視する。自作パッケージを `!com.vgc-laboratory.*/` で除外解除して
+> いないと、**新規ファイルが git status に出ない**。編集する際は消さないこと。
 
 ## TODO
 
