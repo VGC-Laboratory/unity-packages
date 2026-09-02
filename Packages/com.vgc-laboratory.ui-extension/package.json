@@ -1,7 +1,7 @@
 {
   "name": "com.vgc-laboratory.ui-extension",
   "displayName": "VGC UI Extension",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "unity": "2022.3",
   "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
   "author": { "name": "VGC-Laboratory", "url": "https://github.com/VGC-Laboratory" },
@@ -9,6 +9,6 @@
   "url": "https://github.com/VGC-Laboratory/unity-packages",
   "vpmDependencies": {
     "com.vrchat.worlds": "^3.10.4",
-    "com.vgc-laboratory.attributes": "^0.2.0"
+    "com.vgc-laboratory.attributes": "^0.3.0"
   }
 }
