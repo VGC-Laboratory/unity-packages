@@ -47,14 +47,31 @@ namespace VGC.Attributes.Runtime
             var targets = (MonoBehaviour[])ExecutorSharedCache.GetTargets(targetType);
             
             // グループ化
-            var grouped = targets
-                          .Select(b => new
-                          {
-                              Behaviour = b,
-                              Anchor = anchorType == null
-                                  ? (object)"__ALL__"
-                                  : GetAnchorCached(b.transform, anchorType, scope)
-                          })
+            var paired = targets
+                         .Select(b => new
+                         {
+                             Behaviour = b,
+                             Anchor = anchorType == null
+                                 ? (object)"__ALL__"
+                                 : GetAnchorCached(b.transform, anchorType, scope)
+                         })
+                         .ToArray();
+
+            // Anchorが見つからなかったインスタンスにはIndexが割り振られない。
+            // 黙って初期値のまま残ると気付けないため警告する
+            var orphans = paired.Where(x => x.Anchor == null).ToArray();
+            if (orphans.Length > 0)
+            {
+                Debug.LogWarning($"<color=#FF9900>[VGC.AutoAssignIndex] Anchor was not found. Index was not assigned.\n" +
+                                 $"Component: {targetType.Name}\n" +
+                                 $"Field: {field.Name}\n" +
+                                 $"AnchorType: {anchorType.FullName}\n" +
+                                 $"Scope: {scope}\n" +
+                                 $"Count: {orphans.Length}</color>"
+                    , orphans[0].Behaviour);
+            }
+
+            var grouped = paired
                           .Where(x => x.Anchor != null)
                           .GroupBy(x => x.Anchor);
 
@@ -90,7 +107,12 @@ namespace VGC.Attributes.Runtime
             if (AutoAssignIndexCache.AnchorCache.TryGetValue(key, out var cached))
                 return cached;
 
-            var result = ExecuteScopeHelper.FindTarget(t, anchorType, scope);
+            var found = ExecuteScopeHelper.FindTarget(t, anchorType, scope);
+
+            // 破棄済みUnityObjectはobjectへboxingすると `!= null` を通過してしまう。
+            // Unityのnull比較演算子で判定できるここで純粋なnullへ正規化しておく
+            UnityEngine.Object result = found != null ? found : null;
+
             AutoAssignIndexCache.AnchorCache[key] = result;
 
             return result;
