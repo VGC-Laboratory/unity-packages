@@ -1,98 +1,147 @@
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace VGC.Attributes.Runtime
 {
     /// <summary>
-    /// <see cref="ExecutorScope"/> 指定での単体検索
+    /// <see cref="ExecutorScope"/> の解釈を一手に引き受けるヘルパ。
+    /// scope に対する switch はこのクラスの <see cref="FindTargets"/> 1 箇所だけに置き、
+    /// 他の Executor は必ずここを経由すること。
+    /// (解釈が複数箇所にあると片方だけ更新され、黙って null を返す不具合になる)
     /// </summary>
-    public static class ExecuteScopeHelper
+    internal static class ExecuteScopeHelper
     {
-        public static UnityEngine.Object FindTarget(Transform t, Type targetType, ExecutorScope scope)
+        /// <summary>
+        /// <paramref name="scope"/> の範囲から <paramref name="targetType"/> を実装する
+        /// Component を全て取得します。順序は Unity の走査順のままです。
+        /// </summary>
+        /// <param name="t">検索の基準となる Transform</param>
+        /// <param name="targetType">取得したい型。interface も指定できます</param>
+        /// <param name="scope">検索範囲</param>
+        /// <param name="anchorType">
+        /// NearestParent / NearestParentHierarchy で親を特定するための型。
+        /// null の場合は <paramref name="targetType"/> 自身をアンカーとして扱います
+        /// </param>
+        /// <param name="includeInactive">非アクティブな GameObject を含めるか</param>
+        public static Component[] FindTargets(
+            Transform t,
+            Type targetType,
+            ExecutorScope scope,
+            Type anchorType = null,
+            bool includeInactive = true)
         {
             if (t == null || targetType == null)
-                return null;
+                return Array.Empty<Component>();
+
+            if (anchorType == null)
+                anchorType = targetType;
 
             switch (scope)
             {
                 case ExecutorScope.Self:
-                    return t.GetComponent(targetType);
+                    return GetComponents(t, targetType, includeInactive);
 
                 case ExecutorScope.Children:
-                    return t.GetComponentInChildren(targetType, true);
+                    return t.GetComponentsInChildren(targetType, includeInactive);
 
                 case ExecutorScope.ChildrenExcludeSelf:
-                {
-                    foreach (Transform child in t)
-                    {
-                        var comp = child.GetComponentInChildren(targetType, true);
-                        if (comp != null)
-                            return comp;
-                    }
-                    return null;
-                }
+                    return t.GetComponentsInChildren(targetType, includeInactive)
+                            .Where(c => c.transform != t)
+                            .ToArray();
 
                 case ExecutorScope.Parents:
-                    return t.GetComponentInParent(targetType, true);
+                    return t.GetComponentsInParent(targetType, includeInactive);
 
                 case ExecutorScope.Parent:
                 {
                     var parent = t.parent;
-                    if (parent != null)
-                        return parent.GetComponent(targetType);
-                    return null;
+                    return parent != null
+                        ? GetComponents(parent, targetType, includeInactive)
+                        : Array.Empty<Component>();
                 }
 
                 case ExecutorScope.ParentHierarchy:
                 {
-                    // 親が無い場合は自身の階層を対象にする(AutoPopulateUtilityと同じ挙動)
+                    // 親が無い場合は自身の階層を対象にする
                     var root = t.parent != null ? t.parent : t;
-                    return root.GetComponentInChildren(targetType, true);
+                    return root.GetComponentsInChildren(targetType, includeInactive);
                 }
 
                 case ExecutorScope.NearestParent:
                 {
-                    var nearest = FindNearestParentWithComponent(t, targetType);
-                    if (nearest != null)
-                        return nearest.GetComponent(targetType);
-                    return null;
+                    var nearest = FindNearestParentWithComponent(t, anchorType);
+                    return nearest != null
+                        ? GetComponents(nearest, targetType, includeInactive)
+                        : Array.Empty<Component>();
                 }
 
                 case ExecutorScope.NearestParentHierarchy:
                 {
-                    var nearest = FindNearestParentWithComponent(t, targetType);
-                    if (nearest != null)
-                        return nearest.GetComponentInChildren(targetType, true);
-                    return null;
+                    var nearest = FindNearestParentWithComponent(t, anchorType);
+                    return nearest != null
+                        ? nearest.GetComponentsInChildren(targetType, includeInactive)
+                        : Array.Empty<Component>();
                 }
 
                 case ExecutorScope.Root:
-                    return t.root.GetComponent(targetType);
+                    return GetComponents(t.root, targetType, includeInactive);
 
                 case ExecutorScope.RootHierarchy:
-                    return t.root.GetComponentInChildren(targetType, true);
+                    return t.root.GetComponentsInChildren(targetType, includeInactive);
 
                 case ExecutorScope.Scene:
-                    return UnityEngine.Object.FindFirstObjectByType(targetType);
+                    return FindInScene(targetType, includeInactive);
 
                 default:
-                    Debug.LogWarning($"<color=#FF9900>[VGC.ExecuteScopeHelper] Unhandled scope '{scope}'. " +
-                                     $"Returning null for type {targetType.FullName}.</color>", t);
-                    return null;
+                    Debug.LogWarning($"<color=#FF9900>[VGC.ExecuteScopeHelper] Unhandled scope '{scope}'.\n" +
+                                     $"Type: {targetType.FullName}</color>", t);
+                    return Array.Empty<Component>();
             }
         }
 
         /// <summary>
-        /// 最も近い親階層で <paramref name="targetType"/> を持つ Transform を返します。
-        /// 非アクティブ状態は無視します。
+        /// <see cref="FindTargets"/> の先頭 1 件だけを返します。
         /// </summary>
-        private static Transform FindNearestParentWithComponent(Transform t, Type targetType)
+        public static UnityEngine.Object FindTarget(Transform t, Type targetType, ExecutorScope scope)
+        {
+            var found = FindTargets(t, targetType, scope);
+            return found.Length > 0 ? found[0] : null;
+        }
+
+        /// <summary>
+        /// シーン全体から検索します。
+        /// FindObjectsByType は interface を受け付けないため、
+        /// interface 指定時は MonoBehaviour を全走査して絞り込みます。
+        /// </summary>
+        private static Component[] FindInScene(Type targetType, bool includeInactive)
+        {
+            if (typeof(Component).IsAssignableFrom(targetType))
+            {
+                return ExecutorSharedCache.GetTargets(targetType, includeInactive)
+                                          .OfType<Component>()
+                                          .ToArray();
+            }
+
+            return ExecutorSharedCache.GetTargets<MonoBehaviour>(includeInactive)
+                                      .Where(m => targetType.IsAssignableFrom(m.GetType()))
+                                      .Cast<Component>()
+                                      .ToArray();
+        }
+
+        /// <summary>
+        /// 最も近い親階層で <paramref name="anchorType"/> を持つ Transform を返します。
+        /// 親探索時は非アクティブ状態を無視します。
+        /// </summary>
+        private static Transform FindNearestParentWithComponent(Transform t, Type anchorType)
         {
             var current = t.parent;
 
             while (current != null)
             {
-                if (current.GetComponent(targetType) != null)
+                if (current.GetComponent(anchorType) != null)
                     return current;
 
                 current = current.parent;
@@ -100,5 +149,18 @@ namespace VGC.Attributes.Runtime
 
             return null;
         }
+
+        /// <summary>
+        /// 単一 GameObject から取得します。
+        /// includeInactive が false のとき、非アクティブな GameObject は対象外です。
+        /// </summary>
+        private static Component[] GetComponents(Transform t, Type targetType, bool includeInactive)
+        {
+            if (includeInactive || t.gameObject.activeInHierarchy)
+                return t.GetComponents(targetType);
+
+            return Array.Empty<Component>();
+        }
     }
 }
+#endif

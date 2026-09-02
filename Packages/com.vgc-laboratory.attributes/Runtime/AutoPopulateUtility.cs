@@ -1,6 +1,5 @@
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
@@ -34,112 +33,28 @@ namespace VGC.Attributes.Runtime
                 return;
             }
 
-            // 対象のMonoBehaviourを取得
-            MonoBehaviour[] allMonoBehaviours;
-            switch (scope)
+            // 対象のComponentを取得。
+            // ExecutorScope の解釈は ExecuteScopeHelper に集約してある
+            var foundObjects = ExecuteScopeHelper.FindTargets(
+                target.transform,
+                targetType,
+                scope,
+                anchorType,
+                includeInactive);
+
+            // Behaviour 以外(Transform 等)は enabled を持たないので対象のまま残す
+            if (onlyEnabled)
+                foundObjects = foundObjects.Where(c => !(c is Behaviour b) || b.enabled).ToArray();
+
+            // Hierarchy順
+            if (order == ExecutorOrder.Hierarchy)
             {
-                case ExecutorScope.Self:
-                {
-                    allMonoBehaviours = GetComponents(target.gameObject, includeInactive);
-                    break;
-                }
-                case ExecutorScope.Children:
-                {
-                    allMonoBehaviours = target.GetComponentsInChildren<MonoBehaviour>(includeInactive);
-                    break;
-                }
-                case ExecutorScope.ChildrenExcludeSelf:
-                {
-                    var exclude = target.GetComponents<MonoBehaviour>();
-                    allMonoBehaviours = target.GetComponentsInChildren<MonoBehaviour>(includeInactive)
-                                              .Where(m => !exclude.Contains(m))
-                                              .ToArray();
-                    break;
-                }
-                case ExecutorScope.Parents:
-                {
-                    allMonoBehaviours = target.GetComponentsInParent<MonoBehaviour>(includeInactive);
-                    break;
-                }
-                case ExecutorScope.Parent:
-                {
-                    var parent = target.transform.parent;
-                    allMonoBehaviours = parent
-                        ? GetComponents(parent.gameObject, includeInactive)
-                        : Array.Empty<MonoBehaviour>();
-                    break;
-                }
-                case ExecutorScope.ParentHierarchy:
-                {
-                    var parent = target.transform.parent;
-                    allMonoBehaviours = parent
-                        ? parent.GetComponentsInChildren<MonoBehaviour>(includeInactive)
-                        : target.GetComponentsInChildren<MonoBehaviour>(includeInactive);
-                    break;
-                }
-                case ExecutorScope.NearestParent:
-                {
-                    var parent = FindNearestParentWithComponent(target.transform, anchorType);
-                    allMonoBehaviours = parent
-                        ? GetComponents(parent.gameObject, includeInactive)
-                        : Array.Empty<MonoBehaviour>();
-                    break;
-                }
-                case ExecutorScope.NearestParentHierarchy:
-                {
-                    var parent = FindNearestParentWithComponent(target.transform, anchorType);
-
-                    allMonoBehaviours = parent != null
-                        ? parent.GetComponentsInChildren<MonoBehaviour>(includeInactive)
-                        : Array.Empty<MonoBehaviour>();
-                    break;
-                }
-                case ExecutorScope.Root:
-                {
-                    allMonoBehaviours = GetComponents(target.transform.root.gameObject, includeInactive);
-                    break;
-                }
-                case ExecutorScope.RootHierarchy:
-                {
-                    allMonoBehaviours = target.transform.root.GetComponentsInChildren<MonoBehaviour>(includeInactive);
-                    break;
-                }
-                case ExecutorScope.Scene:
-                default:
-                {
-                    allMonoBehaviours = ExecutorSharedCache.GetTargets<MonoBehaviour>(includeInactive);
-                    break;
-                }
+                foundObjects = foundObjects
+                               // ReSharper disable once StringCompareToIsCultureSpecific
+                               .OrderBy(c => ExecutorSharedCache.GetHierarchyIndex(c.transform))
+                               .ToArray();
             }
-            
-            if(onlyEnabled)
-                allMonoBehaviours = allMonoBehaviours.Where(m => m.enabled).ToArray();
-            
-            // targetType (ITarget等) を実装しているものを抽出
-            var foundObjects = FindObjects();
-            UnityEngine.Object[] FindObjects()
-            {
-                var list = new List<Component>();
 
-                foreach (var m in allMonoBehaviours)
-                {
-                    if (!targetType.IsAssignableFrom(m.GetType()))
-                        continue;
-
-                    list.Add(m);
-                }
-
-                if (order == ExecutorOrder.Hierarchy)
-                {
-                    list.Sort((a, b) =>
-                        // ReSharper disable once StringCompareToIsCultureSpecific
-                        ExecutorSharedCache.GetHierarchyIndex(a.transform)
-                                           .CompareTo(ExecutorSharedCache.GetHierarchyIndex(b.transform)));
-                }
-
-                return list.Cast<UnityEngine.Object>().ToArray();
-            }
-            
             // 必須状態で見つからなかった場合の警告表示
             if (required && foundObjects.Length == 0)
             {
@@ -210,41 +125,6 @@ namespace VGC.Attributes.Runtime
                     }
                 }
             }
-        }
-        
-        private static Transform FindNearestParentWithComponent(
-            Transform target,
-            Type targetType,
-            bool includeSelf = false)
-        {
-            var current = includeSelf ? target : target.parent;
-
-            while (current != null)
-            {
-                var components = current.GetComponents<MonoBehaviour>();
-
-                foreach (var component in components)
-                {
-                    if (targetType.IsAssignableFrom(component.GetType()))
-                    {
-                        return current;
-                    }
-                }
-
-                current = current.parent;
-            }
-
-            return null;
-        }
-        
-        private static MonoBehaviour[] GetComponents(
-            GameObject gameObject,
-            bool includeInactive)
-        {
-            if (includeInactive || gameObject.activeInHierarchy)
-                return gameObject.GetComponents<MonoBehaviour>();
-
-            return Array.Empty<MonoBehaviour>();
         }
     }
 }
