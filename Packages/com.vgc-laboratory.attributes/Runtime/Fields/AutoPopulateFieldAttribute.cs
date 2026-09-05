@@ -68,18 +68,7 @@ namespace VGC.Attributes.Runtime
         
         protected static Type ResolveElementType(Type type)
         {
-            if (type.IsArray)
-                return type.GetElementType();
-
-            if (type.IsGenericType)
-            {
-                var genericType = type.GetGenericTypeDefinition();
-
-                if (genericType == typeof(List<>))
-                    return type.GetGenericArguments()[0];
-            }
-
-            return type;
+            return ObjectFieldAssignUtility.ResolveElementType(type);
         }
         
         protected Type ResolveAnchorType(Type targetType)

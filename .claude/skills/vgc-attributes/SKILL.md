@@ -5,10 +5,11 @@ description: >-
   (com.vgc-laboratory.attributes, namespace VGC.Attributes.Runtime). Use when writing or
   reviewing MonoBehaviour / UdonSharpBehaviour code in a Unity project that has this package
   installed, and a field needs a reference to another component, a sibling / child / parent
-  object, an interface implementation, a transform value, or a sequential index. Prefer these
+  object, an interface implementation, a transform value, a sequential index, or a Project
+  asset referenced by GUID (Texture2D, Material, AudioClip, prefab, ScriptableObject). Prefer these
   attributes over GetComponent / GetComponentInParent / GetComponentInChildren in Start(),
-  over FindObjectOfType, and over bare [SerializeField] that the user must wire by hand in the
-  Inspector. Also covers AutoPopulateField, SelfField, FindFirstField, AutoAssignIndexField,
+  over FindObjectOfType, over Resources.Load, and over bare [SerializeField] that the user must
+  wire by hand in the Inspector. Also covers AutoPopulateField, SelfField, FindFirstField, AssetGuidField, AutoAssignIndexField,
   SelfPositionField, SelfRotationField, SelfLocalScaleField, AddButtonSendCustomEventField,
   AddEventTriggerSendCustomEventField, ExecutorScope, ExecutorOrder, and the Attribute Executor.
 license: MIT
@@ -44,6 +45,9 @@ using VGC.Attributes.Runtime;
 | シーン全体から最初の1つ | `[SerializeField, FindFirstField] private GameManager _manager;` |
 | 同型コンポーネントに連番 | `[SerializeField, AutoAssignIndexField(typeof(EntryPanelBase))] private int _index;` |
 | Transform 値の焼き込み | `[SerializeField, SelfPositionField] private Vector3 _initialPos;` |
+| **Project のアセットを GUID で** | `[SerializeField, AssetGuidField("2a3f…c1")] private Texture2D _icon;` |
+| フォルダ配下のアセット全部 | `[SerializeField, AssetGuidField("フォルダのGUID")] private AudioClip[] _clips;` |
+| アトラス内 Sprite など | `[SerializeField, AssetGuidField("…", subAssetName: "icon_0")] private Sprite _sprite;` |
 
 **interface を `targetType` にできる**のが効く場面が多い。`UdonSharpBehaviour[]` で受けて
 `SendCustomEvent(nameof(IFoo._OnBar))` で呼ぶ、というコールバック配線が手作業ゼロになる。
@@ -75,6 +79,9 @@ using VGC.Attributes.Runtime;
   シーン内の同型全部が1グループになり、パネルごとの連番にならない
 - Inspector には読み取り専用で表示される。手で編集しても Executor に上書きされる
 - 配列は `T[]` と `List<T>` の両方に対応
+- **`AssetGuidField` の GUID は `.meta` ファイルの `guid`。** アセットを移動しても追従するが、
+  削除・再インポートで GUID が変わると解決できなくなる（未発見時は `null` が入り警告が出る）。
+  フォルダ指定は `FindAssets` なのでサブフォルダも辿り、path 順（序数比較）に並ぶ
 
 ## Worlds SDK が要る属性
 

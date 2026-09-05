@@ -20,7 +20,8 @@ Attributes/
 │   ├── IExecutorClassAttribute.cs
 │   ├── AutoPopulateUtility.cs
 │   ├── AutoAssignIndexUtility.cs
-│   └── Fields/                 属性の定義本体（7個）
+│   ├── ObjectFieldAssignUtility.cs  解決済みオブジェクトのフィールド書き込み（共通）
+│   └── Fields/                 属性の定義本体（8個）
 └── Editor/                     asmdef: VGC.Attributes.Editor
     └── AttributeExecutor.cs    属性を走査して実行するドライバ
 ```
@@ -91,6 +92,7 @@ Attributes/
 | `SelfPositionField(SelfPositionState)` | Field | `transform.position` を焼き込み。`X/Y/Z` は `float`、`All` は `Vector3` |
 | `SelfRotationField` | Field | `transform.rotation`（`Quaternion`）を焼き込み |
 | `SelfLocalScaleField(SelfLocalScaleState)` | Field | `transform.localScale` を焼き込み。`X/Y/Z` は `float`、`All` は `Vector3` |
+| `AssetGuidField(guid, subAssetName, required)` | Field | GUID で指定した **Project 内のアセット**を代入（`AssetDatabase` 経由）。GUID がフォルダなら配列・`List<T>` に配下（サブフォルダ含む）の該当型アセットを path 順で全件。`subAssetName` でアトラス内 Sprite などのサブアセットを名前指定。未発見時は `null`（配列は要素数0）を書き込み、`required`（既定 `true`）で警告 |
 | `AutoAssignIndexField(anchorType, scope, order)` | Field | 同じ型のコンポーネント群に連番（0,1,2,…）を割り振る。`anchorType` でグループ分けし、既定は `NearestParent` + `Hierarchy` 順 |
 
 
@@ -100,6 +102,8 @@ Udon / uGUI 固有の `AddButtonSendCustomEventField` / `AddEventTriggerSendCust
 ### 補助クラス
 
 - `ExecuteScopeHelper.FindTarget(transform, type, scope)` — スコープ指定の単体検索。
+- `ObjectFieldAssignUtility` — 解決済みの `Object[]` を `SerializedProperty` 経由でフィールドへ書き込む共通処理（配列／`List<T>`／単一、変更判定つき）と、`ResolveElementType`。
+  `AutoPopulateUtility`（Hierarchy 検索）と `AssetGuidFieldAttribute`（Project 検索）が共用する。
 - `ExecutorSharedCache` — `FindObjectsByType` のキャッシュと、階層インデックス文字列（例 `"0001.0003.0002"`）の生成・キャッシュ。`Execute()` の先頭で `Clear()`。
 - `AutoAssignIndexCache` — アンカー解決結果のキャッシュ（`AnchorCache`）と、処理済みの `(コンポーネント型, フィールド名)`（`ProcessedFields`）。
   `AutoAssignIndexUtility.ExecuteField` は1回で同型の全インスタンスに Index を割り振るため、
