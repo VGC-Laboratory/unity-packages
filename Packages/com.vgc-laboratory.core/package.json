@@ -1,7 +1,7 @@
 {
   "name": "com.vgc-laboratory.core",
   "displayName": "VGC Core",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "unity": "2022.3",
   "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。TimeHelper は VRChat のワールド向け API を使う。",
   "author": { "name": "VGC-Laboratory", "url": "https://github.com/VGC-Laboratory" },
