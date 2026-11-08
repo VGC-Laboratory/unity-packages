@@ -167,8 +167,20 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.vgc-laboratory.localization": {
+      "version": "file:../../../Packages/com.vgc-laboratory.localization",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.vgc-laboratory.resources": {
       "version": "file:../../../Packages/com.vgc-laboratory.resources",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.vgc-laboratory.versioning": {
+      "version": "file:../../../Packages/com.vgc-laboratory.versioning",
       "depth": 0,
       "source": "local",
       "dependencies": {}

@@ -1,0 +1,21 @@
+{
+    "name": "VGC.Versioning.Avatar.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:3d9bceffc22a47838727d798ccc6d31b",
+        "GUID:30b3ead8a479494d9c1f6ff1a15f968f",
+        "GUID:2325c6245c9047b78693c65787a7440e",
+        "GUID:adadcb890e2a4ff7b6e1dd02d2b465f5"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

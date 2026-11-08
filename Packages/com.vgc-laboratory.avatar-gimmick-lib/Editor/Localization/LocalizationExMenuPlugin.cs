@@ -2,11 +2,10 @@
 using nadena.dev.modular_avatar.core;
 using nadena.dev.ndmf;
 using UnityEngine;
-using VGC.Gimmicks_MA.Lib.Localization;
+using VGC.Localization;
+[assembly: ExportsPlugin(typeof(VGC.Localization.Avatar.LocalizationExMenuPlugin))]
 
-[assembly: ExportsPlugin(typeof(LocalizationExMenuPlugin))]
-
-namespace VGC.Gimmicks_MA.Lib.Localization
+namespace VGC.Localization.Avatar
 {
     internal sealed class LocalizationExMenuPlugin : Plugin<LocalizationExMenuPlugin>
     {
@@ -30,7 +29,7 @@ namespace VGC.Gimmicks_MA.Lib.Localization
                 .BeforePlugin("nadena.dev.modular-avatar")
                 .Run("VGC Localize Menu Labels", ctx =>
                 {
-                    var language = LocalizeConfig.instance.Language;
+                    var language = LanguageSetting.Current;
                     foreach (var labels in ctx.AvatarRootObject.GetComponentsInChildren<LocalizedMenuLabels>(true))
                     {
                         if (labels.Table == null)

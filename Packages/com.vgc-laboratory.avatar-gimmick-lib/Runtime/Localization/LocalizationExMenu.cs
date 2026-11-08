@@ -9,10 +9,10 @@ using UnityEngine;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using VRC.SDKBase;
 
-namespace VGC.Gimmicks_MA.Lib.Localization
+namespace VGC.Localization.Avatar
 {
     [AddComponentMenu("VGC/VGC Localization Ex Menu")]
-    public class LocalizationExMenu : LocalizeConfigBehaviour, IEditorOnly
+    public class LocalizationExMenu : LocalizedBehaviour, IEditorOnly
     {
         [SerializeField] private LocalizeMenuInfo _menuInfo;
 #if MODULAR_AVATAR
@@ -50,7 +50,7 @@ namespace VGC.Gimmicks_MA.Lib.Localization
         public VRCExpressionsMenu GetMenu()
         {
 #if UNITY_EDITOR
-            switch (LocalizeConfig.instance.Language)
+            switch (LanguageSetting.Current)
             {
                 case Language.English:
                     break;

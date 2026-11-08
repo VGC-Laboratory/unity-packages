@@ -1,0 +1,16 @@
+{
+    "name": "VGC.Versioning.Runtime",
+    "rootNamespace": "",
+    "references": [
+        "GUID:adadcb890e2a4ff7b6e1dd02d2b465f5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

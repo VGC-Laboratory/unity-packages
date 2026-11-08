@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using nadena.dev.ndmf.localization;
 
-namespace VGC.Gimmicks_MA.Lib.Localization
+namespace VGC.Localization.Avatar
 {
     /// <summary>
     /// LocalizationTable(スプレッドシート由来)をNDMFのLocalizerとして使うための変換。

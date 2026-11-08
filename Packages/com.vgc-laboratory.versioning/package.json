@@ -1,0 +1,17 @@
+{
+  "name": "com.vgc-laboratory.versioning",
+  "displayName": "VGC Versioning",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "ギミックの版の取得・比較（GimmickVersionManager）と、ギミックの設定・導入（GimmickSetting / GimmickInstaller）。VRChat の SDK に依存しないので、ワールド用・アバター用のどちらのプロジェクトでも使える。版の一覧は読み取り専用で取得する。",
+  "author": {
+    "name": "VGC-Laboratory",
+    "url": "https://github.com/VGC-Laboratory"
+  },
+  "license": "MIT",
+  "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "vpmDependencies": {
+    "com.vrchat.base": "^3.10.4",
+    "com.vgc-laboratory.localization": ">=0.1.0 <1.0.0"
+  }
+}

@@ -1,7 +1,7 @@
 using UnityEngine;
 using VRC.SDKBase;
 
-namespace VGC.Gimmicks_MA.Lib.Localization
+namespace VGC.Localization.Avatar
 {
     /// <summary>
     /// 子孫の MA Menu Item のラベルを、ビルド時に LocalizationTable の訳へ差し替える。
@@ -9,7 +9,7 @@ namespace VGC.Gimmicks_MA.Lib.Localization
     /// 言語ごとにメニュー資産を複製する代わりに使う(言語はビルドする人のエディタ言語)。
     /// </summary>
     [AddComponentMenu("VGC/VGC Localized Menu Labels")]
-    public class LocalizedMenuLabels : LocalizeConfigBehaviour, IEditorOnly
+    public class LocalizedMenuLabels : LocalizedBehaviour, IEditorOnly
     {
         [SerializeField] private LocalizationTable _table;
         [SerializeField] private string _keyPrefix = "Menu.";

@@ -1,0 +1,27 @@
+{
+    "name": "VGC.Localization.Avatar.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:adadcb890e2a4ff7b6e1dd02d2b465f5",
+        "GUID:a8ee28b458f7437892e139e5e96e9757",
+        "GUID:fc900867c0f47cd49b6e2ae4ef907300",
+        "GUID:62ced99b048af7f4d8dfe4bed8373d76"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "nadena.dev.modular-avatar",
+            "expression": "",
+            "define": "MODULAR_AVATAR"
+        }
+    ],
+    "noEngineReferences": false
+}
