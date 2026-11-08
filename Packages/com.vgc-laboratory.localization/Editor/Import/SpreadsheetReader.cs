@@ -29,6 +29,8 @@ namespace VGC.Localization.Import
             {
                 try
                 {
+                    EnsureNotHtml(text, source.Kind);
+
                     var rows = source.Kind == SpreadsheetSourceKind.AppsScript
                         ? ParseAppsScript(text)
                         : CsvParser.Parse(text);
@@ -39,6 +41,33 @@ namespace VGC.Localization.Import
                     onError?.Invoke(e.Message);
                 }
             }, onError);
+        }
+
+        /// <summary>
+        /// 応答が HTML なら止める。
+        ///
+        /// シートが公開されていないと Google はログインのページ(HTML)を返す。
+        /// これを CSV として読むと、エラーにならないまま意味のない行が取り込まれてしまう
+        /// (とくに版の一覧は見出しを検証しないので、黙って変な行が入る)。
+        /// </summary>
+        private static void EnsureNotHtml(string text, SpreadsheetSourceKind kind)
+        {
+            var head = (text ?? "").TrimStart();
+            if (!head.StartsWith("<"))
+                return;
+
+            var hint = kind == SpreadsheetSourceKind.AppsScript
+                ? "Apps Script の URL が正しいか、Web アプリのアクセス権が「全員」になっているか確認してください。"
+                : "スプレッドシートの共有設定が「リンクを知っている全員が閲覧可」になっているか確認してください。";
+
+            throw new Exception(
+                "応答が HTML でした。" + hint + " 受け取った先頭: " + Truncate(head, 200));
+        }
+
+        private static string Truncate(string value, int max)
+        {
+            value = (value ?? "").Replace("\r", " ").Replace("\n", " ");
+            return value.Length <= max ? value : value.Substring(0, max) + "…";
         }
 
         /// <summary>
@@ -129,7 +158,8 @@ namespace VGC.Localization.Import
                 return rows;
             }
 
-            throw new Exception("Unknown Apps Script response.");
+            throw new Exception("Apps Script の応答を解釈できませんでした。受け取った先頭: "
+                                + Truncate(json, 200));
         }
 
         private static List<string[]> FromEntries(Entry[] entries)

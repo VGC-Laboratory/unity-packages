@@ -31,6 +31,23 @@ if (VersionChecker.HasUpdate(_versionSource, "MyTool", "1.0.0", out var latest))
 
 **書き込み（スプレッドシートの更新）はこのパッケージに入っていない。**
 
+### 一覧を分ける
+
+`VersionSource` はいくつでも作れる。取得元やタブを変えた `VersionSource` を用意し、
+`GimmickSetting` の Version Source にそれぞれ指定すれば、**一覧を分けられる。**
+
+| 分け方 | Google Sheets CSV | Apps Script |
+|---|---|---|
+| 別のスプレッドシート | ○ | ○ |
+| 同じスプレッドシートの別タブ | ○ | GAS が `?sheet=` を見ている必要がある |
+
+- キャッシュは「取得元 ＋ タブ名」ごとに分かれる。
+- 導入 UI は使われている取得元をすべて取りに行くので、**1 つの画面に複数の取得元が混在してよい。**
+- **Version Source が空のギミックは、VGC の既定の一覧を見る。**
+  分けるときは各 `GimmickSetting` に設定すること。
+
+取得元の作り方と、自分で GAS を書くときの仕様は
+[localization の README](../com.vgc-laboratory.localization/README.md) にある。
 ## ギミックの定義と導入（誰でも使える）
 
 ```

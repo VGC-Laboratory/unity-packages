@@ -148,7 +148,15 @@ namespace VGC.Localization
             if (string.IsNullOrWhiteSpace(value))
                 return false;
 
-            return Enum.TryParse(value.Trim(), true, out language) &&
+            var trimmed = value.Trim();
+
+            // SystemLanguage は 0 から連番なので、"5" のような数字は Enum.TryParse が通してしまい
+            // Enum.IsDefined も true を返す。メモ用に数字で見出しを付けた列を言語と誤認しないよう、
+            // 文字で始まらないものは弾く(言語名はすべて文字で始まる)。
+            if (!char.IsLetter(trimmed[0]))
+                return false;
+
+            return Enum.TryParse(trimmed, true, out language) &&
                    Enum.IsDefined(typeof(SystemLanguage), language);
         }
     }

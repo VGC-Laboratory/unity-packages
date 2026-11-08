@@ -77,13 +77,21 @@ namespace VGC.Localization.Import
 
             var entries = new List<Entry>();
             var seen = new HashSet<string>();
+            var duplicated = new List<string>();
 
             for (var r = 1; r < rows.Count; r++)
             {
                 var row = rows[r];
                 var id = row.Length > 0 ? row[0]?.Trim() : null;
-                if (string.IsNullOrEmpty(id) || !seen.Add(id))
+                if (string.IsNullOrEmpty(id))
                     continue;
+
+                // 重複は先に出てきた行を残す。黙って落とすとシートの編集ミスに気づけないので控えておく
+                if (!seen.Add(id))
+                {
+                    duplicated.Add($"{id} ({r + 1} 行目)");
+                    continue;
+                }
 
                 var values = new List<LangValue>();
                 foreach (var (index, language) in columns)
@@ -99,6 +107,15 @@ namespace VGC.Localization.Import
             message = $"{entries.Count} keys, {columns.Count} languages";
             if (skipped.Count > 0)
                 message += $" (skipped columns: {string.Join(", ", skipped)})";
+
+            if (duplicated.Count > 0)
+            {
+                var detail = string.Join(", ", duplicated);
+                message += $" (duplicated keys: {detail})";
+                // インスペクタの表示は選択を外すと消えるので、Console にも残す
+                Debug.LogWarning($"[VGC.Localization] キーが重複しています。先に出てきた行を使います: {detail}");
+            }
+
             return entries.ToArray();
         }
     }

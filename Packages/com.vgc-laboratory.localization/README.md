@@ -6,6 +6,66 @@
 
 ワールドの実行時（Udon）に翻訳を使うときは [localization-world](../com.vgc-laboratory.localization-world/README.md) を併せて入れる。
 
+## 取得元の 2 つの方式
+
+`SpreadsheetSource`（Create > VGC > Localization > Spreadsheet Source）で選ぶ。
+翻訳表（`LocalizationTable`）でも版の一覧（`VersionSource`）でも同じものを使う。
+
+| 方式 | 設定するもの | 向き |
+|---|---|---|
+| **Google Sheets CSV**（既定） | スプレッドシートの ID（URL を貼ってもよい） | ふつうはこちら。シートを公開するだけで使える |
+| Apps Script | Web アプリの URL（`…/exec`） | 上級者向け。自分で GAS を書く人だけ |
+
+### Google Sheets CSV
+
+シートの共有設定を **「リンクを知っている全員が閲覧可」** にする。これだけで読める。
+
+- gviz の CSV 出力を読む（`https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv&headers=1&sheet=<タブ名>`）
+- **タブ名で切り替えられる。** 1 つのスプレッドシートに複数の表を置ける
+- 公開を忘れていると Google がログインのページ（HTML）を返す。
+  その場合は「応答が HTML でした」というエラーになるので、共有設定を見直す
+
+### Apps Script（上級者向け）
+
+自分で `doGet` を書く場合、次の形にする。
+
+**受け取るもの**
+
+- `?sheet=<タブ名>` が付く（`VersionSource` や `LocalizationTable` のシート名）。
+  空のときは付かないので、既定のタブにフォールバックすること
+
+**返すもの**（どちらか。Content-Type は JSON）
+
+翻訳の表:
+
+```json
+[
+  { "id": "Hello", "values": [
+      { "language": "English",  "text": "Hello" },
+      { "language": "Japanese", "text": "こんにちは" } ] }
+]
+```
+
+版の一覧:
+
+```json
+{ "items": [
+    { "sheetName": "睡眠システム", "version": "1.2.0", "url": "https://..." }
+] }
+```
+
+エラー:
+
+```json
+{ "error": "シートが見つかりません: ..." }
+```
+
+- `language` は `UnityEngine.SystemLanguage` の名前（`English` / `Japanese` / `Korean` /
+  `ChineseSimplified` / `ChineseTraditional` …）。読めない名前の列は読み飛ばす
+- セル内の改行は `
+`（2 文字）にして返しても、実際の改行のまま返してもよい。どちらも改行として扱う
+- Web アプリのアクセス権を「全員」にする。そうしないとログインのページ（HTML）が返り、
+  「応答が HTML でした」というエラーになる
 ## 使い方
 
 1. **スプレッドシートを用意する**。1 行目は見出しで、A 列に `key`、B 列以降に言語名（`SystemLanguage` の名前: `Japanese`, `English`, `Korean`, `ChineseSimplified` …）。2 行目以降が 1 キー 1 行。言語として読めない見出しの列（メモ欄など）は読み飛ばす。
