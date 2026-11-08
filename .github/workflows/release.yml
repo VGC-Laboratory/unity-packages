@@ -1,72 +1,121 @@
 name: Release
 
-# 全パッケージを同一バージョンで揃えて出す（lockstep）。
-# 手順: 各 package.json の version を上げて push → タグ v<version> を打つ
+# パッケージごとに個別の版で出す。
+# 手順: 対象の package.json の version を上げて push → タグ <短縮名>-v<version> を打つ
+#   例) attributes-v0.5.0 → Packages/com.vgc-laboratory.attributes を 0.5.0 で出す
+#       avatar-gimmick-lib-v2.0.0 → Packages/com.vgc-laboratory.avatar-gimmick-lib を 2.0.0 で出す
+#
+# 短縮名 = パッケージ ID から "com.vgc-laboratory." を取ったもの。
+# タグ v<version>（全パッケージを同じ版で出す旧方式）はもう起動しない。
+# 公開済みの v0.1.0〜v0.4.0 の Release と添付ファイルはそのまま残る。
 on:
   push:
-    tags: [ 'v*' ]
+    tags: [ '*-v*' ]
   workflow_dispatch:
+    inputs:
+      package:
+        description: '短縮名（例: attributes、avatar-gimmick-lib）'
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 jobs:
+  guid-check:
+    permissions:
+      contents: read
+    uses: ./.github/workflows/guid-check.yml
+
   release:
+    needs: guid-check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: バージョンを決める
-        id: ver
+      - name: 対象パッケージと版を決める
+        id: t
         run: |
+          set -euo pipefail
           if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
-            V="${GITHUB_REF_NAME#v}"
-          else
-            V=$(jq -r .version Packages/com.vgc-laboratory.attributes/package.json)
-          fi
-          echo "version=$V" >> "$GITHUB_OUTPUT"
-          echo "リリースバージョン: $V"
-
-      - name: 全 package.json のバージョンが揃っているか確認
-        run: |
-          V="${{ steps.ver.outputs.version }}"
-          fail=0
-          for p in Packages/com.vgc-laboratory.*/package.json; do
-            pv=$(jq -r .version "$p")
-            if [ "$pv" != "$V" ]; then
-              echo "::error file=$p::version が $pv でタグ $V と一致しません"
-              fail=1
+            TAG="${GITHUB_REF_NAME}"
+            # 末尾の -v<version> を切り離す。短縮名にハイフンが入っていてもよい
+            if [[ ! "$TAG" =~ ^(.+)-v([0-9].*)$ ]]; then
+              echo "::error::タグ '$TAG' が <短縮名>-v<version> の形ではありません"
+              exit 1
             fi
-          done
-          [ "$fail" = "0" ]
+            SHORT="${BASH_REMATCH[1]}"
+            V="${BASH_REMATCH[2]}"
+          else
+            SHORT="${{ inputs.package }}"
+            V=""
+          fi
+
+          DIR="Packages/com.vgc-laboratory.${SHORT}"
+          if [ ! -f "$DIR/package.json" ]; then
+            echo "::error::$DIR/package.json がありません（短縮名 '$SHORT' が正しいか確認してください）"
+            echo "存在するパッケージ:"
+            for d in Packages/com.vgc-laboratory.*/; do
+              basename "$d" | sed 's/^com\.vgc-laboratory\./  /'
+            done
+            exit 1
+          fi
+
+          PV=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1],encoding="utf-8"))["version"])' "$DIR/package.json")
+          if [ -z "$V" ]; then
+            V="$PV"
+            echo "workflow_dispatch: package.json の version を使います: $V"
+          elif [ "$PV" != "$V" ]; then
+            echo "::error file=$DIR/package.json::version が $PV で、タグの版 $V と一致しません"
+            exit 1
+          fi
+
+          ID=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1],encoding="utf-8"))["name"])' "$DIR/package.json")
+          if [ "$ID" != "com.vgc-laboratory.${SHORT}" ]; then
+            echo "::error file=$DIR/package.json::name が $ID で、フォルダ名から決まる ID と一致しません"
+            exit 1
+          fi
+
+          {
+            echo "short=$SHORT"
+            echo "version=$V"
+            echo "dir=$DIR"
+            echo "id=$ID"
+            echo "tag=${SHORT}-v${V}"
+          } >> "$GITHUB_OUTPUT"
+          echo "リリース対象: $ID $V （タグ ${SHORT}-v${V}）"
 
       - name: ZIP と version entry を作る
         run: |
-          V="${{ steps.ver.outputs.version }}"
-          BASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/v${V}"
+          set -euo pipefail
+          ID="${{ steps.t.outputs.id }}"
+          V="${{ steps.t.outputs.version }}"
+          DIR="${{ steps.t.outputs.dir }}"
+          TAG="${{ steps.t.outputs.tag }}"
+          BASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}"
           mkdir -p out
-          for dir in Packages/com.vgc-laboratory.*/; do
-            id=$(jq -r .name "$dir/package.json")
-            zip="out/${id}-${V}.zip"
-            # package.json が ZIP のルートに来るように、パッケージ内から固める
-            ( cd "$dir" && zip -r -q "$OLDPWD/$zip" . -x '.git/*' )
-            sha=$(sha256sum "$zip" | cut -d' ' -f1)
-            # listing の1バージョン分 = package.json + url + zipSHA256
-            jq --arg url "${BASE}/${id}-${V}.zip" --arg sha "$sha" \
-               '. + {url: $url, zipSHA256: $sha}' "$dir/package.json" > "out/${id}-${V}.json"
-            echo "  $id  $V  $sha"
-          done
+          zip="out/${ID}-${V}.zip"
+          # package.json が ZIP のルートに来るように、パッケージ内から固める
+          ( cd "$DIR" && zip -r -q "$OLDPWD/$zip" . -x '.git/*' )
+          sha=$(sha256sum "$zip" | cut -d' ' -f1)
+          # listing の1バージョン分 = package.json + url + zipSHA256
+          python3 tools/make-version-entry.py \
+            "$DIR/package.json" "${BASE}/${ID}-${V}.zip" "$sha" "out/${ID}-${V}.json"
+          echo "  $ID  $V  $sha"
+          ls -l out
 
       - name: Release を作成
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          V="${{ steps.ver.outputs.version }}"
-          gh release create "v${V}" out/* \
-            --title "v${V}" \
+          set -euo pipefail
+          TAG="${{ steps.t.outputs.tag }}"
+          TITLE="${{ steps.t.outputs.id }} ${{ steps.t.outputs.version }}"
+          gh release create "$TAG" out/* \
+            --title "$TITLE" \
             --generate-notes \
             --repo "${GITHUB_REPOSITORY}" || \
-          gh release upload "v${V}" out/* --clobber --repo "${GITHUB_REPOSITORY}"
+          gh release upload "$TAG" out/* --clobber --repo "${GITHUB_REPOSITORY}"
 
   # GITHUB_TOKEN が作った Release は on: release: を発火させないため、ここから直接呼ぶ
   listing:

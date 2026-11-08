@@ -13,7 +13,7 @@
   "vpmDependencies": {
     "com.vrchat.avatars": "^3.10.4",
     "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
-    "com.vgc-laboratory.resources": ">=0.5.0 <1.0.0"
+    "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
   },
   "legacyFolders": {
     "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"

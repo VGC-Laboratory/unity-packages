@@ -1,0 +1,30 @@
+name: GUID Check
+
+# Packages/ 配下の .meta の GUID がパッケージをまたいで重複していないか調べる。
+# 重複すると、利用者のプロジェクトでどちらか一方しか解決されず参照が静かに壊れる。
+# release.yml からも uses: で呼ばれる（リリース前の門番）。
+on:
+  push:
+    branches: [ '**' ]
+    paths:
+      - 'Packages/**/*.meta'
+      - 'tools/check-guid-duplicates.py'
+      - '.github/workflows/guid-check.yml'
+  pull_request:
+    paths:
+      - 'Packages/**/*.meta'
+      - 'tools/check-guid-duplicates.py'
+      - '.github/workflows/guid-check.yml'
+  workflow_call:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: GUID の重複を調べる
+        run: python3 tools/check-guid-duplicates.py Packages
