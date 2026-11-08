@@ -3,9 +3,14 @@
   "displayName": "VGC Core",
   "version": "0.4.0",
   "unity": "2022.3",
-  "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。TimeHelper は VRChat のワールド向け API を使う。",
-  "author": { "name": "VGC-Laboratory", "url": "https://github.com/VGC-Laboratory" },
+  "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。ワールド専用（Udon から呼ぶ前提で、asmdef が UdonSharp を参照する）。",
+  "author": {
+    "name": "VGC-Laboratory",
+    "url": "https://github.com/VGC-Laboratory"
+  },
   "license": "MIT",
   "url": "https://github.com/VGC-Laboratory/unity-packages",
-  "vpmDependencies": { "com.vrchat.base": "^3.10.4" }
+  "vpmDependencies": {
+    "com.vrchat.worlds": "^3.10.4"
+  }
 }

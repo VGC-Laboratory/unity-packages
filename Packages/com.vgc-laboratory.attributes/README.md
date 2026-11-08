@@ -115,7 +115,23 @@ Udon / uGUI 固有の `AddButtonSendCustomEventField` / `AddEventTriggerSendCust
 
 **`VGC.Attributes.Runtime` の参照はゼロ**（UnityEngine のみ）。UdonSharp にも uGUI にも依存しない。
 
-- **VGC.Attributes.Editor** … `VGC.Attributes.Runtime` を参照。`AttributeExecutor` が `#if UDONSHARP` で UdonSharp を使う。
+このパッケージは **ワールド用・アバター用のどちらの VRChat プロジェクトでも使える**。
+`vpmDependencies` は `com.vrchat.base` だけで、Udon 固有の部分は asmdef の
+`versionDefines`（`com.vrchat.worlds` → `VGC_HAS_UDONSHARP`）と `defineConstraints` で切り分けてある。
+
+| アセンブリ | 参照 | com.vrchat.worlds が無い環境 |
+|---|---|---|
+| **VGC.Attributes.Runtime** | なし | コンパイルされる |
+| **VGC.Attributes.Editor** | `VGC.Attributes.Runtime` のみ | コンパイルされる |
+| **VGC.Attributes.Udon.Runtime** | 上記 ＋ `UdonSharp.Runtime` / `UdonSharp.Editor` / `VRC.Udon` | コンパイルされない |
+| **VGC.Attributes.Udon.Editor** | 上記 ＋ `VGC.Attributes.Editor` | コンパイルされない |
+
+`AttributeExecutor` は UdonSharp を直接使わない。フィールドを書き換えたあとの書き戻しは
+`AttributeExecutor.AfterFieldsAssigned`（`Func<MonoBehaviour, bool>`）に委ねており、
+`VGC.Attributes.Udon.Editor` が `[InitializeOnLoad]` で
+`UdonSharpEditorUtility.CopyProxyToUdon` を登録する。
+フックが未登録（＝アバター用プロジェクト）なら `EditorUtility.SetDirty` だけを行う。
+
 - **[VGC.Attributes.Udon](../AttributesUdon/README.md)** … Udon / uGUI 固有の属性（`AddButton*` / `AddEventTrigger*`）と、その配線を行う Serializer。
   こちら側が `VGC.Attributes.Runtime` を参照する（依存の向きは Udon → 汎用）。
 

@@ -11,11 +11,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using VGC.Attributes.Runtime;
 
-#if UDONSHARP
-using UdonSharp;
-using UdonSharpEditor;
-#endif
-
 namespace VGC.Attributes.Editor
 {
     [FilePath("ScriptableSingleton/AttributeExecutorSetting.dat", FilePathAttribute.Location.ProjectFolder)]
@@ -130,6 +125,13 @@ namespace VGC.Attributes.Editor
            Execute();   
        }
        
+       /// <summary>
+       /// フィールドを書き換えた後に呼ばれる。書き戻しを引き受けたなら true を返す。
+       /// UdonSharpBehaviour への CopyProxyToUdon は VGC.Attributes.Udon.Editor が
+       /// [InitializeOnLoad] でここに登録する（com.vrchat.worlds がある場合のみ）。
+       /// </summary>
+       public static Func<MonoBehaviour, bool> AfterFieldsAssigned;
+
        public static void Execute(bool registerUndo = true)
        {
            Debug.Log("<color=#FF9900>[VGC.AttributeExecutor] Start Execute</color>");
@@ -161,13 +163,8 @@ namespace VGC.Attributes.Editor
                
                if (updateFields)
                {
-#if UDONSHARP
-                   if(monoBehaviour is UdonSharpBehaviour udonSharpBehaviour)
-                   {
-                       UdonSharpEditorUtility.CopyProxyToUdon(udonSharpBehaviour);
-                   }
-                   else
-#endif
+                   var handler = AfterFieldsAssigned;
+                   if (handler == null || !handler(monoBehaviour))
                    {
                        EditorUtility.SetDirty(monoBehaviour);
                    }

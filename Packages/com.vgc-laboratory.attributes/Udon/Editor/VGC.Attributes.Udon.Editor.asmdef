@@ -1,0 +1,29 @@
+{
+    "name": "VGC.Attributes.Udon.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f8a14f8b257d3d044aac0cb748e36ae7",
+        "GUID:a49572adb1211f54ab5b1418fdeb26bd",
+        "GUID:99835874ee819da44948776e0df4ff1d",
+        "GUID:84265b35cca3905448e623ef3903f0ff"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "VGC_HAS_UDONSHARP"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.vrchat.worlds",
+            "expression": "",
+            "define": "VGC_HAS_UDONSHARP"
+        }
+    ],
+    "noEngineReferences": false
+}

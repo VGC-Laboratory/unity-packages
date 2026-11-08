@@ -7,17 +7,22 @@
 VRChat 固有の処理だけをこちらに分離してある。
 
 ```
-AttributesUdon/
-└── Runtime/                     asmdef: VGC.Attributes.Udon.Runtime
-    ├── Fields/
-    │   ├── AddButtonSendCustomEventFieldAttribute.cs
-    │   └── AddEventTriggerSendCustomEventFieldAttribute.cs
-    └── Serializer/
-        ├── ButtonSerializer.cs
-        └── EventTriggerSerializer.cs
+Udon/                            asmdef: VGC.Attributes.Udon.Runtime
+├── Fields/
+│   ├── AddButtonSendCustomEventFieldAttribute.cs
+│   └── AddEventTriggerSendCustomEventFieldAttribute.cs
+├── Serializer/
+│   ├── ButtonSerializer.cs
+│   └── EventTriggerSerializer.cs
+└── Editor/                      asmdef: VGC.Attributes.Udon.Editor
+    └── UdonProxyWriteBack.cs
 ```
 
 参照: `VGC.Attributes.Runtime`, `UdonSharp.Runtime`, `UdonSharp.Editor`, `VRC.Udon`
+（`VGC.Attributes.Udon.Editor` はさらに `VGC.Attributes.Editor`）
+
+どちらの asmdef も `versionDefines`（`com.vrchat.worlds` → `VGC_HAS_UDONSHARP`）と
+`defineConstraints: ["VGC_HAS_UDONSHARP"]` を持つので、**アバター用プロジェクトではコンパイルされない**。
 
 ---
 
@@ -45,8 +50,21 @@ AttributesUdon/
 
 ---
 
+## UdonProxyWriteBack（Editor）
+
+`AttributeExecutor` がフィールドを書き換えたあと、`UdonSharpBehaviour` なら裏の `UdonBehaviour` へ
+`UdonSharpEditorUtility.CopyProxyToUdon` で写す。
+
+これは以前 `AttributeExecutor` 本体に `#if UDONSHARP` で直接書かれていたが、
+`VGC.Attributes.Editor.asmdef` が UdonSharp の asmdef を条件なしで参照することになり、
+**アバター用プロジェクトでは参照が解決できず Editor アセンブリ全体がコンパイルされなくなる**ため、
+こちらへ分離した。`AttributeExecutor.AfterFieldsAssigned` に `[InitializeOnLoad]` で登録する形。
+
+---
+
 ## なぜ分離したか
 
 `VGC.Attributes` を単体パッケージとして配布する場合、この2属性のためだけに
 UdonSharp / uGUI / VRChat SDK への依存が汎用パッケージ側に入ってしまう。
-分離することで `VGC.Attributes.Runtime` の参照はゼロになる。
+分離することで `VGC.Attributes.Runtime` の参照はゼロになり、
+アバター用プロジェクトでも使えるようになる。
