@@ -1,0 +1,27 @@
+{
+    "name": "VGC.Gimmicks_MA.Lib.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:433d64cc240a8214ea3fa88408f14787",
+        "GUID:62ced99b048af7f4d8dfe4bed8373d76",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:fc900867c0f47cd49b6e2ae4ef907300"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "nadena.dev.modular-avatar",
+            "expression": "",
+            "define": "MODULAR_AVATAR"
+        }
+    ],
+    "noEngineReferences": false
+}

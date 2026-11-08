@@ -161,6 +161,12 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.vgc-laboratory.avatar-gimmick-lib": {
+      "version": "file:../../../Packages/com.vgc-laboratory.avatar-gimmick-lib",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.vrchat.avatars": {
       "version": "file:com.vrchat.avatars",
       "depth": 0,
