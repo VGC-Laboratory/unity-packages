@@ -4,9 +4,9 @@ using UnityEngine;
 using VGC.Localization;
 using VRC.SDK3.Avatars.Components;
 
-namespace VGC.Versioning.Avatar
+namespace VGC.Gimmicks.Avatar
 {
-    public class AvatarGimmickSetupWindow : EditorWindow
+    public class SetupWindow : EditorWindow
     {
         private LocalizationTable _localize;
         private GimmickSetting[] _settings;
@@ -15,10 +15,11 @@ namespace VGC.Versioning.Avatar
         private VRCAvatarDescriptor _descriptor;
         private GimmickInstaller _installer;
         
-        [MenuItem("VGC/" + nameof(AvatarGimmickSetupWindow))]
+        // nameof では「SetupWindow」になってしまうので、読める名前を直接書く
+        [MenuItem("VGC/Gimmick Setup")]
         static void Open()
         {
-            var window = GetWindow<AvatarGimmickSetupWindow>(nameof(AvatarGimmickSetupWindow));
+            var window = GetWindow<SetupWindow>("Gimmick Setup");
             window.minSize = new Vector2(500, 700);
         }
 

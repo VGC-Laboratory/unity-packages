@@ -1,9 +1,9 @@
 {
-  "name": "com.vgc-laboratory.avatar-gimmick-lib",
-  "displayName": "VGC Avatar Gimmick Lib",
+  "name": "com.vgc-laboratory.gimmicks-avatar",
+  "displayName": "VGC Gimmicks (Avatar)",
   "version": "2.0.0",
   "unity": "2022.3",
-  "description": "VGC のアバターギミック向けの、アバター固有の部分。NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳、アバターの探索と導入 UI。共通部分は com.vgc-laboratory.localization と com.vgc-laboratory.versioning にある。",
+  "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
   "author": {
     "name": "VGC-Laboratory",
     "url": "https://github.com/VGC-Laboratory"
@@ -14,7 +14,7 @@
     "com.vrchat.avatars": "^3.10.4",
     "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
     "com.vgc-laboratory.localization": ">=0.1.0 <1.0.0",
-    "com.vgc-laboratory.versioning": ">=0.1.0 <1.0.0",
+    "com.vgc-laboratory.gimmicks": ">=0.1.0 <1.0.0",
     "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
   },
   "legacyFolders": {

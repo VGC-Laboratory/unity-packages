@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace VGC.Versioning
+namespace VGC.Gimmicks
 {
     [System.Serializable]
     public class GimmickVersionInfo
@@ -30,8 +30,8 @@ namespace VGC.Versioning
         // 取得結果と取得時刻を EditorPrefs に残し、一定時間は取り直さない。
         // [InitializeOnLoad] なのでスクリプトが再読み込みされるたびに走り、
         // そのまま毎回 GET すると Apps Script の実行回数の上限に近づくため。
-        private const string CacheKey = "VGC.Versioning.GimmickVersionCache";
-        private const string CacheTimeKey = "VGC.Versioning.GimmickVersionCacheTime";
+        private const string CacheKey = "VGC.Gimmicks.GimmickVersionCache";
+        private const string CacheTimeKey = "VGC.Gimmicks.GimmickVersionCacheTime";
 
         /// <summary>この時間を過ぎていなければ取り直さない。</summary>
         public static readonly TimeSpan CacheLifetime = TimeSpan.FromHours(6);
@@ -115,7 +115,7 @@ namespace VGC.Versioning
             catch (Exception e)
             {
                 // キャッシュが壊れている場合に、エディタを開くたびエラーにしない
-                Debug.LogWarning($"[VGC.Versioning] 版の一覧を読めませんでした: {e.Message}");
+                Debug.LogWarning($"[VGC.Gimmicks] 版の一覧を読めませんでした: {e.Message}");
                 return;
             }
 

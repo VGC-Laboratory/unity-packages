@@ -3,7 +3,7 @@
   "displayName": "VGC Localization",
   "version": "0.1.0",
   "unity": "2022.3",
-  "description": "翻訳テーブル（LocalizationTable）とエディタ言語の設定。VRChat の SDK に依存しないので、ワールド用・アバター用のどちらのプロジェクトでも使える。NDMF / Modular Avatar の言語設定への相乗りは com.vgc-laboratory.avatar-gimmick-lib 側で行う。",
+  "description": "翻訳テーブル（LocalizationTable）とエディタ言語の設定。VRChat の SDK に依存しないので、ワールド用・アバター用のどちらのプロジェクトでも使える。NDMF / Modular Avatar の言語設定への相乗りは com.vgc-laboratory.gimmicks-avatar 側で行う。",
   "author": {
     "name": "VGC-Laboratory",
     "url": "https://github.com/VGC-Laboratory"

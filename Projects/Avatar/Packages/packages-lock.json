@@ -161,8 +161,8 @@
       "source": "local",
       "dependencies": {}
     },
-    "com.vgc-laboratory.avatar-gimmick-lib": {
-      "version": "file:../../../Packages/com.vgc-laboratory.avatar-gimmick-lib",
+    "com.vgc-laboratory.gimmicks-avatar": {
+      "version": "file:../../../Packages/com.vgc-laboratory.gimmicks-avatar",
       "depth": 0,
       "source": "local",
       "dependencies": {}
@@ -179,8 +179,8 @@
       "source": "local",
       "dependencies": {}
     },
-    "com.vgc-laboratory.versioning": {
-      "version": "file:../../../Packages/com.vgc-laboratory.versioning",
+    "com.vgc-laboratory.gimmicks": {
+      "version": "file:../../../Packages/com.vgc-laboratory.gimmicks",
       "depth": 0,
       "source": "local",
       "dependencies": {}

@@ -19,9 +19,9 @@ Animations/EmptyAnimation.anim   … 中身が空の AnimationClip
 ## このパッケージを分けた理由
 
 元は `Assets/VGC/VGCResources` として各アバターギミックの unitypackage に同梱されていた。
-VPM パッケージ化（[com.vgc-laboratory.avatar-gimmick-lib](../com.vgc-laboratory.avatar-gimmick-lib/README.md)）の際、
+VPM パッケージ化（[com.vgc-laboratory.gimmicks-avatar](../com.vgc-laboratory.gimmicks-avatar/README.md)）の際、
 中身がアバター固有ではなくワールドでも使えるものだったため、
-**avatar-gimmick-lib（`com.vrchat.avatars` に依存するのでワールドプロジェクトに入れられない）から切り離した。**
+**gimmicks-avatar（`com.vrchat.avatars` に依存するのでワールドプロジェクトに入れられない）から切り離した。**
 
 旧フォルダ `Assets\VGC\VGCResources`（GUID `f6d57f4e3e4bc244cb83ffa7f9103f0b`）の
 後継はこのパッケージなので、`legacyFolders` もこちらが持つ。
@@ -31,6 +31,6 @@ VPM パッケージ化（[com.vgc-laboratory.avatar-gimmick-lib](../com.vgc-labo
 このリポジトリはパッケージごとに版を持ち、**タグ `resources-v<version>`** で個別にリリースする。
 初版は `0.1.0`。
 
-avatar-gimmick-lib はこのパッケージに `>=0.1.0 <1.0.0` で依存する。
+gimmicks-avatar はこのパッケージに `>=0.1.0 <1.0.0` で依存する。
 `^0.1.0`（= `>=0.1.0 <0.2.0`）のような狭い範囲にはしない。
 狭くすると、このパッケージの版を上げるたびに依存側も出し直さないと解決できなくなる。

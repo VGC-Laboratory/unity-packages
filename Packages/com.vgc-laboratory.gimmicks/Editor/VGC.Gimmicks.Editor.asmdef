@@ -1,10 +1,14 @@
 {
-    "name": "VGC.Versioning.Avatar.Runtime",
+    "name": "VGC.Gimmicks.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:3d9bceffc22a47838727d798ccc6d31b"
+        "GUID:3d9bceffc22a47838727d798ccc6d31b",
+        "GUID:adadcb890e2a4ff7b6e1dd02d2b465f5",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

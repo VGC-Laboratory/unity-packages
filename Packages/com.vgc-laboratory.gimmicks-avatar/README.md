@@ -1,4 +1,4 @@
-# VGC Avatar Gimmick Lib
+# VGC Gimmicks (Avatar)
 
 VGC のアバターギミックが共通で使う基盤。**アバター専用**（`com.vrchat.avatars` と Modular Avatar に依存）。
 
@@ -8,14 +8,14 @@ unitypackage 同梱から VPM パッケージへ配布形態が変わる区切�
 利用者のプロジェクトに旧版のギミックが残っていても動くようにするため。
 
 ```
-Runtime/                         asmdef: VGC.Gimmicks_MA.Lib.Runtime
+Runtime/                         asmdef: VGC.Gimmicks.Avatar.Runtime
 ├── Attributes/ReadOnlyAttribute.cs
 ├── Installer/                   AvatarGimmickSetting / AvatarGimmickMarker /
 │                                AvatarGimmickInstaller / AvatarGimmickUtility
 └── Localization/                LocalizationTable / LocalizationTableResolver /
                                  LocalizationExMenu / LocalizeConfig / LocalizedMenuLabels
-Editor/                          asmdef: VGC.Gimmicks_MA.Lib.Editor
-├── Installer/                   AvatarGimmickInstallerEditor / AvatarGimmickSetupWindow
+Editor/                          asmdef: VGC.Gimmicks.Avatar.Editor
+├── Installer/                   AvatarGimmickInstallerEditor / SetupWindow
 ├── Localization/                LocalizationExMenuPlugin（NDMF プラグイン）/
 │                                LocalizationTableEditor / LocalizationTreeView /
 │                                LocalizationTableNdmfExtensions
@@ -26,8 +26,8 @@ VGCResources/EmptyAnimation.anim
 
 - 名前空間は `VGC.Gimmicks_MA.Lib` と `VGC.Gimmicks_MA.Lib.Localization`。
 - asmdef の名前と GUID は変えない。**配布済みの各ギミックの asmdef が GUID で参照している。**
-  - `VGC.Gimmicks_MA.Lib.Runtime` … `433d64cc240a8214ea3fa88408f14787`
-  - `VGC.Gimmicks_MA.Lib.Editor` … `43840042a51294744a849c40be6f5eee`
+  - `VGC.Gimmicks.Avatar.Runtime` … `433d64cc240a8214ea3fa88408f14787`
+  - `VGC.Gimmicks.Avatar.Editor` … `43840042a51294744a849c40be6f5eee`
 - `versionDefines`: `nadena.dev.modular-avatar` → `MODULAR_AVATAR`。
 
 ## 依存関係

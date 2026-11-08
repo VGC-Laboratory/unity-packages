@@ -26,7 +26,7 @@ public static Language Current { get; set; }
 ```
 
 - **ワールド用プロジェクト**: 既定のまま。`EditorPrefs`（`VGC.Localization.Language`）に保存する。
-- **アバター用プロジェクト**: [avatar-gimmick-lib](../com.vgc-laboratory.avatar-gimmick-lib/README.md) の
+- **アバター用プロジェクト**: [gimmicks-avatar](../com.vgc-laboratory.gimmicks-avatar/README.md) の
   `NdmfLanguageProvider` が `[InitializeOnLoad]` で差し替え、**NDMF / Modular Avatar の
   `LanguagePrefs` に相乗り**する。MA のインスペクタで言語を変えると VGC 側も切り替わる（逆も同じ）。
 

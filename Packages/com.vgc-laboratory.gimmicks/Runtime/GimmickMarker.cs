@@ -1,7 +1,7 @@
 using UnityEngine;
 using VRC.SDKBase;
 
-namespace VGC.Versioning
+namespace VGC.Gimmicks
 {
     public class GimmickMarker : MonoBehaviour, IEditorOnly
     {

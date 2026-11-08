@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using VGC.Localization;
-namespace VGC.Versioning
+namespace VGC.Gimmicks
 {
     [CreateAssetMenu(fileName = nameof(GimmickSetting), menuName = "VGC/" + nameof(GimmickSetting))]
     // ReSharper disable once ClassNeverInstantiated.Global

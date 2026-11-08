@@ -3,7 +3,7 @@ using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using VGC.Localization;
-namespace VGC.Versioning
+namespace VGC.Gimmicks
 {
     [CustomEditor(typeof(GimmickInstaller), true)]
     public class GimmickInstallerEditor : Editor

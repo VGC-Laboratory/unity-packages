@@ -6,45 +6,92 @@ VPM（VRChat Package Manager）で配信する。
 
 ## パッケージ
 
+### ワールド用・アバター用のどちらでも使える
+
 | パッケージ | 内容 | 依存 |
 |---|---|---|
-| [`com.vgc-laboratory.attributes`](Packages/com.vgc-laboratory.attributes) | フィールド参照の自動配線属性と、それを実行する Executor | `com.vrchat.worlds` ※ |
-| [`com.vgc-laboratory.core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ | `com.vrchat.base` |
-| [`com.vgc-laboratory.ui-extension`](Packages/com.vgc-laboratory.ui-extension) | uGUI Button の UdonSharp 向け拡張 | `com.vrchat.worlds`, `attributes` |
-| [`com.vgc-laboratory.game-framework`](Packages/com.vgc-laboratory.game-framework) | ホスト決定 / エントリー枠管理 / 開始終了状態 | `com.vrchat.worlds`, `attributes`, `core`, `ui-extension` |
+| [`attributes`](Packages/com.vgc-laboratory.attributes) | フィールド参照の自動配線属性と、それを実行する Executor | `com.vrchat.base` |
+| [`localization`](Packages/com.vgc-laboratory.localization) | 翻訳テーブルとエディタ言語の設定 | `com.vrchat.base` |
+| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | ギミックの定義・版の確認・導入 | `com.vrchat.base`, `localization` |
+| [`resources`](Packages/com.vgc-laboratory.resources) | 共通アセット（中身が空の AnimationClip） | `com.vrchat.base` |
 
-※ `attributes` の **Runtime アセンブリは依存ゼロ**で、素の Unity プロジェクトでも動く。
-現時点で `com.vrchat.worlds` を要求しているのは Editor 側の `AttributeExecutor` が
-`UdonSharpEditorUtility.CopyProxyToUdon` を直接呼んでいるため。
-ここを外せば汎用パッケージにできる（[Issue 化候補](#todo)）。
+### ワールド用
+
+| パッケージ | 内容 | 依存 |
+|---|---|---|
+| [`core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ | `com.vrchat.worlds` |
+| [`ui-extension`](Packages/com.vgc-laboratory.ui-extension) | uGUI Button の UdonSharp 向け拡張 | `com.vrchat.worlds`, `attributes` |
+| [`game-framework`](Packages/com.vgc-laboratory.game-framework) | ホスト決定 / エントリー枠管理 / 開始終了状態 | `com.vrchat.worlds`, `attributes`, `core`, `ui-extension` |
+
+### アバター用
+
+| パッケージ | 内容 | 依存 |
+|---|---|---|
+| [`gimmicks-avatar`](Packages/com.vgc-laboratory.gimmicks-avatar) | ギミック導入ウィンドウ、NDMF / Modular Avatar 連携、メニューの翻訳 | `com.vrchat.avatars`, Modular Avatar, `localization`, `gimmicks`, `resources` |
+
+ワールド用かアバター用かは `vpmDependencies` で決まる（`com.vrchat.worlds` ならワールド用、
+`com.vrchat.avatars` ならアバター用、どちらも無ければ両方で使える）。
+[配信ページ](https://vgc-laboratory.github.io/unity-packages/)もこの規則で区分を出し分けている。
 
 ## 依存の向き
 
 ```
-attributes（汎用）
+attributes
     ├── attributes/Udon（com.vrchat.worlds がある時のみコンパイル）
     ├── ui-extension
     └── game-framework
-core（VRChat base）
+
+localization
+    ├── gimmicks
+    │     └── gimmicks-avatar
+    └── gimmicks-avatar（VGC.Localization.Avatar）
+
+resources
+    └── gimmicks-avatar
+
+core
     └── game-framework
 ```
 
 循環なし。上流ほど依存が少ない。
 
+プラットフォーム固有の部分は、共通の家族に `.Avatar` / `.World` を足した名前にする。
+
+| 家族 | 共通 | アバター | ワールド |
+|---|---|---|---|
+| 翻訳 | `VGC.Localization` | `VGC.Localization.Avatar` | （将来） |
+| ギミック | `VGC.Gimmicks` | `VGC.Gimmicks.Avatar` | （将来） |
+
 ## 開発
 
-このリポジトリ自体が VRChat Worlds プロジェクトになっている。
-クローンして Unity で開けば、`Packages/com.vgc-laboratory.*` が埋め込みパッケージとして
-読み込まれ、そのままコンパイル・動作確認できる。
+リポジトリ直下は Unity プロジェクトではない。**配布するパッケージ本体は `Packages/` に置き、
+開発用の Unity プロジェクトを `Projects/` に並べている。**
 
-`Assets/` 配下は VCC / VRChat SDK が自動生成するもの（ワールドテンプレート、
-UtilityScripts、XR 設定など）なので追跡していない。クローン直後は空で、
-Unity と VCC が再生成する。Build & Test には自分でシーンを作るか、
-VCC のワールドテンプレートを読み込むこと。
+```
+Packages/          配布するパッケージ本体
+Projects/World/    ワールド用（com.vrchat.worlds）
+Projects/Avatar/   アバター用（com.vrchat.avatars + Modular Avatar）
+```
 
-> `Packages/.gitignore` は VCC が生成したもので、1行目の `/*/` が `Packages/` 直下の
-> 全ディレクトリを無視する。自作パッケージを `!com.vgc-laboratory.*/` で除外解除して
-> いないと、**新規ファイルが git status に出ない**。編集する際は消さないこと。
+VRChat SDK のワールド用とアバター用は 1 つのプロジェクトに同時に入れられないので、
+プロジェクトを 2 つに分けている。どちらのプロジェクトも `Packages/manifest.json` の
+`file:../../../Packages/com.vgc-laboratory.*` で同じパッケージ本体を読み込むので、
+**どちらで編集しても同じファイルが変わる。**
+
+Unity で開くのは `Projects/World` か `Projects/Avatar`。リポジトリ直下を開いても何も起きない。
+
+> **開発用プロジェクトの `vpm-manifest.json` に `com.vgc-laboratory.*` を書かないこと。**
+> VCC の Manage Project や `vrc-get install` で自作パッケージを足すと、
+> `file:` 参照と二重になって `.meta` の GUID が重複する。
+
+`Assets/` 配下は VCC / VRChat SDK が自動生成するものなので追跡していない。
+無視設定は 3 枚に分かれている。
+
+| ファイル | 役割 |
+|---|---|
+| `.gitignore` | Unity の生成物（`Library/` `Temp/` `Logs/` `*.csproj` など）。`Projects/<name>/` 配下でも効く |
+| `Projects/<name>/.gitignore` | そのプロジェクト固有の `Assets/` 配下の無視設定 |
+| `Projects/<name>/Packages/.gitignore` | VCC が入れる VPM パッケージ |
 
 ## インストール
 
@@ -72,44 +119,42 @@ Claude Code 用スキルを同梱している。
 npx skills add VGC-Laboratory/unity-packages
 ```
 
-複数プロジェクトで使うならユーザーレベルに置いてもよい。
-
-```bash
-# Windows
-mkdir %USERPROFILE%.claudeskillsvgc-attributes
-copy .claudeskillsvgc-attributesSKILL.md %USERPROFILE%.claudeskillsvgc-attributes
-```
-
 スキルは「選択の指針」だけを持ち、実装詳細は
 [`Packages/com.vgc-laboratory.attributes/README.md`](Packages/com.vgc-laboratory.attributes/README.md)
 に委ねている。内容が二重管理にならないようにするため。
 
 ## リリース手順
 
-全パッケージを同一バージョンで揃えて出す（lockstep）。相互依存が強く、
-片方だけ上げても結局まとめて検証することになるため。
+**パッケージごとに個別の版で出す。** 変えたものだけ出せる。
 
-1. 4つの `package.json` の `version` を同じ値に上げる
+1. 対象の `package.json` の `version` を上げる
 2. 依存側の `vpmDependencies` のバージョン範囲も必要なら更新する
 3. commit / push
-4. タグを打つ
+4. タグ `<短縮名>-v<version>` を打つ（短縮名 = パッケージ ID から `com.vgc-laboratory.` を取ったもの）
 
 ```bash
-git tag v0.2.0 && git push origin v0.2.0
+git tag gimmicks-v0.2.0 && git push origin gimmicks-v0.2.0
 ```
 
-`release.yml` が全 package.json のバージョンとタグの一致を確認したうえで、
-パッケージごとに ZIP と listing 用の version entry を作り、Release に添付する。
-Release が publish されると `listing.yml` が全 Release から `index.json` を
-作り直して Pages へ配信する。手で `index.json` を管理する必要はない。
+`release.yml` がそのパッケージの `version` とタグの一致を確認したうえで ZIP と
+listing 用の version entry を作り、Release に添付する。
+そのあと `listing.yml` が全 Release から `index.json` を作り直して Pages へ配信する。
+手で `index.json` を管理する必要はない。
 
-## TODO
+- パッケージごとの版なので、**パッケージ間の依存は `^0.4.0` のような狭い範囲にしない。**
+  `^0.4.0` は `>=0.4.0 <0.5.0` の意味で、片方だけ版を上げると解決できなくなる。
+  `>=0.4.0 <1.0.0` のように書く。
+- 旧方式のタグ `v*`（全パッケージを同じ版で出す）では起動しない。
+  公開済みの `v0.1.0`〜`v0.4.0` の Release はそのまま残している。
 
-- [ ] `AttributeExecutor` から UdonSharp への直接参照を外し、`attributes` を
-      `com.vrchat.worlds` 非依存にする（リフレクション経由にするか、
-      プロキシ同期をフックとして切り出すか）
-- [ ] VPM listing リポジトリの用意（GitHub Pages）
-- [ ] リリース用 GitHub Actions
+### 検査
+
+`guid-check.yml` が `Packages/` 配下の `.meta` の GUID 重複を調べる。
+push / PR で走り、リリースの前にも走る（`release.yml` が待つ）。手元でも同じコマンドで確認できる。
+
+```bash
+python3 tools/check-guid-duplicates.py Packages
+```
 
 ## ライセンス
 

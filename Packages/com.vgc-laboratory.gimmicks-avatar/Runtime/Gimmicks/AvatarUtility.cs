@@ -1,7 +1,7 @@
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
-namespace VGC.Versioning.Avatar
+namespace VGC.Gimmicks.Avatar
 {
     public static class AvatarUtility
     {

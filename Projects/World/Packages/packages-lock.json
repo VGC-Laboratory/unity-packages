@@ -218,8 +218,8 @@
       "source": "local",
       "dependencies": {}
     },
-    "com.vgc-laboratory.versioning": {
-      "version": "file:../../../Packages/com.vgc-laboratory.versioning",
+    "com.vgc-laboratory.gimmicks": {
+      "version": "file:../../../Packages/com.vgc-laboratory.gimmicks",
       "depth": 0,
       "source": "local",
       "dependencies": {}
