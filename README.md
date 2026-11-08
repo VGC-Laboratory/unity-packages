@@ -157,6 +157,23 @@ listing 用の version entry を作り、Release に添付する。
 - 旧方式のタグ `v*`（全パッケージを同じ版で出す）では起動しない。
   公開済みの `v0.1.0`〜`v0.4.0` の Release はそのまま残している。
 
+#### 複数パッケージをまとめて出すとき
+
+**タグは 1 度に 3 本までしか push しない。** GitHub は
+[4 本以上のタグを一度に push するとイベントを作らない](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)。
+9 本まとめて打って 1 本も動かなかったことがある。エラーも出ず、ただ無視される。
+打ち直すにはリモートのタグを消してから入れ直すしかない。
+
+```bash
+git push origin attributes-v0.5.0 core-v0.5.0 game-framework-v0.5.0
+```
+
+**`listing.yml` は `concurrency: group: pages` で待ち行列が 1 本しかない。**
+Release が続けて走ると、先に並んでいた listing が押し出されて cancelled になる。
+`release` ジョブ自体は成功しているので Release と ZIP は出来ているが、
+`index.json` が古いままになる。出し終わってから Actions の
+**Build VPM Listing** を手で 1 回実行するのが確実。
+listing は毎回すべての Release から作り直すので、1 回走れば全部そろう。
 ### 検査
 
 `guid-check.yml` が `Packages/` 配下の `.meta` の GUID 重複を調べる。
