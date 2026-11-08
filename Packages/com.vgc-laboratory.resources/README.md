@@ -1,5 +1,20 @@
 # VGC Resources
 
+> **これは VGC のギミックが内部で使う基盤。**
+> [VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)のギミックを入れると
+> 依存として一緒に入るので、自分で入れる必要はない。
+>
+> **外部のクリエイターが直接使うことは想定していない。**
+> このパッケージ自体は空の AnimationClip 1 本なので単体でも使えるが、
+> **GUID は配布済みの VGC ギミックが参照しているので変えられない**（この制約のために存在している）。
+> 公開 API も VGC のギミックの都合で変わりうる。
+>
+> ワールド制作向けのライブラリは
+> [attributes](../com.vgc-laboratory.attributes/README.md) /
+> [core](../com.vgc-laboratory.core/README.md) /
+> [ui-extension](../com.vgc-laboratory.ui-extension) /
+> [game-framework](../com.vgc-laboratory.game-framework/README.md) 側。
+
 ワールド用・アバター用のどちらからも使う共通アセットの置き場。
 **`vpmDependencies` は `com.vrchat.base` だけ**なので、ワールドプロジェクトにもアバタープロジェクトにも入る。
 

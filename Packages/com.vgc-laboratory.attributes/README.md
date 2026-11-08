@@ -97,7 +97,7 @@ Attributes/
 
 
 Udon / uGUI 固有の `AddButtonSendCustomEventField` / `AddEventTriggerSendCustomEventField` は
-別アセンブリ [`VGC.Attributes.Udon`](../AttributesUdon/README.md) にある。
+別アセンブリ [`VGC.Attributes.Udon`](Udon/README.md) にある。
 
 ### 補助クラス
 
@@ -132,7 +132,7 @@ Udon / uGUI 固有の `AddButtonSendCustomEventField` / `AddEventTriggerSendCust
 `UdonSharpEditorUtility.CopyProxyToUdon` を登録する。
 フックが未登録（＝アバター用プロジェクト）なら `EditorUtility.SetDirty` だけを行う。
 
-- **[VGC.Attributes.Udon](../AttributesUdon/README.md)** … Udon / uGUI 固有の属性（`AddButton*` / `AddEventTrigger*`）と、その配線を行う Serializer。
+- **[VGC.Attributes.Udon](Udon/README.md)** … Udon / uGUI 固有の属性（`AddButton*` / `AddEventTrigger*`）と、その配線を行う Serializer。
   こちら側が `VGC.Attributes.Runtime` を参照する（依存の向きは Udon → 汎用）。
 
 ## メモ

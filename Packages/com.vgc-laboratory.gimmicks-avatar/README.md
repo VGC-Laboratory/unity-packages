@@ -1,5 +1,27 @@
 # VGC Gimmicks (Avatar)
 
+> **これは VGC のギミックが内部で使う基盤。**
+> [VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)のギミックを入れると
+> 依存として一緒に入るので、自分で入れる必要はない。
+>
+> **外部のクリエイターが直接使うことは想定していない。**
+> VRChat の SDK に依存しない作りではあるが、
+> **アセットの発見をプロジェクト全体の型検索（`AssetDatabase.FindAssets("t:…")`）で行っている。**
+> 持ち主の区別が無いので、独立した利用者が同じプロジェクトに同居すると混ざる。
+>
+> - `LocalizationTableResolver` … 全 `LocalizationTable` を `sheetName` 一つの辞書に入れる。
+>   シート名が衝突すると後に読んだ方で上書きされる
+> - `GimmickInstallerEditor` / `SetupWindow` … 全 `GimmickSetting` を一覧に出す。
+>   他人のギミックが混ざって見える
+>
+> 公開 API も VGC のギミックの都合で変わりうる。
+>
+> ワールド制作向けのライブラリは
+> [attributes](../com.vgc-laboratory.attributes/README.md) /
+> [core](../com.vgc-laboratory.core/README.md) /
+> [ui-extension](../com.vgc-laboratory.ui-extension) /
+> [game-framework](../com.vgc-laboratory.game-framework/README.md) 側。
+
 VGC のアバターギミックが共通で使う基盤。**アバター専用**（`com.vrchat.avatars` と Modular Avatar に依存）。
 
 配布済み 1.0 系（各ギミックの unitypackage に同梱されていた `Assets/VGC/Gimmicks_MA/Lib`）の後継。

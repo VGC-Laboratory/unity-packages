@@ -6,28 +6,42 @@ VPM（VRChat Package Manager）で配信する。
 
 ## パッケージ
 
-### ワールド用・アバター用のどちらでも使える
+二種類ある。**外部のクリエイターに使ってもらうためのもの**と、
+**VGC のギミックが内部で使う基盤**。前者だけ見れば足りる。
+
+### 外部のクリエイター向け
+
+ワールド制作に使えるライブラリ。これらを目的に入れる。
 
 | パッケージ | 内容 | 依存 |
 |---|---|---|
-| [`attributes`](Packages/com.vgc-laboratory.attributes) | フィールド参照の自動配線属性と、それを実行する Executor | `com.vrchat.base` |
-| [`localization`](Packages/com.vgc-laboratory.localization) | 翻訳テーブルとエディタ言語の設定 | `com.vrchat.base` |
-| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | ギミックの定義・版の確認・導入 | `com.vrchat.base`, `localization` |
-| [`resources`](Packages/com.vgc-laboratory.resources) | 共通アセット（中身が空の AnimationClip） | `com.vrchat.base` |
-
-### ワールド用
-
-| パッケージ | 内容 | 依存 |
-|---|---|---|
-| [`core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ（VCC では「VGC Core (Worlds)」と表示される） | `com.vrchat.worlds` |
+| [`attributes`](Packages/com.vgc-laboratory.attributes) | フィールド参照の自動配線属性と、それを実行する Executor。**Runtime は依存ゼロ**で素の Unity でも動く | `com.vrchat.base` |
+| [`core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ。**ワールド専用**（VCC では「VGC Core (Worlds)」） | `com.vrchat.worlds` |
 | [`ui-extension`](Packages/com.vgc-laboratory.ui-extension) | uGUI Button の UdonSharp 向け拡張 | `com.vrchat.worlds`, `attributes` |
 | [`game-framework`](Packages/com.vgc-laboratory.game-framework) | ホスト決定 / エントリー枠管理 / 開始終了状態 | `com.vrchat.worlds`, `attributes`, `core`, `ui-extension` |
 
-### アバター用
+各パッケージの README に属性の一覧や設計の意図を書いてある。
 
-| パッケージ | 内容 | 依存 |
-|---|---|---|
-| [`gimmicks-avatar`](Packages/com.vgc-laboratory.gimmicks-avatar) | ギミック導入ウィンドウ、NDMF / Modular Avatar 連携、メニューの翻訳 | `com.vrchat.avatars`, Modular Avatar, `localization`, `gimmicks`, `resources` |
+### VGC のギミック管理の基盤
+
+[VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)で配布している VGC のギミックが、
+版の確認・導入・メニューの翻訳のために使う。
+
+**ギミックを入れると依存として一緒に入るので、自分で入れる必要はない。**
+
+| パッケージ | 内容 |
+|---|---|
+| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | ギミックの定義・版の確認・導入 |
+| [`gimmicks-avatar`](Packages/com.vgc-laboratory.gimmicks-avatar) | 上のアバター側（導入ウィンドウ、NDMF / Modular Avatar 連携） |
+| [`localization`](Packages/com.vgc-laboratory.localization) | 翻訳テーブルとエディタ言語の設定 |
+| [`resources`](Packages/com.vgc-laboratory.resources) | 共通アセット（中身が空の AnimationClip） |
+
+> **外部のクリエイターが直接使うことは想定していない。**
+> VRChat の SDK に依存しない作りではあるが、
+> **アセットの発見をプロジェクト全体の型検索（`AssetDatabase.FindAssets("t:…")`）で行っている。**
+> 持ち主の区別が無いので、独立した利用者が同じプロジェクトに同居すると、
+> 翻訳テーブルのシート名が衝突したり、他人のギミックが導入ウィンドウに混ざったりする。
+> 公開 API も VGC のギミックの都合で変わりうる。
 
 ワールド用かアバター用かは `vpmDependencies` で決まる（`com.vrchat.worlds` ならワールド用、
 `com.vrchat.avatars` ならアバター用、どちらも無ければ両方で使える）。
@@ -36,32 +50,31 @@ VPM（VRChat Package Manager）で配信する。
 ## 依存の向き
 
 ```
-attributes
-    ├── attributes/Udon（com.vrchat.worlds がある時のみコンパイル）
-    ├── ui-extension
-    └── game-framework
+外部のクリエイター向け
+  attributes
+      ├── attributes/Udon（com.vrchat.worlds がある時のみコンパイル）
+      ├── ui-extension
+      └── game-framework
+  core
+      └── game-framework
 
-localization
-    ├── gimmicks
-    │     └── gimmicks-avatar
-    └── gimmicks-avatar（VGC.Localization.Avatar）
-
-resources
-    └── gimmicks-avatar
-
-core
-    └── game-framework
+ギミック管理の基盤
+  localization
+      ├── gimmicks
+      │     └── gimmicks-avatar
+      └── gimmicks-avatar（VGC.Localization.Avatar）
+  resources
+      └── gimmicks-avatar
 ```
 
-循環なし。上流ほど依存が少ない。
+循環なし。二つの群の間に依存は無い。
 
-プラットフォーム固有の部分は、共通の家族に `.Avatar` / `.World` を足した名前にする。
+基盤側は、共通の家族に `.Avatar` / `.World` を足した名前でプラットフォーム固有の部分を分ける。
 
 | 家族 | 共通 | アバター | ワールド |
 |---|---|---|---|
 | 翻訳 | `VGC.Localization` | `VGC.Localization.Avatar` | （将来） |
 | ギミック | `VGC.Gimmicks` | `VGC.Gimmicks.Avatar` | （将来） |
-
 ## 開発
 
 リポジトリ直下は Unity プロジェクトではない。**配布するパッケージ本体は `Packages/` に置き、
