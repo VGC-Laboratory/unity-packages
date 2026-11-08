@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
@@ -26,6 +27,15 @@ namespace VGC.Versioning
         // 開発用ツール(GimmickVersionPublisher)からも参照する
         public const string URL ="https://script.google.com/macros/s/AKfycby0cK2uzLT3rXKNk2ufW6CjBwIugqBTWqtG-yC1AShn3msKXk-rtLmnaoAZwIBWwGc2zg/exec";
 
+        // 取得結果と取得時刻を EditorPrefs に残し、一定時間は取り直さない。
+        // [InitializeOnLoad] なのでスクリプトが再読み込みされるたびに走り、
+        // そのまま毎回 GET すると Apps Script の実行回数の上限に近づくため。
+        private const string CacheKey = "VGC.Versioning.GimmickVersionCache";
+        private const string CacheTimeKey = "VGC.Versioning.GimmickVersionCacheTime";
+
+        /// <summary>この時間を過ぎていなければ取り直さない。</summary>
+        public static readonly TimeSpan CacheLifetime = TimeSpan.FromHours(6);
+
         private static readonly Dictionary<string, GimmickVersionInfo> _remote = new();
         private static bool _isFetching;
 
@@ -35,20 +45,96 @@ namespace VGC.Versioning
 
         static GimmickVersionManager()
         {
-            Fetch().Forget(Debug.LogException);
+            // まずキャッシュから戻す。これをしないと、取得を省いたときに
+            // 中身が空のまま「更新なし」と表示してしまう
+            LoadCache();
+
+            if (IsCacheStale())
+                Fetch().Forget(Debug.LogException);
         }
-        
-        public static UniTask Fetch()
+
+        /// <summary>
+        /// 版の一覧を取り直す。
+        /// </summary>
+        /// <param name="force">
+        /// true なら、キャッシュが新しくても取り直す。利用者が明示的に押したときに使う。
+        /// </param>
+        public static UniTask Fetch(bool force = false)
         {
             if (_isFetching)
                 return _currentTask;
 
+            if (!force && !IsCacheStale())
+                return UniTask.CompletedTask;
+
             _isFetching = true;
             return _currentTask = FetchInternal();
+        }
+
+        /// <summary>最後に取得してからの経過時間。取得したことが無ければ null。</summary>
+        public static TimeSpan? SinceLastFetch
+        {
+            get
+            {
+                var at = LastFetchedAt;
+                return at == null ? (TimeSpan?)null : DateTime.UtcNow - at.Value;
+            }
+        }
+
+        private static DateTime? LastFetchedAt
+        {
+            get
+            {
+                var raw = EditorPrefs.GetString(CacheTimeKey, "");
+                return long.TryParse(raw, out var ticks)
+                    ? new DateTime(ticks, DateTimeKind.Utc)
+                    : (DateTime?)null;
+            }
+        }
+
+        private static bool IsCacheStale()
+        {
+            var since = SinceLastFetch;
+            return since == null || since.Value >= CacheLifetime;
+        }
+
+        private static void LoadCache()
+        {
+            var json = EditorPrefs.GetString(CacheKey, "");
+            if (!string.IsNullOrEmpty(json))
+                Apply(json);
+        }
+
+        private static void Apply(string json)
+        {
+            GimmickVersionResponse data;
+            try
+            {
+                data = JsonUtility.FromJson<GimmickVersionResponse>(json);
+            }
+            catch (Exception e)
+            {
+                // キャッシュが壊れている場合に、エディタを開くたびエラーにしない
+                Debug.LogWarning($"[VGC.Versioning] 版の一覧を読めませんでした: {e.Message}");
+                return;
+            }
+
+            _remote.Clear();
+
+            if (data?.items == null)
+                return;
+
+            foreach (var item in data.items)
+            {
+                if (item != null && !string.IsNullOrEmpty(item.sheetName))
+                    _remote[item.sheetName] = item;
+            }
         }
         
         private static async UniTask FetchInternal()
         {
+            string fetched = null;
+
             try
             {
                 using var req = UnityWebRequest.Get(URL);
@@ -60,24 +146,22 @@ namespace VGC.Versioning
                     return;
                 }
 
-                var json = req.downloadHandler.text;
-                var data = JsonUtility.FromJson<GimmickVersionResponse>(json);
-
-                _remote.Clear();
-
-                if (data?.items != null)
-                {
-                    foreach (var item in data.items)
-                    {
-                        _remote[item.sheetName] = item;
-                    }
-                }
+                fetched = req.downloadHandler.text;
+                Apply(fetched);
             }
             finally
             {
                 _isFetching = false;
 
                 await UniTask.SwitchToMainThread();
+
+                // EditorPrefs はメインスレッドで触る
+                if (fetched != null)
+                {
+                    EditorPrefs.SetString(CacheKey, fetched);
+                    EditorPrefs.SetString(CacheTimeKey, DateTime.UtcNow.Ticks.ToString());
+                }
+
                 UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
             }
         }

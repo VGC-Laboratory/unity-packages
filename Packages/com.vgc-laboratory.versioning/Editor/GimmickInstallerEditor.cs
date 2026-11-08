@@ -46,7 +46,8 @@ namespace VGC.Versioning
             {
                 if (GUILayout.Button(localize.Get("VersionCheck"), GUILayout.Height(24)))
                 {
-                    GimmickVersionManager.Fetch().Forget(Debug.LogException);
+                    // 利用者が押したときはキャッシュが新しくても取り直す
+                    GimmickVersionManager.Fetch(force: true).Forget(Debug.LogException);
                 }
             }
 
