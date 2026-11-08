@@ -10,9 +10,7 @@
   },
   "license": "MIT",
   "url": "https://github.com/VGC-Laboratory/unity-packages",
-  "vpmDependencies": {
-    "com.vrchat.base": "^3.10.4"
-  },
+  "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.resources/README.md",
   "legacyFolders": {
     "Assets\\VGC\\VGCResources": "f6d57f4e3e4bc244cb83ffa7f9103f0b"
   }

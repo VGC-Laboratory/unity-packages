@@ -3,14 +3,12 @@
   "displayName": "VGC Localization",
   "version": "0.2.0",
   "unity": "2022.3",
-  "description": "翻訳テーブル（LocalizationTable）、スプレッドシートからの取り込み（SpreadsheetSource）、エディタ言語と使用言語の一覧（Project Settings > VGC > Localization）。言語は UnityEngine.SystemLanguage。VRChat の SDK に依存しないので、ワールド用・アバター用のどちらのプロジェクトでも使える。",
+  "description": "翻訳テーブル（LocalizationTable）、スプレッドシートからの取り込み（SpreadsheetSource）、エディタ言語と使用言語の一覧（Project Settings > VGC > Localization）。言語は UnityEngine.SystemLanguage。VRChat の SDK の API を使わないので、ワールド用・アバター用のどちらのプロジェクトでも使える。",
   "author": {
     "name": "VGC-Laboratory",
     "url": "https://github.com/VGC-Laboratory"
   },
   "license": "MIT",
   "url": "https://github.com/VGC-Laboratory/unity-packages",
-  "vpmDependencies": {
-    "com.vrchat.base": "^3.10.4"
-  }
+  "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.localization/README.md"
 }

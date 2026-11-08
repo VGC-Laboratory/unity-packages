@@ -16,7 +16,7 @@
 > [game-framework](../com.vgc-laboratory.game-framework/README.md) 側。
 
 ワールド用・アバター用のどちらからも使う共通アセットの置き場。
-**`vpmDependencies` は `com.vrchat.base` だけ**なので、ワールドプロジェクトにもアバタープロジェクトにも入る。
+**`vpmDependencies` は空**なので、ワールドプロジェクトにもアバタープロジェクトにも入る。
 
 ```
 Animations/EmptyAnimation.anim   … 中身が空の AnimationClip

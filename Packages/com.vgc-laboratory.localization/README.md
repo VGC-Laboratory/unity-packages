@@ -1,8 +1,8 @@
 # VGC Localization
 
 スプレッドシートで管理する翻訳表（`LocalizationTable`）と、エディタの表示言語。
-**VRChat の SDK に依存しない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
-（`vpmDependencies` は `com.vrchat.base` だけ）。
+**VRChat の SDK の API を使わない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
+（`vpmDependencies` は空）。素の Unity プロジェクトでも動く。
 
 ワールドの実行時（Udon）に翻訳を使うときは [localization-world](../com.vgc-laboratory.localization-world/README.md) を併せて入れる。
 

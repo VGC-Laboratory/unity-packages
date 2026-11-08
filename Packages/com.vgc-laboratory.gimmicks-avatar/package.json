@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks-avatar/README.md",
   "vpmDependencies": {
     "com.vrchat.avatars": "^3.10.4",
     "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",

@@ -10,6 +10,7 @@
   },
   "license": "MIT",
   "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.core/README.md",
   "vpmDependencies": {
     "com.vrchat.worlds": "^3.10.4"
   }

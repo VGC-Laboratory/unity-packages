@@ -60,17 +60,23 @@ namespace VGC.Localization
         /// <summary>取得に使う URL。</summary>
         public string BuildUrl(string sheetName)
         {
-            var sheet = Uri.EscapeDataString(sheetName ?? "");
+            // シート(タブ)名は、指定が無いときは付けない。
+            // 空の sheet= を付けると、取得先がそれを「名前の無いシート」と解釈しうる。
+            // 付けなければ gviz も Apps Script も先頭のシートを返す
+            var hasSheet = !string.IsNullOrEmpty(sheetName);
+            var sheet = hasSheet ? Uri.EscapeDataString(sheetName) : null;
+
             if (_kind == SpreadsheetSourceKind.AppsScript)
             {
                 var url = AppsScriptUrl;
-                if (string.IsNullOrEmpty(sheetName))
+                if (!hasSheet)
                     return url;
                 return url + (url.Contains("?") ? "&" : "?") + "sheet=" + sheet;
             }
 
             // headers=1: 1 行目を見出しとして扱わせる(gviz が見出し行を推測して複数行をまとめるのを防ぐ)
-            return $"https://docs.google.com/spreadsheets/d/{SpreadsheetId}/gviz/tq?tqx=out:csv&headers=1&sheet={sheet}";
+            var csv = $"https://docs.google.com/spreadsheets/d/{SpreadsheetId}/gviz/tq?tqx=out:csv&headers=1";
+            return hasSheet ? csv + "&sheet=" + sheet : csv;
         }
 
         /// <summary>ブラウザで開く URL。Apps Script のときはスプレッドシートが分からないので null。</summary>

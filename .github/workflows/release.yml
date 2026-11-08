@@ -3,7 +3,7 @@ name: Release
 # パッケージごとに個別の版で出す。
 # 手順: 対象の package.json の version を上げて push → タグ <短縮名>-v<version> を打つ
 #   例) attributes-v0.5.0 → Packages/com.vgc-laboratory.attributes を 0.5.0 で出す
-#       avatar-gimmick-lib-v2.0.0 → Packages/com.vgc-laboratory.avatar-gimmick-lib を 2.0.0 で出す
+#       gimmicks-avatar-v2.0.2 → Packages/com.vgc-laboratory.gimmicks-avatar を 2.0.2 で出す
 #
 # 短縮名 = パッケージ ID から "com.vgc-laboratory." を取ったもの。
 # タグ v<version>（全パッケージを同じ版で出す旧方式）はもう起動しない。
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       package:
-        description: '短縮名（例: attributes、avatar-gimmick-lib）'
+        description: '短縮名（例: attributes、gimmicks-avatar）'
         required: true
         type: string
 

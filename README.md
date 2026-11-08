@@ -15,7 +15,7 @@ VPM（VRChat Package Manager）で配信する。
 
 | パッケージ | 内容 | 依存 |
 |---|---|---|
-| [`attributes`](Packages/com.vgc-laboratory.attributes) | フィールド参照の自動配線属性と、それを実行する Executor。**Runtime は依存ゼロ**で素の Unity でも動く | `com.vrchat.base` |
+| [`attributes`](Packages/com.vgc-laboratory.attributes) | フィールド参照の自動配線属性と、それを実行する Executor。**Runtime は依存ゼロ**で素の Unity でも動く | なし |
 | [`core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ。**ワールド専用**（VCC では「VGC Core (Worlds)」） | `com.vrchat.worlds` |
 | [`ui-extension`](Packages/com.vgc-laboratory.ui-extension) | uGUI Button の UdonSharp 向け拡張 | `com.vrchat.worlds`, `attributes` |
 | [`game-framework`](Packages/com.vgc-laboratory.game-framework) | ホスト決定 / エントリー枠管理 / 開始終了状態 | `com.vrchat.worlds`, `attributes`, `core`, `ui-extension` |

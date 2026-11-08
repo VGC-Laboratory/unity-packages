@@ -4,7 +4,6 @@ using System.Text;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using VGC.Localization;
 using VGC.Localization.Import;
 
 namespace VGC.Gimmicks
@@ -20,7 +19,7 @@ namespace VGC.Gimmicks
     {
         /// <summary>
         /// VGC のギミックの版を返す Apps Script(読み取り専用デプロイ)。
-        /// VersionSource を指定しないときの取得元。開発用ツール(GimmickVersionPublisher)からも参照する。
+        /// Config/VGCSpreadsheet.asset と同じ URL。コードから組み立てたいとき用に公開している。
         /// </summary>
         public const string VGCAppsScriptUrl =
             "https://script.google.com/macros/s/AKfycby0cK2uzLT3rXKNk2ufW6CjBwIugqBTWqtG-yC1AShn3msKXk-rtLmnaoAZwIBWwGc2zg/exec";
@@ -44,25 +43,15 @@ namespace VGC.Gimmicks
         }
 
         private static readonly Dictionary<string, State> States = new();
-        private static VersionSource _default;
 
-        /// <summary>VersionSource を指定しないときの取得元(VGC の版の一覧)。</summary>
-        public static VersionSource Default
-        {
-            get
-            {
-                if (_default == null)
-                    _default = VersionSource.Create(SpreadsheetSource.Create(SpreadsheetSourceKind.AppsScript, VGCAppsScriptUrl));
-                return _default;
-            }
-        }
-
-        public static bool IsFetching(VersionSource source = null) => GetState(source).Fetching;
+        public static bool IsFetching(VersionSource source) => source != null && GetState(source).Fetching;
 
         /// <summary>最後に取得してからの経過時間。取得したことが無ければ null。</summary>
-        public static TimeSpan? SinceLastFetch(VersionSource source = null)
+        public static TimeSpan? SinceLastFetch(VersionSource source)
         {
-            source = Resolve(source);
+            if (source == null)
+                return null;
+
             var raw = EditorPrefs.GetString(TimeKey(source), "");
             return long.TryParse(raw, out var ticks)
                 ? DateTime.UtcNow - new DateTime(ticks, DateTimeKind.Utc)
@@ -73,11 +62,13 @@ namespace VGC.Gimmicks
         /// 版の一覧を取り直す。force が false なら、キャッシュが新しいうちは何もしない。
         /// 利用者が明示的に押したときは force を true にする。
         /// </summary>
-        public static void Fetch(VersionSource source = null, bool force = false)
+        public static void Fetch(VersionSource source, bool force = false)
         {
-            source = Resolve(source);
+            if (source == null || !source.IsValid)
+                return;
+
             var state = GetState(source);
-            if (state.Fetching || !source.IsValid)
+            if (state.Fetching)
                 return;
 
             if (!force && !IsStale(source))
@@ -104,10 +95,9 @@ namespace VGC.Gimmicks
         public static bool HasUpdate(VersionSource source, string key, string localVersion, out string remoteVersion)
         {
             remoteVersion = null;
-            if (string.IsNullOrEmpty(key))
+            if (source == null || string.IsNullOrEmpty(key))
                 return false;
 
-            source = Resolve(source);
             Fetch(source);
 
             if (!GetState(source).Items.TryGetValue(key, out var info))
@@ -120,13 +110,13 @@ namespace VGC.Gimmicks
         /// <summary>シート上の最新版。無ければ null。</summary>
         public static string GetVersion(VersionSource source, string key)
         {
-            return key != null && GetState(source).Items.TryGetValue(key, out var info) ? info.Version : null;
+            return source != null && key != null && GetState(source).Items.TryGetValue(key, out var info) ? info.Version : null;
         }
 
         /// <summary>シート上のダウンロード URL。無ければ null。</summary>
         public static string GetUrl(VersionSource source, string key)
         {
-            return key != null && GetState(source).Items.TryGetValue(key, out var info) ? info.Url : null;
+            return source != null && key != null && GetState(source).Items.TryGetValue(key, out var info) ? info.Url : null;
         }
 
         /// <summary>
@@ -166,11 +156,8 @@ namespace VGC.Gimmicks
 
         // ===== 内部 =====
 
-        private static VersionSource Resolve(VersionSource source) => source != null ? source : Default;
-
         private static State GetState(VersionSource source)
         {
-            source = Resolve(source);
             var key = source.CacheKey;
             if (!States.TryGetValue(key, out var state))
                 States[key] = state = new State();

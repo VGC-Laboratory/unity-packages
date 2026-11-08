@@ -38,9 +38,12 @@ namespace VGC.Gimmicks
             return true;
         }
 
-        /// <summary>「更新を確認」ボタン。押すとキャッシュを無視して取り直す。</summary>
-        public static void DrawCheckButton(VersionSource source = null)
+        /// <summary>「更新を確認」ボタン。押すとキャッシュを無視して取り直す。取得元が無ければ何も出さない。</summary>
+        public static void DrawCheckButton(VersionSource source)
         {
+            if (source == null)
+                return;
+
             var texts = GimmickTexts.Installer;
             using (new EditorGUI.DisabledScope(VersionChecker.IsFetching(source)))
             {

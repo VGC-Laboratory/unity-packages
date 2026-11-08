@@ -116,7 +116,7 @@ Udon / uGUI 固有の `AddButtonSendCustomEventField` / `AddEventTriggerSendCust
 **`VGC.Attributes.Runtime` の参照はゼロ**（UnityEngine のみ）。UdonSharp にも uGUI にも依存しない。
 
 このパッケージは **ワールド用・アバター用のどちらの VRChat プロジェクトでも使える**。
-`vpmDependencies` は `com.vrchat.base` だけで、Udon 固有の部分は asmdef の
+`vpmDependencies` は空で、Udon 固有の部分は asmdef の
 `versionDefines`（`com.vrchat.worlds` → `VGC_HAS_UDONSHARP`）と `defineConstraints` で切り分けてある。
 
 | アセンブリ | 参照 | com.vrchat.worlds が無い環境 |

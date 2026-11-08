@@ -1,8 +1,8 @@
 # VGC Gimmicks
 
 ギミックやツールの**版の確認**と、VGC のギミックの**定義・導入**の共通基盤。
-**VRChat の SDK に依存しない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
-（`vpmDependencies` は `com.vrchat.base` と [localization](../com.vgc-laboratory.localization/README.md)）。
+**VRChat の SDK の API を使わない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
+（`vpmDependencies` は [localization](../com.vgc-laboratory.localization/README.md) だけ）。
 
 ## 版の確認（誰でも使える）
 
@@ -27,7 +27,7 @@ if (VersionChecker.HasUpdate(_versionSource, "MyTool", "1.0.0", out var latest))
 
 - 取得は最初に問い合わせたときに始まり、結果を取得元ごとに `EditorPrefs` へ残す。`CacheLifetime`（既定 6 時間）を過ぎるまで取り直さない。
 - 版の比較は数値で行う（`1.10.0 > 1.9.0`）。先頭の `v`、`-beta` や `+build` 以降は比べない。数値でない部分は 0 として扱い、例外にしない。
-- `VersionSource` を指定しない（null）ときは、VGC のギミックの版の一覧（`VersionChecker.VGCAppsScriptUrl`、Apps Script の読み取り専用デプロイ）を見る。
+- **`VersionSource` が null のときは版の確認をしない。** 他人のシートを黙って見に行くことはない。
 
 **書き込み（スプレッドシートの更新）はこのパッケージに入っていない。**
 
@@ -43,11 +43,24 @@ if (VersionChecker.HasUpdate(_versionSource, "MyTool", "1.0.0", out var latest))
 
 - キャッシュは「取得元 ＋ タブ名」ごとに分かれる。
 - 導入 UI は使われている取得元をすべて取りに行くので、**1 つの画面に複数の取得元が混在してよい。**
-- **Version Source が空のギミックは、VGC の既定の一覧を見る。**
-  分けるときは各 `GimmickSetting` に設定すること。
+- **Version Source が空のギミックは版の確認をしない。** 確認したいなら必ず設定する。
 
 取得元の作り方と、自分で GAS を書くときの仕様は
 [localization の README](../com.vgc-laboratory.localization/README.md) にある。
+
+### VGC の取得元
+
+VGC 自身の版の一覧は、1 つのスプレッドシートをアバター用とワールド用のタブに分けてある。
+このパッケージの `Config/` に、そのまま使えるアセットが入っている。
+
+| アセット | タブ |
+|---|---|
+| `Config/VGCAvatarGimmicks.asset` | アバターギミック |
+| `Config/VGCWorldGimmicks.asset` | ワールドギミック |
+
+どちらも `Config/VGCSpreadsheet.asset`（VGC の Apps Script、読み取り専用デプロイ）を見ている。
+VGC のギミックを作るときは、`GimmickSetting` の Version Source にこのどちらかを入れる。
+
 ## ギミックの定義と導入（誰でも使える）
 
 ```
@@ -61,11 +74,14 @@ Editor/    asmdef VGC.Gimmicks.Editor
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
 └── GimmickInstallerEditor.cs  導入 UI（版チェックの表示を含む）
 Config/
-└── GimmickInstallerTable.asset  導入 UI と更新のお知らせの文言（シート「メインウィンドウ」）
+├── GimmickInstallerTable.asset  導入 UI と更新のお知らせの文言（シート「メインウィンドウ」）
+├── VGCSpreadsheet.asset         VGC の Apps Script（読み取り専用デプロイ）
+├── VGCAvatarGimmicks.asset      ↑ のタブ「アバターギミック」
+└── VGCWorldGimmicks.asset       ↑ のタブ「ワールドギミック」
 ```
 
 - `GimmickSetting` と同じフォルダに `LocalizationTable` を置く。表の `GimmickName` の訳が表示名になる。
-- 版チェックのキーは `GimmickSetting` の Version Key（空なら同じフォルダの表のシート名）。取得元は Version Source（空なら VGC の版の一覧）。
+- 版チェックのキーは `GimmickSetting` の Version Key（空なら同じフォルダの表のシート名）。取得元は Version Source（空なら確認しない）。
 - 導入 UI は、プロジェクトにある `GimmickSetting` をすべて一覧に出す（型で探す）。
   ギミックのアセットを置くだけで一覧に並ぶので、登録作業は要らない。
 
@@ -91,7 +107,7 @@ Config/
 
 | 0.1.0 | 0.2.0 |
 |---|---|
-| `GimmickVersionManager`（取得元は固定の `URL`） | `VersionChecker`（取得元 `VersionSource` を引数で渡す。省略時は VGC の版の一覧） |
+| `GimmickVersionManager`（取得元は固定の `URL`） | `VersionChecker`（取得元 `VersionSource` を引数で渡す。null なら確認しない） |
 | `GimmickVersionManager.URL` | `VersionChecker.VGCAppsScriptUrl` |
 | `HasUpdate(id, local, out remote)` | `HasUpdate(source, key, local, out remote)` |
 | 起動時（`[InitializeOnLoad]`）に取得 | 最初に問い合わせたときに取得 |
