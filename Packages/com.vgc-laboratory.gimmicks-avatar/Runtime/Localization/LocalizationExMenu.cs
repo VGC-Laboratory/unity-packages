@@ -52,21 +52,21 @@ namespace VGC.Localization.Avatar
 #if UNITY_EDITOR
             switch (LanguageSetting.Current)
             {
-                case Language.English:
+                case SystemLanguage.English:
                     break;
-                case Language.Japanese:
+                case SystemLanguage.Japanese:
                     if(_menuJa != null)
                         return _menuJa;
                     break;
-                case Language.Korean:
+                case SystemLanguage.Korean:
                     if(_menuKr != null)
                         return _menuKr;
                     break;
-                case Language.ChineseSimplified:
+                case SystemLanguage.ChineseSimplified:
                     if(_menuCs != null)
                         return _menuCs;
                     break;
-                case Language.ChineseTraditional:
+                case SystemLanguage.ChineseTraditional:
                     if(_menuCt != null)
                         return _menuCt;
                     break;

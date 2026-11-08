@@ -90,21 +90,21 @@ namespace VGC.Localization
             return "";
         }
 
-        private string[] GetLanguages(LocalizationTable table)
+        /// <summary>表に含まれる言語の名前(列の並び順)。</summary>
+        public static string[] GetLanguages(LocalizationTable table)
         {
-            var set = new HashSet<string>();
+            var list = new List<string>();
 
             foreach (var e in table.Entries)
             {
                 foreach (var v in e.Values)
                 {
-                    set.Add(v.Language);
+                    if (!string.IsNullOrEmpty(v.Language) && !list.Contains(v.Language))
+                        list.Add(v.Language);
                 }
             }
 
-            var arr = new string[set.Count];
-            set.CopyTo(arr);
-            return arr;
+            return list.ToArray();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using nadena.dev.ndmf.localization;
+using UnityEngine;
 
 namespace VGC.Localization.Avatar
 {
@@ -23,11 +24,11 @@ namespace VGC.Localization.Avatar
 
             var localizer = new Localizer("en-US", () => new List<(string, Func<string, string>)>
             {
-                ("en-US", key => Lookup(table, key, Language.English)),
-                ("ja-JP", key => Lookup(table, key, Language.Japanese)),
-                ("ko-KR", key => Lookup(table, key, Language.Korean)),
-                ("zh-Hans", key => Lookup(table, key, Language.ChineseSimplified)),
-                ("zh-Hant", key => Lookup(table, key, Language.ChineseTraditional)),
+                ("en-US", key => Lookup(table, key, SystemLanguage.English)),
+                ("ja-JP", key => Lookup(table, key, SystemLanguage.Japanese)),
+                ("ko-KR", key => Lookup(table, key, SystemLanguage.Korean)),
+                ("zh-Hans", key => Lookup(table, key, SystemLanguage.ChineseSimplified)),
+                ("zh-Hant", key => Lookup(table, key, SystemLanguage.ChineseTraditional)),
             });
 
             Cache[table] = localizer;
@@ -35,7 +36,7 @@ namespace VGC.Localization.Avatar
         }
 
         // 見つからないときはnullを返す(NDMFが次の候補言語へフォールバックする)
-        private static string Lookup(LocalizationTable table, string key, Language language)
+        private static string Lookup(LocalizationTable table, string key, SystemLanguage language)
         {
             return table != null && table.TryGet(key, language, out var text) ? text : null;
         }

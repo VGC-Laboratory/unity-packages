@@ -6,8 +6,8 @@ VPM（VRChat Package Manager）で配信する。
 
 ## パッケージ
 
-二種類ある。**外部のクリエイターに使ってもらうためのもの**と、
-**VGC のギミックが内部で使う基盤**。前者だけ見れば足りる。
+二種類ある。**ワールド制作に使えるライブラリ**と、**翻訳・版の確認・ギミックの導入の基盤**。
+どちらも外部のクリエイターが使える。
 
 ### 外部のクリエイター向け
 
@@ -22,26 +22,22 @@ VPM（VRChat Package Manager）で配信する。
 
 各パッケージの README に属性の一覧や設計の意図を書いてある。
 
-### VGC のギミック管理の基盤
+### 翻訳・版の確認・ギミックの導入の基盤
 
-[VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)で配布している VGC のギミックが、
-版の確認・導入・メニューの翻訳のために使う。
-
-**ギミックを入れると依存として一緒に入るので、自分で入れる必要はない。**
+**スプレッドシートの ID を設定すれば、誰のツールでも使える。**
+[VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)で配布している VGC のギミックや
+ワールド拡張メニュー（VGCWExM）もこれを使っている。
 
 | パッケージ | 内容 |
 |---|---|
-| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | ギミックの定義・版の確認・導入 |
+| [`localization`](Packages/com.vgc-laboratory.localization) | スプレッドシートから取り込む翻訳表、エディタの表示言語、使用言語の一覧（Project Settings） |
+| [`localization-world`](Packages/com.vgc-laboratory.localization-world) | ワールドの実行時（Udon）の翻訳。VRChat 本体の言語に追従、ビルド時に焼き込み |
+| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | スプレッドシートで管理する版の確認と更新のお知らせ。VGC のギミックの定義・導入 |
 | [`gimmicks-avatar`](Packages/com.vgc-laboratory.gimmicks-avatar) | 上のアバター側（導入ウィンドウ、NDMF / Modular Avatar 連携） |
-| [`localization`](Packages/com.vgc-laboratory.localization) | 翻訳テーブルとエディタ言語の設定 |
 | [`resources`](Packages/com.vgc-laboratory.resources) | 共通アセット（中身が空の AnimationClip） |
 
-> **外部のクリエイターが直接使うことは想定していない。**
-> VRChat の SDK に依存しない作りではあるが、
-> **アセットの発見をプロジェクト全体の型検索（`AssetDatabase.FindAssets("t:…")`）で行っている。**
-> 持ち主の区別が無いので、独立した利用者が同じプロジェクトに同居すると、
-> 翻訳テーブルのシート名が衝突したり、他人のギミックが導入ウィンドウに混ざったりする。
-> 公開 API も VGC のギミックの都合で変わりうる。
+翻訳表はプロジェクト全体をシート名で探さず、GUID・パス・フォルダで場所を絞って読む。
+別の作者の表と同じシート名でも衝突しない。
 
 ワールド用かアバター用かは `vpmDependencies` で決まる（`com.vrchat.worlds` ならワールド用、
 `com.vrchat.avatars` ならアバター用、どちらも無ければ両方で使える）。
@@ -58,8 +54,9 @@ VPM（VRChat Package Manager）で配信する。
   core
       └── game-framework
 
-ギミック管理の基盤
+翻訳・版の確認・ギミックの導入の基盤
   localization
+      ├── localization-world
       ├── gimmicks
       │     └── gimmicks-avatar
       └── gimmicks-avatar（VGC.Localization.Avatar）
@@ -73,7 +70,7 @@ VPM（VRChat Package Manager）で配信する。
 
 | 家族 | 共通 | アバター | ワールド |
 |---|---|---|---|
-| 翻訳 | `VGC.Localization` | `VGC.Localization.Avatar` | （将来） |
+| 翻訳 | `VGC.Localization` | `VGC.Localization.Avatar` | `VGC.Localization.World` |
 | ギミック | `VGC.Gimmicks` | `VGC.Gimmicks.Avatar` | （将来） |
 ## 開発
 

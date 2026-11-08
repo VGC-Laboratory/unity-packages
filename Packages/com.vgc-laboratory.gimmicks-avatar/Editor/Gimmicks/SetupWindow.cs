@@ -35,7 +35,7 @@ namespace VGC.Gimmicks.Avatar
         private void OnGUI()
         {
             if(_localize == null)
-                _localize = LocalizationTableResolver.Get("メインウィンドウ");
+                _localize = GimmickTexts.Installer;
             
             LocalizeUIHelper.InspectorGUI();
             

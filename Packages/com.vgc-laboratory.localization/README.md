@@ -1,69 +1,89 @@
 # VGC Localization
 
-> **これは VGC のギミックが内部で使う基盤。**
-> [VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)のギミックを入れると
-> 依存として一緒に入るので、自分で入れる必要はない。
->
-> **外部のクリエイターが直接使うことは想定していない。**
-> VRChat の SDK に依存しない作りではあるが、
-> **アセットの発見をプロジェクト全体の型検索（`AssetDatabase.FindAssets("t:…")`）で行っている。**
-> 持ち主の区別が無いので、独立した利用者が同じプロジェクトに同居すると混ざる。
->
-> - `LocalizationTableResolver` … 全 `LocalizationTable` を `sheetName` 一つの辞書に入れる。
->   シート名が衝突すると後に読んだ方で上書きされる
-> - `GimmickInstallerEditor` / `SetupWindow` … 全 `GimmickSetting` を一覧に出す。
->   他人のギミックが混ざって見える
->
-> 公開 API も VGC のギミックの都合で変わりうる。
->
-> ワールド制作向けのライブラリは
-> [attributes](../com.vgc-laboratory.attributes/README.md) /
-> [core](../com.vgc-laboratory.core/README.md) /
-> [ui-extension](../com.vgc-laboratory.ui-extension) /
-> [game-framework](../com.vgc-laboratory.game-framework/README.md) 側。
+スプレッドシートで管理する翻訳表（`LocalizationTable`）と、エディタの表示言語。
+**VRChat の SDK に依存しない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
+（`vpmDependencies` は `com.vrchat.base` だけ）。
 
-翻訳テーブルとエディタ言語の設定。**VRChat の SDK に依存しない**ので、
-ワールド用・アバター用のどちらのプロジェクトでも使える（`vpmDependencies` は `com.vrchat.base` だけ）。
+ワールドの実行時（Udon）に翻訳を使うときは [localization-world](../com.vgc-laboratory.localization-world/README.md) を併せて入れる。
+
+## 使い方
+
+1. **スプレッドシートを用意する**。1 行目は見出しで、A 列に `key`、B 列以降に言語名（`SystemLanguage` の名前: `Japanese`, `English`, `Korean`, `ChineseSimplified` …）。2 行目以降が 1 キー 1 行。言語として読めない見出しの列（メモ欄など）は読み飛ばす。
+2. 共有設定を「リンクを知っている全員が閲覧可」にする。
+3. Create > VGC > Localization > **Spreadsheet Source** を作り、シート ID（URL をそのまま貼ってもよい）を入れる。
+4. Create > VGC > Localization > **Localization Table** を作り、Source と Sheet Name を入れて **Import**。
+5. コードから引く。
+
+```csharp
+[SerializeField] LocalizationTable _texts;
+
+EditorGUILayout.LabelField(_texts.Get("Title"));           // エディタの表示言語
+EditorGUILayout.LabelField(_texts.Get("Count", 3));        // string.Format
+var ja = _texts.Get("Title", SystemLanguage.Japanese);      // 言語を指定
+```
+
+訳が無いときは、表の Default Language → 最初に見つかった訳 → キー の順に返す。
+
+### 取得方法
+
+| `SpreadsheetSource.Kind` | 仕組み | 向いているとき |
+|---|---|---|
+| `GoogleSheetsCsv`（既定） | 公開シートを gviz の CSV 出力で直接読む | シート ID だけで使いたい |
+| `AppsScript` | Apps Script の Web アプリ（`?sheet=シート名` で GET） | 書き込みや整形を Apps Script でしたい |
+
+Apps Script の応答は、翻訳の配列 `[{id, values:[{language, text}]}]` か、版の一覧 `{items:[{sheetName, version, url}]}`
+（[gimmicks](../com.vgc-laboratory.gimmicks/README.md) の版チェック用）。どちらも行の配列に直してから扱うので、
+取得方法が違っても同じシートの形で使える。
+
+## 言語
+
+言語は `UnityEngine.SystemLanguage`。**使う言語の一覧と既定言語は Project Settings > VGC > Localization** で決める
+（`ProjectSettings/VGCLocalizationSettings.asset`）。一覧の並び順が言語メニューの並びで、
+ワールド側（localization-world）の言語の番号にもなる。
+
+| API | 内容 |
+|---|---|
+| `LanguageSetting.Current` | エディタの表示言語。既定は `EditorPrefs` に保存（初回は OS の言語が一覧にあればそれ） |
+| `LanguageSetting.Available` / `Default` | Project Settings の一覧と既定言語 |
+| `LanguageSetting.Changed` | 言語（または一覧）が変わったとき |
+| `LanguageSetting.Getter` / `Setter` | 言語の保存先の差し替え口。アバター用プロジェクトでは [gimmicks-avatar](../com.vgc-laboratory.gimmicks-avatar/README.md) の `NdmfLanguageProvider` が NDMF / Modular Avatar の `LanguagePrefs` に相乗りさせる |
+| `ILocalizable` | 開いている EditorWindow / Editor が実装すると、言語が変わったときに `OnLanguageChanged` が呼ばれる。そのあと全ビューを描き直す |
+| `LocalizeUIHelper.InspectorGUI()` | 言語を選ぶポップアップ（一覧の言語を自称で出す） |
+| `LanguageNames.NativeName` / `TryParse` | 言語の自称（日本語、English …）、見出し文字列からの変換 |
+
+## 翻訳表を探す（LocalizationTableResolver）
+
+**プロジェクト全体をシート名で探すことはしない。** 別の作者の表と名前が衝突するため（「メインウィンドウ」など）。
+次のどれかで場所を絞る。基本は、使う側が `LocalizationTable` をフィールドで直接持つこと。
+
+| API | 用途 |
+|---|---|
+| `LoadByGuid(guid)` | 自分のパッケージに入れた決まった表（移動・改名しても変わらない） |
+| `LoadAtPath(path)` | パスで読む |
+| `FindInFolder(folder, sheetName)` | フォルダの中から探す |
+| `FindNextTo(asset, sheetName)` | アセットと同じフォルダから探す（`GimmickSetting` がこれを使う） |
+
+## 構成
 
 ```
 Runtime/   asmdef VGC.Localization.Runtime   namespace VGC.Localization
-├── Language.cs              Language（5言語の列挙）と LanguageSetting（言語の継ぎ目）
-├── LocalizationTable.cs     ScriptableObject。id → 言語 → 文字列
-├── LocalizationTableResolver.cs  シート名からテーブルを引く
-└── LocalizedBehaviour.cs    インスペクタに言語切り替えを出す基底 MonoBehaviour
+├── LanguageSetting.cs            LanguageSetting / LocalizationProjectSettings / LanguageNames / ILocalizable
+├── LocalizationTable.cs          ScriptableObject。キー → 言語 → 文字列
+├── SpreadsheetSource.cs          ScriptableObject。取り込み元のスプレッドシート
+├── LocalizationTableResolver.cs  GUID / パス / フォルダで表を探す（エディタのみ）
+└── LocalizedBehaviour.cs         インスペクタに言語の選択を出す基底 MonoBehaviour
 Editor/    asmdef VGC.Localization.Editor
-├── LocalizationTableEditor.cs
-└── LocalizationTreeView.cs
+├── Import/                       CsvParser / SpreadsheetReader / LocalizationTableImporter（namespace VGC.Localization.Import）
+├── LocalizationTableEditor.cs    表のインスペクタ（Import ボタン、表の閲覧）
+├── LocalizationSettingsProvider.cs  Project Settings > VGC > Localization
+└── LanguageChangeNotifier.cs     ILocalizable への通知
 ```
 
-## 言語の継ぎ目（LanguageSetting）
+## 0.1.0 からの変更（破壊的）
 
-「今どの言語か」だけが環境によって違うので、ここを差し替え可能にしてある。
-
-```csharp
-public static Func<Language> Getter;      // 既定: EditorPrefs
-public static Action<Language> Setter;    // 既定: EditorPrefs
-public static event Action<Language> Changed;
-public static Language Current { get; set; }
-```
-
-- **ワールド用プロジェクト**: 既定のまま。`EditorPrefs`（`VGC.Localization.Language`）に保存する。
-- **アバター用プロジェクト**: [gimmicks-avatar](../com.vgc-laboratory.gimmicks-avatar/README.md) の
-  `NdmfLanguageProvider` が `[InitializeOnLoad]` で差し替え、**NDMF / Modular Avatar の
-  `LanguagePrefs` に相乗り**する。MA のインスペクタで言語を変えると VGC 側も切り替わる（逆も同じ）。
-
-この形にしているので、**共通側は NDMF を一切参照しない。**
-NDMF が無い環境ではアバター側のアセンブリがそもそもコンパイルされず、既定動作になる。
-
-## 旧 `VGC.Gimmicks_MA.Lib.Localization` からの変更
-
-| 旧 | 新 |
+| 0.1.0 | 0.2.0 |
 |---|---|
-| `VGC.Gimmicks_MA.Lib.Localization` | `VGC.Localization` |
-| `LocalizeConfigBehaviour` | `LocalizedBehaviour` |
-| `LocalizeConfig`（NDMF 相乗り） | `VGC.Localization.Avatar.NdmfLanguageProvider` へ移動 |
-| （なし） | `LanguageSetting`（継ぎ目） |
-
-**`.cs` の `.meta` GUID は維持している**ので、利用者が持っている `LocalizationTable.asset` は
-そのまま読める（アセットは型名ではなくスクリプトの GUID で参照しているため）。
-一方、**ソースは名前で参照しているので、古い名前を使っているコードは直す必要がある**（破壊的変更）。
+| `Language`（5 言語の列挙） | `UnityEngine.SystemLanguage`。保存してある言語名は同じなので、既存の `LocalizationTable.asset` はそのまま読める |
+| `LocalizationTableResolver.Get(sheetName)`（全体から検索） | `LoadByGuid` / `LoadAtPath` / `FindInFolder` / `FindNextTo` |
+| 取り込みは無し（開発用リポジトリの別ツール） | `SpreadsheetSource` と表のインスペクタの Import |
+| `Get(id, Language fallback)` | `Get(id)` は表の `Default Language` に戻る |

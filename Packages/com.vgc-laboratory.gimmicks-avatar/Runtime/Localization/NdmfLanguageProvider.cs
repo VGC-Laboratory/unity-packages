@@ -24,7 +24,7 @@ namespace VGC.Localization.Avatar
         private static readonly string[] SupportedLanguageCodes = { "en-us", "ja-jp", "ko-kr", "zh-hans", "zh-hant" };
 
         // 旧バージョンで保存していた言語。NDMF 側が未設定のときに1回だけ引き継ぐ
-        [SerializeField] private Language _language;
+        [SerializeField] private SystemLanguage _language = SystemLanguage.English;
 
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -51,27 +51,27 @@ namespace VGC.Localization.Avatar
                 _ => LanguageSetting.NotifyChanged(FromCode(LanguagePrefs.Language)));
         }
 
-        public static string ToCode(Language language)
+        public static string ToCode(SystemLanguage language)
         {
             switch (language)
             {
-                case Language.Japanese: return "ja-jp";
-                case Language.Korean: return "ko-kr";
-                case Language.ChineseSimplified: return "zh-hans";
-                case Language.ChineseTraditional: return "zh-hant";
+                case SystemLanguage.Japanese: return "ja-jp";
+                case SystemLanguage.Korean: return "ko-kr";
+                case SystemLanguage.ChineseSimplified: return "zh-hans";
+                case SystemLanguage.ChineseTraditional: return "zh-hant";
                 default: return "en-us";
             }
         }
 
-        public static Language FromCode(string code)
+        public static SystemLanguage FromCode(string code)
         {
             code = (code ?? "").ToLowerInvariant();
 
-            if (code.StartsWith("ja")) return Language.Japanese;
-            if (code.StartsWith("ko")) return Language.Korean;
-            if (code == "zh-hant" || code == "zh-tw" || code == "zh-hk" || code == "zh-mo") return Language.ChineseTraditional;
-            if (code.StartsWith("zh")) return Language.ChineseSimplified;
-            return Language.English;
+            if (code.StartsWith("ja")) return SystemLanguage.Japanese;
+            if (code.StartsWith("ko")) return SystemLanguage.Korean;
+            if (code == "zh-hant" || code == "zh-tw" || code == "zh-hk" || code == "zh-mo") return SystemLanguage.ChineseTraditional;
+            if (code.StartsWith("zh")) return SystemLanguage.ChineseSimplified;
+            return SystemLanguage.English;
         }
     }
 }

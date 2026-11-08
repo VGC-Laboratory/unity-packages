@@ -1,86 +1,66 @@
 # VGC Gimmicks (Avatar)
 
-> **これは VGC のギミックが内部で使う基盤。**
-> [VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)のギミックを入れると
-> 依存として一緒に入るので、自分で入れる必要はない。
->
-> **外部のクリエイターが直接使うことは想定していない。**
-> VRChat の SDK に依存しない作りではあるが、
-> **アセットの発見をプロジェクト全体の型検索（`AssetDatabase.FindAssets("t:…")`）で行っている。**
-> 持ち主の区別が無いので、独立した利用者が同じプロジェクトに同居すると混ざる。
->
-> - `LocalizationTableResolver` … 全 `LocalizationTable` を `sheetName` 一つの辞書に入れる。
->   シート名が衝突すると後に読んだ方で上書きされる
-> - `GimmickInstallerEditor` / `SetupWindow` … 全 `GimmickSetting` を一覧に出す。
->   他人のギミックが混ざって見える
->
-> 公開 API も VGC のギミックの都合で変わりうる。
->
-> ワールド制作向けのライブラリは
-> [attributes](../com.vgc-laboratory.attributes/README.md) /
-> [core](../com.vgc-laboratory.core/README.md) /
-> [ui-extension](../com.vgc-laboratory.ui-extension) /
-> [game-framework](../com.vgc-laboratory.game-framework/README.md) 側。
-
-VGC のアバターギミックが共通で使う基盤。**アバター専用**（`com.vrchat.avatars` と Modular Avatar に依存）。
-
-配布済み 1.0 系（各ギミックの unitypackage に同梱されていた `Assets/VGC/Gimmicks_MA/Lib`）の後継。
-unitypackage 同梱から VPM パッケージへ配布形態が変わる区切りとして **2.0.0** から始める。
-**公開 API（型・メンバー・シリアライズされるフィールド名）は 1.0 系から消さない。**
-利用者のプロジェクトに旧版のギミックが残っていても動くようにするため。
+VGC のギミックの**アバター固有の部分**。共通部分は
+[gimmicks](../com.vgc-laboratory.gimmicks/README.md) と
+[localization](../com.vgc-laboratory.localization/README.md) にある。
 
 ```
-Runtime/                         asmdef: VGC.Gimmicks.Avatar.Runtime
-├── Attributes/ReadOnlyAttribute.cs
-├── Installer/                   AvatarGimmickSetting / AvatarGimmickMarker /
-│                                AvatarGimmickInstaller / AvatarGimmickUtility
-└── Localization/                LocalizationTable / LocalizationTableResolver /
-                                 LocalizationExMenu / LocalizeConfig / LocalizedMenuLabels
-Editor/                          asmdef: VGC.Gimmicks.Avatar.Editor
-├── Installer/                   AvatarGimmickInstallerEditor / SetupWindow
-├── Localization/                LocalizationExMenuPlugin（NDMF プラグイン）/
-│                                LocalizationTableEditor / LocalizationTreeView /
-│                                LocalizationTableNdmfExtensions
-└── VersionManager/              AvatarGimmickVersionManager
-Config/LocalizationTable.asset   実行時に使う翻訳テーブル
-VGCResources/EmptyAnimation.anim
+Runtime/
+├── Gimmicks/        asmdef VGC.Gimmicks.Avatar.Runtime      namespace VGC.Gimmicks.Avatar
+│   └── AvatarUtility.cs          アバターのルート探索、階層パスの取得
+└── Localization/    asmdef VGC.Localization.Avatar.Runtime  namespace VGC.Localization.Avatar
+    ├── NdmfLanguageProvider.cs   エディタ言語を NDMF の LanguagePrefs に相乗りさせる
+    ├── LocalizationExMenu.cs     エクスプレッションメニューの翻訳
+    └── LocalizedMenuLabels.cs    子孫の MA Menu Item のラベルをビルド時に差し替える
+Editor/
+├── Gimmicks/        asmdef VGC.Gimmicks.Avatar.Editor
+│   └── SetupWindow.cs            導入ウィンドウ（メニュー: VGC/Gimmick Setup）
+└── Localization/    asmdef VGC.Localization.Avatar.Editor
+    ├── LocalizationExMenuPlugin.cs      NDMF プラグイン
+    └── LocalizationTableNdmfExtensions.cs  NDMF の Localizer との橋渡し
 ```
 
-- 名前空間は `VGC.Gimmicks_MA.Lib` と `VGC.Gimmicks_MA.Lib.Localization`。
-- asmdef の名前と GUID は変えない。**配布済みの各ギミックの asmdef が GUID で参照している。**
-  - `VGC.Gimmicks.Avatar.Runtime` … `433d64cc240a8214ea3fa88408f14787`
-  - `VGC.Gimmicks.Avatar.Editor` … `43840042a51294744a849c40be6f5eee`
-- `versionDefines`: `nadena.dev.modular-avatar` → `MODULAR_AVATAR`。
+`VGC.Localization.Avatar.*` の 2 つは `versionDefines`（`nadena.dev.modular-avatar` → `MODULAR_AVATAR`）を持つ。
 
-## 依存関係
+導入 UI の文言は [gimmicks](../com.vgc-laboratory.gimmicks/README.md) の
+`Config/GimmickInstallerTable.asset` にある（このパッケージは翻訳表を持たない）。
 
-| 参照先 | 来る場所 |
-|---|---|
-| `nadena.dev.modular-avatar.core` | Modular Avatar |
-| `nadena.dev.ndmf` | NDMF（MA 経由で入る） |
-| `UniTask` | `com.vrchat.base`（avatars SDK 経由で入る） |
-| `VRC.SDK3A` / `VRC.SDKBase` | avatars SDK（`autoReferenced` なので asmdef に書かれていない） |
+## エディタ言語を NDMF に相乗りさせる
 
-使っている MA / NDMF の API は `ObjectRegistry.TryRegisterReplacedObject` / `GetReference`、
-`Localizer`、`LanguagePrefs`、`Plugin<T>` / `ExportsPlugin` / `BuildPhase` / `ErrorReport`、
-`ModularAvatarMenuItem` / `ModularAvatarMenuInstaller`。
-いずれも MA 1.18 系にあるものなので、`vpmDependencies` は `>=1.18.0 <2.0.0-a` としている。
+`NdmfLanguageProvider` が `[InitializeOnLoad]` で
+[localization](../com.vgc-laboratory.localization/README.md) の `LanguageSetting` に差し込み、
+**NDMF / Modular Avatar と共通の言語設定（`LanguagePrefs`）**につなぐ。
+MA のインスペクタで言語を変えると VGC 側も切り替わる（逆も同じ）。
+
+この形にしているので、**共通側は NDMF を一切参照しない。**
+NDMF が無いワールド用プロジェクトではこのアセンブリ自体がコンパイルされず、
+`LanguageSetting` は既定の `EditorPrefs` 動作になる。
+
+## 導入ウィンドウ
+
+メニュー **VGC/Gimmick Setup**。アバターを選ぶと `GimmickInstaller` を付け、
+プロジェクト内の `GimmickSetting` を一覧にして導入・更新できる。
+
+一覧は **配布元（`GimmickSetting.Publisher`）ごとにまとめて並ぶ。**
+別々の配布元のギミックが同じプロジェクトに入っていても取り違えない。
+詳しくは [gimmicks の README](../com.vgc-laboratory.gimmicks/README.md) を参照。
 
 ## 旧フォルダの削除（legacyFolders）
 
-`package.json` の `legacyFolders` に旧フォルダとその GUID を書いてある。
-VCC・vrc-get（各ギミックに同梱している自動導入ツールも中身は vrc-get）がこのパッケージを入れるとき、
-旧フォルダを消してくれる。GUID でも照合するので、利用者がフォルダを移動していても消える。
+`package.json` の `legacyFolders` に、unitypackage 同梱時代の旧フォルダとその GUID を書いてある。
+VCC・vrc-get がこのパッケージを入れるとき、旧フォルダを消してくれる。GUID でも照合するので、
+利用者がフォルダを移動していても消える。
 
 | 旧フォルダ | GUID |
 |---|---|
 | `Assets\VGC\Gimmicks_MA\Lib` | `c6dcaad7d767b274c85fc33f805b383f` |
-| `Assets\VGC\VGCResources` | `f6d57f4e3e4bc244cb83ffa7f9103f0b` |
 
-旧 1.0 の unitypackage を後から取り込み直すと旧フォルダが戻ってきて GUID が重複する。
-この場合の扱いは未確認（設計書 5.2 の課題）。
+## 経緯
 
-## 開発専用で入れていないもの
+配布済み 1.0 系（各ギミックの unitypackage に同梱されていた `Assets/VGC/Gimmicks_MA/Lib`）の後継。
+unitypackage 同梱から VPM パッケージへ配布形態が変わる区切りとして 2.0.0 から始めた。
 
-`Lib/Config/LocalizeDownloader.asset`（スプレッドシートの取り込み設定）はパッケージに入れない。
-移動元の VGCAvatarGimmick_MA に残してある。
+当初は名前空間 `VGC.Gimmicks_MA.Lib` のまま 1 パッケージだったが、
+中身の大半がアバター固有でないと分かったため、機能ごとに
+`VGC.Localization` / `VGC.Gimmicks` へ切り出し、このパッケージにはアバター固有の部分だけを残した。
+**旧 1.0 系の公開 API との互換は維持していない**（破壊的変更）。

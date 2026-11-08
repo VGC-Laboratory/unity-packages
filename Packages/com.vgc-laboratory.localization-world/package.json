@@ -1,0 +1,17 @@
+{
+  "name": "com.vgc-laboratory.localization-world",
+  "displayName": "VGC Localization (World)",
+  "version": "0.1.0",
+  "unity": "2022.3",
+  "description": "VRChat ワールドで LocalizationTable の翻訳を使う。LocalizationSystem（表示言語の管理。VRChat 本体の言語に追従）、LocalizedUdonBehaviour（翻訳を受け取る基底）、LocalizationBindings（文字欄とキーの対応）、ビルド時の焼き込み。",
+  "author": {
+    "name": "VGC-Laboratory",
+    "url": "https://github.com/VGC-Laboratory"
+  },
+  "license": "MIT",
+  "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "vpmDependencies": {
+    "com.vrchat.worlds": "^3.10.4",
+    "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+  }
+}

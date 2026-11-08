@@ -1,44 +1,67 @@
 # VGC Gimmicks
 
-> **これは VGC のギミックが内部で使う基盤。**
-> [VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)のギミックを入れると
-> 依存として一緒に入るので、自分で入れる必要はない。
->
-> **外部のクリエイターが直接使うことは想定していない。**
-> VRChat の SDK に依存しない作りではあるが、
-> **アセットの発見をプロジェクト全体の型検索（`AssetDatabase.FindAssets("t:…")`）で行っている。**
-> 持ち主の区別が無いので、独立した利用者が同じプロジェクトに同居すると混ざる。
->
-> - `LocalizationTableResolver` … 全 `LocalizationTable` を `sheetName` 一つの辞書に入れる。
->   シート名が衝突すると後に読んだ方で上書きされる
-> - `GimmickInstallerEditor` / `SetupWindow` … 全 `GimmickSetting` を一覧に出す。
->   他人のギミックが混ざって見える
->
-> 公開 API も VGC のギミックの都合で変わりうる。
->
-> ワールド制作向けのライブラリは
-> [attributes](../com.vgc-laboratory.attributes/README.md) /
-> [core](../com.vgc-laboratory.core/README.md) /
-> [ui-extension](../com.vgc-laboratory.ui-extension) /
-> [game-framework](../com.vgc-laboratory.game-framework/README.md) 側。
+ギミックやツールの**版の確認**と、VGC のギミックの**定義・導入**の共通基盤。
+**VRChat の SDK に依存しない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
+（`vpmDependencies` は `com.vrchat.base` と [localization](../com.vgc-laboratory.localization/README.md)）。
 
-VGC のギミックの共通基盤。**VRChat の SDK に依存しない**ので、
-ワールド用・アバター用のどちらのプロジェクトでも使える（`vpmDependencies` は `com.vrchat.base` と localization）。
+## 版の確認（誰でも使える）
 
-「どのギミックがあって、何版で、プロジェクトへ入れる」までを扱う。
+自分のツールの最新版をスプレッドシートで管理し、インスペクタに更新のお知らせを出せる。
+
+1. スプレッドシートに版の一覧を作る。1 行目は見出し、A 列にキー（ツールの識別名）、B 列に最新版（`1.2.3`）、C 列にダウンロード URL。
+2. 共有設定を「リンクを知っている全員が閲覧可」にする。
+3. Create > VGC > Localization > **Spreadsheet Source** でシート ID を登録する。
+4. Create > VGC > Gimmicks > **Version Source** を作り、Source とシート名を入れる。
+5. インスペクタやウィンドウで呼ぶ。
+
+```csharp
+[SerializeField] VersionSource _versionSource;
+
+UpdateNoticeGUI.Draw(_versionSource, "MyTool", "1.0.0");   // 新しい版があるときだけ表示する
+UpdateNoticeGUI.DrawCheckButton(_versionSource);           // 「更新を確認」ボタン（キャッシュを無視して取り直す）
+
+// 自分で表示したいとき
+if (VersionChecker.HasUpdate(_versionSource, "MyTool", "1.0.0", out var latest))
+    Application.OpenURL(VersionChecker.GetUrl(_versionSource, "MyTool"));
+```
+
+- 取得は最初に問い合わせたときに始まり、結果を取得元ごとに `EditorPrefs` へ残す。`CacheLifetime`（既定 6 時間）を過ぎるまで取り直さない。
+- 版の比較は数値で行う（`1.10.0 > 1.9.0`）。先頭の `v`、`-beta` や `+build` 以降は比べない。数値でない部分は 0 として扱い、例外にしない。
+- `VersionSource` を指定しない（null）ときは、VGC のギミックの版の一覧（`VersionChecker.VGCAppsScriptUrl`、Apps Script の読み取り専用デプロイ）を見る。
+
+**書き込み（スプレッドシートの更新）はこのパッケージに入っていない。**
+
+## ギミックの定義と導入（誰でも使える）
 
 ```
 Runtime/   asmdef VGC.Gimmicks.Runtime   namespace VGC.Gimmicks
-├── GimmickSetting.cs     ScriptableObject。版・プレハブ・依存・クロスプラットフォーム対応・名前（翻訳から引く）
+├── GimmickSetting.cs     ScriptableObject。配布元・版・取得元・プレハブ・依存・クロスプラットフォーム対応
+├── VersionSource.cs      ScriptableObject。版の一覧を読むシート
 ├── GimmickInstaller.cs   導入用のマーカー MonoBehaviour（IEditorOnly）
 └── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（IEditorOnly）
 Editor/    asmdef VGC.Gimmicks.Editor
-├── GimmickVersionManager.cs   版の一覧を取得して手元の版と比べる
+├── VersionChecker.cs          取得元ごとに版の一覧を読み、手元の版と比べる
+├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
 └── GimmickInstallerEditor.cs  導入 UI（版チェックの表示を含む）
+Config/
+└── GimmickInstallerTable.asset  導入 UI と更新のお知らせの文言（シート「メインウィンドウ」）
 ```
 
-- `VGC.Gimmicks` は `VGC.Localization` に依存する（`GimmickSetting.Name` が翻訳テーブルを読む）。逆は無い。
-- `com.vrchat.base` に依存するのは、`IEditorOnly` と UniTask を使うため。
+- `GimmickSetting` と同じフォルダに `LocalizationTable` を置く。表の `GimmickName` の訳が表示名になる。
+- 版チェックのキーは `GimmickSetting` の Version Key（空なら同じフォルダの表のシート名）。取得元は Version Source（空なら VGC の版の一覧）。
+- 導入 UI は、プロジェクトにある `GimmickSetting` をすべて一覧に出す（型で探す）。
+  ギミックのアセットを置くだけで一覧に並ぶので、登録作業は要らない。
+
+### 配布元ごとにまとまる
+
+`GimmickSetting` の **Publisher**（配布元）に名前を入れると、導入 UI がその名前ごとにまとめて並べる。
+
+- 別の配布元のギミックが同じプロジェクトに入っていても取り違えない。
+- **空でも動く。** 空のものは見出し無しで先頭にまとまる。
+- 配布元が 1 つしか無いときは見出しを出さない（今までの見た目のまま）。
+
+自分のツールを配る場合は、自分の名前やサークル名を入れておくとよい。
+利用者のプロジェクトに他の作者のギミックが入ったときに、どれが自分のものか分かる。
 
 ## プラットフォーム固有の部分
 
@@ -47,41 +70,14 @@ Editor/    asmdef VGC.Gimmicks.Editor
 | [com.vgc-laboratory.gimmicks-avatar](../com.vgc-laboratory.gimmicks-avatar/README.md) | `VGC.Gimmicks.Avatar.Runtime` / `.Editor` |
 | `com.vgc-laboratory.gimmicks-world`（将来） | `VGC.Gimmicks.World.Runtime` / `.Editor` |
 
-ワールド側のコードができるまで、ワールドのプロジェクトはこのパッケージを直接入れて使える。
+## 0.1.0 からの変更（破壊的）
 
-## 版の取得について
-
-`GimmickVersionManager` は **読み取りしかしない。**
-Apps Script の**読み取り専用デプロイ**へ `UnityWebRequest.Get` で問い合わせ、
-`{sheetName, version, url}` の一覧を取って手元の版と比べるだけ。
-この URL に POST しても拒否される。
-
-**書き込み（スプレッドシートの更新）はこのパッケージに入っていない。**
-書き込み用の URL とトークンは開発用リポジトリ側にしかない。
-
-### 取得は間引いている
-
-`[InitializeOnLoad]` なので、そのまま毎回取得すると Apps Script の実行回数の上限に近づく。
-取得結果と取得時刻を `EditorPrefs` に残し、`CacheLifetime`（既定 6 時間）を過ぎるまでは取り直さない。
-
-- 起動時にキャッシュから復元する。これをしないと `HasUpdate` が空のまま false を返し、
-  更新があっても「更新なし」と誤表示してしまう。
-- 利用者が「バージョン確認」を押したときは `Fetch(force: true)` でキャッシュを無視する。
-- `EditorPrefs` は Unity のバージョンごと・利用者ごとなので、プロジェクトをまたいで共有される。
-  版の一覧はプロジェクトに依らない情報なので問題ない。
-
-## 旧 `VGC.Gimmicks_MA.Lib` からの変更
-
-| 旧 | 新 |
+| 0.1.0 | 0.2.0 |
 |---|---|
-| `VGC.Gimmicks_MA.Lib` | `VGC.Gimmicks` |
-| `AvatarGimmickVersionManager` | `GimmickVersionManager` |
-| `AvatarGimmickSetting` | `GimmickSetting` |
-| `AvatarGimmickInstaller` / `AvatarGimmickMarker` | `GimmickInstaller` / `GimmickMarker` |
-| `AvatarGimmickInstallerEditor` | `GimmickInstallerEditor` |
-| `AvatarGimmickUtility` | `VGC.Gimmicks.Avatar.AvatarUtility` へ移動 |
-| `AvatarGimmickSetupWindow` | `VGC.Gimmicks.Avatar.SetupWindow` へ移動（メニューは `VGC/Gimmick Setup`） |
-| `ReadOnlyAttribute` | 削除（使われていなかった） |
-
-**シリアライズされるフィールド名は変えていない**（`GimmickSetting._maPrefab` など）。
-名前の不一致はコンパイルエラーで気づけるが、フィールド名の変更は値が静かに失われるため。
+| `GimmickVersionManager`（取得元は固定の `URL`） | `VersionChecker`（取得元 `VersionSource` を引数で渡す。省略時は VGC の版の一覧） |
+| `GimmickVersionManager.URL` | `VersionChecker.VGCAppsScriptUrl` |
+| `HasUpdate(id, local, out remote)` | `HasUpdate(source, key, local, out remote)` |
+| 起動時（`[InitializeOnLoad]`）に取得 | 最初に問い合わせたときに取得 |
+| （なし） | `VersionSource` / `UpdateNoticeGUI` / `GimmickSetting` の Version Source・Version Key |
+| UniTask に依存 | 依存しない（`SpreadsheetReader` で取得） |
+| 導入 UI の文言をシート名「メインウィンドウ」で全体から検索 | このパッケージの `Config/GimmickInstallerTable.asset` を GUID で読む（gimmicks-avatar から移した） |

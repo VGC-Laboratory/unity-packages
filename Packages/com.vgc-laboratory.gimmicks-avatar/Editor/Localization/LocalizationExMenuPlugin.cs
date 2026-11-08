@@ -46,7 +46,7 @@ namespace VGC.Localization.Avatar
                 });
         }
 
-        private static void Localize(ModularAvatarMenuItem item, LocalizedMenuLabels labels, Language language)
+        private static void Localize(ModularAvatarMenuItem item, LocalizedMenuLabels labels, SystemLanguage language)
         {
             var table = labels.Table;
 
@@ -69,10 +69,10 @@ namespace VGC.Localization.Avatar
         }
 
         // 選択言語 → 英語 の順で探す。どちらも無ければ元の文字を残す
-        private static bool TryGet(LocalizationTable table, string key, Language language, out string text)
+        private static bool TryGet(LocalizationTable table, string key, SystemLanguage language, out string text)
         {
             return table.TryGet(key, language, out text) ||
-                   (language != Language.English && table.TryGet(key, Language.English, out text));
+                   (language != SystemLanguage.English && table.TryGet(key, SystemLanguage.English, out text));
         }
     }
 }

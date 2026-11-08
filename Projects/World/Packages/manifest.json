@@ -44,6 +44,7 @@
     "com.vgc-laboratory.game-framework": "file:../../../Packages/com.vgc-laboratory.game-framework",
     "com.vgc-laboratory.resources": "file:../../../Packages/com.vgc-laboratory.resources",
     "com.vgc-laboratory.localization": "file:../../../Packages/com.vgc-laboratory.localization",
-    "com.vgc-laboratory.gimmicks": "file:../../../Packages/com.vgc-laboratory.gimmicks"
+    "com.vgc-laboratory.gimmicks": "file:../../../Packages/com.vgc-laboratory.gimmicks",
+    "com.vgc-laboratory.localization-world": "file:../../../Packages/com.vgc-laboratory.localization-world"
   }
 }
