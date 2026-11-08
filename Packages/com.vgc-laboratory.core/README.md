@@ -1,17 +1,34 @@
-# VGC.Core
+# VGC Core (Worlds)
 
-他モジュールに依存しない汎用ユーティリティ。
+**ワールド専用のユーティリティ。** displayName に `(Worlds)` が付いているのは、
+パッケージ ID が `com.vgc-laboratory.core` という汎用的な名前なのに中身がワールド専用で、
+一覧で見たときに誤解されやすいため（ID は公開済みなので変えられない）。
 
 ```
-Core/
-└── Runtime/                        asmdef: VGC.Core.Runtime
-    ├── TimeHelper.cs               サーバー時刻ベースのカウントダウン
-    └── SpriteNumberFormatter.cs    int/uint -> TMP の <sprite index=N> 連結
+Runtime/                            asmdef: VGC.Core.Runtime
+├── TimeHelper.cs                   サーバー時刻ベースのカウントダウン
+└── SpriteNumberFormatter.cs        int/uint -> TMP の <sprite index=N> 連結
 ```
 
 `VGC.Core.Runtime` は `UdonSharpBehaviour` を含まないが、`UdonSharpBehaviour` から
 `TimeHelper` / `SpriteNumberFormatter` を呼べるようにするため、asmdef と対になる
 U# Assembly Definition（`VGC.Core.Runtime.asset`）を持つ。
+
+## なぜワールド専用なのか
+
+`vpmDependencies` は `com.vrchat.worlds`。理由は 2 つで、どちらもアバター用プロジェクトでは成立しない。
+
+- `VGC.Core.Runtime.asmdef` が **`UdonSharp.Runtime`（`com.vrchat.worlds` の中）を条件なしで参照している。**
+  参照が解決できないと Unity はこの asmdef を一切コンパイルしない。
+- `TimeHelper` が `Networking.GetServerTimeInSeconds()` を使う。
+  型は `com.vrchat.base` にあるのでアバター用プロジェクトでもコンパイル自体は通るが、
+  サーバー時刻はワールドの同期の仕組みなので中身が意味を持たない。
+
+ワールド用・アバター用のどちらでも使えるものは、
+[`attributes`](../com.vgc-laboratory.attributes/README.md) /
+[`localization`](../com.vgc-laboratory.localization/README.md) /
+[`gimmicks`](../com.vgc-laboratory.gimmicks/README.md) /
+[`resources`](../com.vgc-laboratory.resources/README.md) 側にある。
 
 ---
 

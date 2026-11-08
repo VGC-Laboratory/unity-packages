@@ -1,6 +1,6 @@
 {
   "name": "com.vgc-laboratory.core",
-  "displayName": "VGC Core",
+  "displayName": "VGC Core (Worlds)",
   "version": "0.4.0",
   "unity": "2022.3",
   "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。ワールド専用（Udon から呼ぶ前提で、asmdef が UdonSharp を参照する）。",

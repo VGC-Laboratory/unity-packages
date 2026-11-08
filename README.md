@@ -19,7 +19,7 @@ VPM（VRChat Package Manager）で配信する。
 
 | パッケージ | 内容 | 依存 |
 |---|---|---|
-| [`core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ | `com.vrchat.worlds` |
+| [`core`](Packages/com.vgc-laboratory.core) | サーバー時刻カウントダウン、TMP sprite 数値フォーマッタ（VCC では「VGC Core (Worlds)」と表示される） | `com.vrchat.worlds` |
 | [`ui-extension`](Packages/com.vgc-laboratory.ui-extension) | uGUI Button の UdonSharp 向け拡張 | `com.vrchat.worlds`, `attributes` |
 | [`game-framework`](Packages/com.vgc-laboratory.game-framework) | ホスト決定 / エントリー枠管理 / 開始終了状態 | `com.vrchat.worlds`, `attributes`, `core`, `ui-extension` |
 
