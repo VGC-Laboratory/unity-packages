@@ -1,0 +1,26 @@
+# アバター用の開発プロジェクト固有の無視設定。
+# Unity の生成物（Library/ Temp/ Logs/ UserSettings/ *.csproj *.sln）はルートの .gitignore で無視される。
+
+# VRChat SDK / NDMF が自動生成するプロジェクト側アセット。
+# このリポジトリで管理するのはリポジトリ直下の Packages/com.vgc-laboratory.* のみ。
+# （個別指定にしてあるので、手で追加したテスト用アセットは通常どおり追跡される）
+/Assets/VRCSDK/
+/Assets/VRCSDK.meta
+/Assets/XR/
+/Assets/XR.meta
+
+# NDMF / Modular Avatar の生成物
+/Assets/_ModularAvatar/
+/Assets/_ModularAvatar.meta
+/Assets/ModularAvatarGenerated/
+/Assets/ModularAvatarGenerated.meta
+/Assets/999_Modular_Avatar_Generated/
+/Assets/999_Modular_Avatar_Generated.meta
+
+# Package Manager が Samples~ から展開したもの（正本は Packages/*/Samples~ 側）
+/Assets/Samples/
+/Assets/Samples.meta
+
+# TMP Essentials（利用者が Import するもの）
+/Assets/TextMesh Pro/
+/Assets/TextMesh Pro.meta
