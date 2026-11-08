@@ -3,7 +3,7 @@
   "displayName": "VGC Avatar Gimmick Lib",
   "version": "2.0.0",
   "unity": "2022.3",
-  "description": "VGC のアバターギミック共通基盤。ギミックの導入・バージョン管理（AvatarGimmickSetting / AvatarGimmickMarker / AvatarGimmickInstaller）と、エクスプレッションメニューの多言語化（LocalizationTable / NDMF の Localizer 連携）。アバター専用。配布済み 1.0 系（各ギミックに同梱されていた Assets/VGC/Gimmicks_MA/Lib）の後継で、公開 API は維持する。",
+  "description": "VGC のアバターギミック共通基盤。ギミックの導入・バージョン管理（AvatarGimmickSetting / AvatarGimmickMarker / AvatarGimmickInstaller）と、エクスプレッションメニューの多言語化（LocalizationTable / NDMF の Localizer 連携）。アバター専用。空の AnimationClip は com.vgc-laboratory.resources から来る。配布済み 1.0 系（各ギミックに同梱されていた Assets/VGC/Gimmicks_MA/Lib）の後継で、公開 API は維持する。",
   "author": {
     "name": "VGC-Laboratory",
     "url": "https://github.com/VGC-Laboratory"
@@ -12,10 +12,10 @@
   "url": "https://github.com/VGC-Laboratory/unity-packages",
   "vpmDependencies": {
     "com.vrchat.avatars": "^3.10.4",
-    "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a"
+    "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+    "com.vgc-laboratory.resources": ">=0.5.0 <1.0.0"
   },
   "legacyFolders": {
-    "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f",
-    "Assets\\VGC\\VGCResources": "f6d57f4e3e4bc244cb83ffa7f9103f0b"
+    "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
   }
 }

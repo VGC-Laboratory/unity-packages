@@ -167,6 +167,12 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.vgc-laboratory.resources": {
+      "version": "file:../../../Packages/com.vgc-laboratory.resources",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.vrchat.avatars": {
       "version": "file:com.vrchat.avatars",
       "depth": 0,

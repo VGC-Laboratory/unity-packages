@@ -200,6 +200,12 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.vgc-laboratory.resources": {
+      "version": "file:../../../Packages/com.vgc-laboratory.resources",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
     "com.vgc-laboratory.ui-extension": {
       "version": "file:../../../Packages/com.vgc-laboratory.ui-extension",
       "depth": 0,

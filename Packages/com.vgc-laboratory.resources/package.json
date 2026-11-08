@@ -1,0 +1,19 @@
+{
+  "name": "com.vgc-laboratory.resources",
+  "displayName": "VGC Resources",
+  "version": "0.4.0",
+  "unity": "2022.3",
+  "description": "ワールド用・アバター用のどちらからも使う共通アセット。今は空の AnimationClip（EmptyAnimation）だけ。アニメーターのレイヤーを無効化する、Modular Avatar の Merge Animator に渡す、といった用途で使う。",
+  "author": {
+    "name": "VGC-Laboratory",
+    "url": "https://github.com/VGC-Laboratory"
+  },
+  "license": "MIT",
+  "url": "https://github.com/VGC-Laboratory/unity-packages",
+  "vpmDependencies": {
+    "com.vrchat.base": "^3.10.4"
+  },
+  "legacyFolders": {
+    "Assets\\VGC\\VGCResources": "f6d57f4e3e4bc244cb83ffa7f9103f0b"
+  }
+}

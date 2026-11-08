@@ -39,6 +39,7 @@
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
     "com.vgc-laboratory.attributes": "file:../../../Packages/com.vgc-laboratory.attributes",
-    "com.vgc-laboratory.avatar-gimmick-lib": "file:../../../Packages/com.vgc-laboratory.avatar-gimmick-lib"
+    "com.vgc-laboratory.avatar-gimmick-lib": "file:../../../Packages/com.vgc-laboratory.avatar-gimmick-lib",
+    "com.vgc-laboratory.resources": "file:../../../Packages/com.vgc-laboratory.resources"
   }
 }
