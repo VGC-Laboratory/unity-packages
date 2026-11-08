@@ -1,0 +1,8 @@
+# VCC が入れる VPM パッケージは追跡しない。
+# vpm-resolver だけは、利用者が Resolve を押せるように追跡する。
+# 自作パッケージはリポジトリ直下の Packages/ にあり、manifest.json の file: 参照で読み込む。
+/*/
+!com.vrchat.core.*/
+!vpm-manifest.json
+!manifest.json
+!packages-lock.json

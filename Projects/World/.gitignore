@@ -1,0 +1,25 @@
+# ワールド用の開発プロジェクト固有の無視設定。
+# Unity の生成物（Library/ Temp/ Logs/ UserSettings/ *.csproj *.sln）はルートの .gitignore で無視される。
+
+# VCC / VRChat SDK が自動生成するプロジェクト側アセット。
+# このリポジトリで管理するのはリポジトリ直下の Packages/com.vgc-laboratory.* のみ。
+# （個別指定にしてあるので、手で追加したテスト用アセットは通常どおり追跡される）
+/Assets/Scenes/
+/Assets/Scenes.meta
+/Assets/UdonSharp/
+/Assets/UdonSharp.meta
+/Assets/XR/
+/Assets/XR.meta
+/Assets/SerializedUdonPrograms/
+/Assets/SerializedUdonPrograms.meta
+
+# Package Manager が Samples~ から展開したもの（正本は Packages/*/Samples~ 側）
+/Assets/Samples/
+/Assets/Samples.meta
+
+# TMP Essentials（利用者が Import するもの）
+/Assets/TextMesh Pro/
+/Assets/TextMesh Pro.meta
+
+# ClientSim の実行時データ
+/ClientSimStorage/

@@ -183,27 +183,27 @@
       "url": "https://packages.unity.com"
     },
     "com.vgc-laboratory.attributes": {
-      "version": "file:com.vgc-laboratory.attributes",
+      "version": "file:../../../Packages/com.vgc-laboratory.attributes",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.vgc-laboratory.core": {
-      "version": "file:com.vgc-laboratory.core",
+      "version": "file:../../../Packages/com.vgc-laboratory.core",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.vgc-laboratory.game-framework": {
-      "version": "file:com.vgc-laboratory.game-framework",
+      "version": "file:../../../Packages/com.vgc-laboratory.game-framework",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.vgc-laboratory.ui-extension": {
-      "version": "file:com.vgc-laboratory.ui-extension",
+      "version": "file:../../../Packages/com.vgc-laboratory.ui-extension",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {}
     },
     "com.vrchat.base": {

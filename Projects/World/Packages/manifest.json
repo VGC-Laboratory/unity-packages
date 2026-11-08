@@ -37,6 +37,10 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.vgc-laboratory.attributes": "file:../../../Packages/com.vgc-laboratory.attributes",
+    "com.vgc-laboratory.core": "file:../../../Packages/com.vgc-laboratory.core",
+    "com.vgc-laboratory.ui-extension": "file:../../../Packages/com.vgc-laboratory.ui-extension",
+    "com.vgc-laboratory.game-framework": "file:../../../Packages/com.vgc-laboratory.game-framework"
   }
 }
