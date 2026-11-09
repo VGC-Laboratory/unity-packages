@@ -54,6 +54,10 @@
 ] }
 ```
 
+`url` はセルの文字列をそのまま返せばよい。カンマや改行で区切った複数の URL、空文字も受け付ける
+（読み方は [gimmicks の README](../com.vgc-laboratory.gimmicks/README.md#配布先の-url)）。
+改行を `\n` の 2 文字に置き換えて返していても読める。
+
 エラー:
 
 ```json

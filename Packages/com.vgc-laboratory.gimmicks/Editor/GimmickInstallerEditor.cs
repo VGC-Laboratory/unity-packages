@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using VGC.Localization;
@@ -88,7 +88,7 @@ namespace VGC.Gimmicks
                 bool validDeps = HasValidDependencies(markers, deps);
 
                 bool hasUpdate = VersionChecker.HasUpdate(setting.VersionSource, setting.VersionKey, setting.Version, out string sheetVersion);
-                string url = VersionChecker.GetUrl(setting.VersionSource, setting.VersionKey);
+                string[] urls = VersionChecker.GetUrls(setting.VersionSource, setting.VersionKey);
 
                 // ===== 色決定 =====
                 Color bgColor = Color.clear;
@@ -257,13 +257,8 @@ namespace VGC.Gimmicks
                             }
                         }
 
-                        using (new EditorGUI.DisabledScope(!hasUpdate || string.IsNullOrEmpty(url)))
-                        {
-                            if (GUILayout.Button(localize.Get("Update"), GUILayout.Height(24)))
-                            {
-                                Application.OpenURL(url);
-                            }
-                        }
+                        // 新しい版が無いときは押せない。配布先が複数あれば押したときに選ばせる
+                        UpdateNoticeGUI.DrawOpenButton(localize.Get("Update"), hasUpdate ? urls : null, GUILayout.Height(24));
                     }
 
                     // ===== 依存エラー表示 =====

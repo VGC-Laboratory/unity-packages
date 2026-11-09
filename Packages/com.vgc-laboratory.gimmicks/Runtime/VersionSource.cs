@@ -6,7 +6,7 @@ namespace VGC.Gimmicks
     /// <summary>
     /// 最新版の一覧を読むシート。ギミック(GimmickSetting)や任意のツールの更新チェックが参照する。
     ///
-    /// シートの形: 1 行目は見出し。A 列がキー(ギミックの識別名)、B 列が最新版(1.2.3)、C 列がダウンロード URL。
+    /// シートの形: 1 行目は見出し。A 列がキー(ギミックの識別名)、B 列が最新版(1.2.3)、C 列が配布先の URL(カンマ・改行・空白区切りで複数可、空欄可)。
     /// Apps Script のときは {items:[{sheetName, version, url}]} を返す doGet にする。
     /// </summary>
     [CreateAssetMenu(fileName = nameof(VersionSource), menuName = "VGC/Gimmicks/Version Source")]

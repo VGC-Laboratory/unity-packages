@@ -20,22 +20,53 @@ namespace VGC.Gimmicks
                 return false;
 
             var texts = GimmickTexts.Installer;
-            var url = VersionChecker.GetUrl(source, key);
+            var urls = VersionChecker.GetUrls(source, key);
 
             using (new EditorGUILayout.HorizontalScope(EditorStyles.helpBox))
             {
                 var message = texts != null ? texts.Get("NewVersion") : "New version";
                 EditorGUILayout.LabelField($"{message}: v{localVersion} → v{remote}", EditorStyles.boldLabel);
 
-                using (new EditorGUI.DisabledScope(string.IsNullOrEmpty(url)))
+                // 配布先が書かれていなければ、お知らせだけ出してボタンは出さない
+                if (urls.Length > 0)
                 {
                     var label = texts != null ? texts.Get("Update") : "Update";
-                    if (GUILayout.Button(label, GUILayout.Width(100)))
-                        Application.OpenURL(url);
+                    DrawOpenButton(label, urls, GUILayout.Width(100));
                 }
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// 配布先を開くボタン。URL が 1 つならそのまま開き、2 つ以上なら行き先を選ぶメニューを出す。
+        /// URL が無いときは押せない状態で描く(並びを崩さないため)。
+        /// </summary>
+        public static void DrawOpenButton(string label, string[] urls, params GUILayoutOption[] options)
+        {
+            urls ??= System.Array.Empty<string>();
+            using (new EditorGUI.DisabledScope(urls.Length == 0))
+            {
+                if (!GUILayout.Button(label, options))
+                    return;
+            }
+
+            if (urls.Length == 1)
+            {
+                Application.OpenURL(urls[0]);
+                return;
+            }
+
+            // GenericMenu は "/" を階層の区切りにするので、URL そのものではなくホスト名を出す
+            var menu = new GenericMenu();
+            for (var i = 0; i < urls.Length; i++)
+            {
+                var url = urls[i];
+                var host = System.Uri.TryCreate(url, System.UriKind.Absolute, out var uri) ? uri.Host : url;
+                menu.AddItem(new GUIContent($"{i + 1}. {host}"), false, () => Application.OpenURL(url));
+            }
+
+            menu.ShowAsContext();
         }
 
         /// <summary>「更新を確認」ボタン。押すとキャッシュを無視して取り直す。取得元が無ければ何も出さない。</summary>

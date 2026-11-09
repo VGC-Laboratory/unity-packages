@@ -32,8 +32,10 @@ namespace VGC.Gimmicks
         private class Info
         {
             public string Version;
-            public string Url;
+            public string[] Urls = Array.Empty<string>();
         }
+
+        private static readonly char[] UrlSeparators = { ',', '，', '、', ' ', '　', '\t', '\r', '\n' };
 
         private class State
         {
@@ -113,10 +115,44 @@ namespace VGC.Gimmicks
             return source != null && key != null && GetState(source).Items.TryGetValue(key, out var info) ? info.Version : null;
         }
 
-        /// <summary>シート上のダウンロード URL。無ければ null。</summary>
+        /// <summary>シート上のダウンロード URL のうち最初のもの。無ければ null。</summary>
         public static string GetUrl(VersionSource source, string key)
         {
-            return source != null && key != null && GetState(source).Items.TryGetValue(key, out var info) ? info.Url : null;
+            var urls = GetUrls(source, key);
+            return urls.Length > 0 ? urls[0] : null;
+        }
+
+        /// <summary>シート上のダウンロード URL すべて(書かれた順)。無ければ空の配列。</summary>
+        public static string[] GetUrls(VersionSource source, string key)
+        {
+            return source != null && key != null && GetState(source).Items.TryGetValue(key, out var info)
+                ? info.Urls
+                : Array.Empty<string>();
+        }
+
+        /// <summary>
+        /// URL の欄を読む。カンマ(半角・全角・読点)、空白、改行のどれで区切ってもよい。
+        /// http / https の URL として読めないもの(空欄、「-」「なし」など)は捨てる。
+        /// URL そのものにカンマを含めたいときは %2C と書く。
+        /// </summary>
+        public static string[] ParseUrls(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                return Array.Empty<string>();
+
+            // Apps Script によっては改行を \n の 2 文字にして返すので、戻してから区切る
+            var parts = raw.Replace("\\n", "\n").Split(UrlSeparators, StringSplitOptions.RemoveEmptyEntries);
+            var result = new List<string>();
+            foreach (var part in parts)
+            {
+                var url = part.Trim();
+                if (Uri.TryCreate(url, UriKind.Absolute, out var uri) &&
+                    (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps) &&
+                    !result.Contains(url))
+                    result.Add(url);
+            }
+
+            return result.ToArray();
         }
 
         /// <summary>
@@ -191,7 +227,7 @@ namespace VGC.Gimmicks
                 state.Items[row[0].Trim()] = new Info
                 {
                     Version = row[1]?.Trim(),
-                    Url = row.Length > 2 ? row[2]?.Trim() : null,
+                    Urls = ParseUrls(row.Length > 2 ? row[2] : null),
                 };
             }
         }
@@ -200,7 +236,10 @@ namespace VGC.Gimmicks
         {
             var sb = new StringBuilder();
             foreach (var pair in state.Items)
-                sb.Append(pair.Key).Append('\t').Append(pair.Value.Version).Append('\t').Append(pair.Value.Url).Append('\n');
+                // URL は空白でつなぐ(URL に空白は入らないので、読み戻しで ParseUrls がそのまま使える)。
+                // 改行のまま残すと、1 行 1 件のこの形式が壊れる
+                sb.Append(pair.Key).Append('\t').Append(pair.Value.Version).Append('\t')
+                  .Append(string.Join(" ", pair.Value.Urls)).Append('\n');
             return sb.ToString();
         }
 
@@ -213,7 +252,7 @@ namespace VGC.Gimmicks
             {
                 var cells = line.Split('\t');
                 if (cells.Length >= 2 && !string.IsNullOrEmpty(cells[0]))
-                    state.Items[cells[0]] = new Info { Version = cells[1], Url = cells.Length > 2 ? cells[2] : null };
+                    state.Items[cells[0]] = new Info { Version = cells[1], Urls = ParseUrls(cells.Length > 2 ? cells[2] : null) };
             }
         }
 
