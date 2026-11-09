@@ -1,7 +1,7 @@
 {
   "name": "com.vgc-laboratory.gimmicks",
   "displayName": "VGC Gimmicks",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "unity": "2022.3",
   "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）。VRChat の SDK が無いプロジェクトでもコンパイルできる（SDK があるときだけ GimmickInstaller / GimmickMarker を IEditorOnly にする）。ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
   "author": {
