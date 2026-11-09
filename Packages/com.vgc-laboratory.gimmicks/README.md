@@ -114,6 +114,26 @@ Config/
 自分のツールを配る場合は、自分の名前やサークル名を入れておくとよい。
 利用者のプロジェクトに他の作者のギミックが入ったときに、どれが自分のものか分かる。
 
+### 自分のウィンドウに導入 UI を出す
+
+`GimmickInstallerEditor` の関数で、導入 UI を自分のウィンドウに描ける。
+
+```csharp
+// まとめて描く（GimmickInstaller のインスペクタと同じ）
+GimmickInstallerEditor.DrawSettings(avatarRoot, settings);
+
+// 「更新確認」ボタンを上に固定し、一覧だけをスクロールさせる
+GimmickInstallerEditor.DrawVersionCheckButton(settings);
+_scroll = EditorGUILayout.BeginScrollView(_scroll);
+GimmickInstallerEditor.DrawGimmickList(avatarRoot, settings);
+EditorGUILayout.EndScrollView();
+```
+
+- 最後の引数に `LocalizationTable` を渡すと文言を差し替えられる（省くとこのパッケージの表）。
+- 各ギミックのボタン（導入・削除・設定／Prefab 選択・更新）は、**言語によらず同じ幅で横に並ぶ。**
+  文字が入りきらないときは文字を小さくし（11 → 8）、それでも入らなければカーソルを乗せると全文が出る。
+- 位置と見た目を自分で決めたい更新ボタンは `UpdateNoticeGUI.DrawOpenButton(Rect, GUIContent, urls, GUIStyle)` で描ける。
+
 ## VRChat の SDK が無いプロジェクト
 
 **0.3.1 から、VRChat の SDK（`com.vrchat.base`）が入っていないプロジェクトでもコンパイルできる。**

@@ -44,10 +44,20 @@ namespace VGC.Gimmicks
         /// </summary>
         public static void DrawOpenButton(string label, string[] urls, params GUILayoutOption[] options)
         {
+            var content = new GUIContent(label);
+            var rect = GUILayoutUtility.GetRect(content, GUI.skin.button, options);
+            DrawOpenButton(rect, content, urls, GUI.skin.button);
+        }
+
+        /// <summary>
+        /// 場所と見た目を指定して描く版。文字の大きさを幅に合わせて変えたいときに使う。
+        /// </summary>
+        public static void DrawOpenButton(Rect rect, GUIContent content, string[] urls, GUIStyle style)
+        {
             urls ??= System.Array.Empty<string>();
             using (new EditorGUI.DisabledScope(urls.Length == 0))
             {
-                if (!GUILayout.Button(label, options))
+                if (!GUI.Button(rect, content, style))
                     return;
             }
 

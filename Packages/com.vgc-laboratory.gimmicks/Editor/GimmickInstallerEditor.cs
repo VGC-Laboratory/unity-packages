@@ -11,6 +11,55 @@ namespace VGC.Gimmicks
         private GimmickSetting[] _settings;
         private GimmickInstaller _installer;
 
+        // ボタン列の 4 つを、文字の長さ(言語)によらず同じ幅にする。
+        // 横並びでは各ボタンに「最小幅と最大幅の間の同じ割合」が配られるので、最小と最大をそろえれば同じ幅になる。
+        // 文字が入りきらないときは FitButtonStyle で文字を小さくする。
+        private static readonly GUILayoutOption[] RowButtonOptions = { GUILayout.Height(24), GUILayout.MinWidth(0), GUILayout.MaxWidth(10000) };
+
+        // 文字を小さくしたボタンの見た目。元にしたボタンの見た目が変わったら(テーマの切り替えなど)作り直す
+        private static GUIStyle _fitStyle;
+        private static GUIStyle _fitStyleBase;
+
+        private const int FitFontSizeMax = 11;
+        private const int FitFontSizeMin = 8;
+
+        /// <summary>
+        /// ボタン列のボタン。幅は列の中で等分し、文字が入りきらないときは小さくする。
+        /// </summary>
+        private static bool RowButton(string label)
+        {
+            var content = new GUIContent(label);
+            var rect = GUILayoutUtility.GetRect(content, GUI.skin.button, RowButtonOptions);
+            return GUI.Button(rect, content, FitButtonStyle(content, rect.width));
+        }
+
+        /// <summary>
+        /// 幅に文字が入る見た目を返す。入るならふつうのボタン、入らなければ文字を段階的に小さくしたもの。
+        /// 一番小さくしても入らないときは切れるので、カーソルを乗せると全文が出るようにする。
+        /// </summary>
+        private static GUIStyle FitButtonStyle(GUIContent content, float width)
+        {
+            var baseStyle = GUI.skin.button;
+            if (baseStyle.CalcSize(content).x <= width)
+                return baseStyle;
+
+            if (_fitStyle == null || _fitStyleBase != baseStyle)
+            {
+                _fitStyle = new GUIStyle(baseStyle);
+                _fitStyleBase = baseStyle;
+            }
+
+            for (var size = FitFontSizeMax; size >= FitFontSizeMin; size--)
+            {
+                _fitStyle.fontSize = size;
+                if (_fitStyle.CalcSize(content).x <= width)
+                    return _fitStyle;
+            }
+
+            content.tooltip = content.text;
+            return _fitStyle;
+        }
+
         private void OnEnable()
         {
             var guids = AssetDatabase.FindAssets($"t:{nameof(GimmickSetting)}");
@@ -36,10 +85,17 @@ namespace VGC.Gimmicks
 
         public static void DrawSettings(GameObject avatarRoot, GimmickSetting[] settings, LocalizationTable localize = null)
         {
+            DrawVersionCheckButton(settings, localize);
+            DrawGimmickList(avatarRoot, settings, localize);
+        }
+
+        /// <summary>
+        /// 「更新確認」ボタン。ウィンドウでギミックの一覧だけをスクロールさせるため、一覧とは分けて描けるようにしている。
+        /// </summary>
+        public static void DrawVersionCheckButton(GimmickSetting[] settings, LocalizationTable localize = null)
+        {
             if (localize == null)
                 localize = GimmickTexts.Installer;
-
-            var markers = avatarRoot.GetComponentsInChildren<GimmickMarker>(true);
 
             // ギミックごとに取得元が違うことがあるので、使われている取得元をすべて取り直す
             var sources = settings.Where(s => s != null).Select(s => s.VersionSource).Distinct().ToArray();
@@ -52,6 +108,17 @@ namespace VGC.Gimmicks
                         VersionChecker.Fetch(source, force: true);
                 }
             }
+        }
+
+        /// <summary>
+        /// ギミックごとの導入・削除・設定・更新の一覧。
+        /// </summary>
+        public static void DrawGimmickList(GameObject avatarRoot, GimmickSetting[] settings, LocalizationTable localize = null)
+        {
+            if (localize == null)
+                localize = GimmickTexts.Installer;
+
+            var markers = avatarRoot.GetComponentsInChildren<GimmickMarker>(true);
 
             // 配布元ごとにまとめて並べる。配布元が空のものを先に、そのあと名前順。
             // 別々の配布元のギミックが同じプロジェクトに入っても取り違えないようにするため。
@@ -217,7 +284,7 @@ namespace VGC.Gimmicks
                     {
                         using (new EditorGUI.DisabledScope(!validDeps || installed))
                         {
-                            if (GUILayout.Button(localize.Get("Install"), GUILayout.Height(24)))
+                            if (RowButton(localize.Get("Install")))
                             {
                                 GimmickMarker marker = null;
                                 var existing = instances.FirstOrDefault();
@@ -231,7 +298,7 @@ namespace VGC.Gimmicks
 
                         using (new EditorGUI.DisabledScope(!installed))
                         {
-                            if (GUILayout.Button(localize.Get("Uninstall"), GUILayout.Height(24)))
+                            if (RowButton(localize.Get("Uninstall")))
                             {
                                 if (EnsureDeletable(instances, localize))
                                     Uninstall(markers, setting);
@@ -243,14 +310,14 @@ namespace VGC.Gimmicks
                         {
                             if (setting.UseSetting)
                             {
-                                if (GUILayout.Button(localize.Get("Setting", instances.Count), GUILayout.Height(24)))
+                                if (RowButton(localize.Get("Setting", instances.Count)))
                                 {
                                     Selection.objects = instances.ToArray();
                                 }
                             }
                             else
                             {
-                                if (GUILayout.Button(localize.Get("Select", instances.Count), GUILayout.Height(24)))
+                                if (RowButton(localize.Get("Select", instances.Count)))
                                 {
                                     Selection.objects = instances.ToArray();
                                 }
@@ -258,7 +325,9 @@ namespace VGC.Gimmicks
                         }
 
                         // 新しい版が無いときは押せない。配布先が複数あれば押したときに選ばせる
-                        UpdateNoticeGUI.DrawOpenButton(localize.Get("Update"), hasUpdate ? urls : null, GUILayout.Height(24));
+                        var updateContent = new GUIContent(localize.Get("Update"));
+                        var updateRect = GUILayoutUtility.GetRect(updateContent, GUI.skin.button, RowButtonOptions);
+                        UpdateNoticeGUI.DrawOpenButton(updateRect, updateContent, hasUpdate ? urls : null, FitButtonStyle(updateContent, updateRect.width));
                     }
 
                     // ===== 依存エラー表示 =====

@@ -127,7 +127,7 @@ MonoBehaviour:
     - language: Japanese
       text: "Prefab\u9078\u629E"
     - language: English
-      text: Select the Prefab ({0})
+      text: Select the Prefab
     - language: Korean
       text: "Prefab \uC120\uD0DD"
     - language: ChineseSimplified
