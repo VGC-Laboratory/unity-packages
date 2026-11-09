@@ -14,7 +14,7 @@ Runtime/
     └── LocalizedMenuLabels.cs    子孫の MA Menu Item のラベルをビルド時に差し替える
 Editor/
 ├── Gimmicks/        asmdef VGC.Gimmicks.Avatar.Editor
-│   └── SetupWindow.cs            導入ウィンドウ（メニュー: VGC/Gimmick Setup）
+│   └── SetupWindow.cs            導入ウィンドウ（メニュー: VGC/AvatarGimmick/Setup）
 └── Localization/    asmdef VGC.Localization.Avatar.Editor
     ├── LocalizationExMenuPlugin.cs      NDMF プラグイン
     └── LocalizationTableNdmfExtensions.cs  NDMF の Localizer との橋渡し
@@ -38,7 +38,7 @@ NDMF が無いワールド用プロジェクトではこのアセンブリ自体
 
 ## 導入ウィンドウ
 
-メニュー **VGC/Gimmick Setup**。アバターを選ぶと `GimmickInstaller` を付け、
+メニュー **VGC/AvatarGimmick/Setup**（VGC メニューの先頭）。アバターを選ぶと `GimmickInstaller` を付け、
 プロジェクト内の `GimmickSetting` を一覧にして導入・更新できる。
 
 一覧は **配布元（`GimmickSetting.Publisher`）ごとにまとめて並ぶ。**

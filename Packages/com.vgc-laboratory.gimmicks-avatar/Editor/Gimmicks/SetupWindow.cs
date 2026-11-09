@@ -15,8 +15,10 @@ namespace VGC.Gimmicks.Avatar
         private VRCAvatarDescriptor _descriptor;
         private GimmickInstaller _installer;
         
-        // nameof では「SetupWindow」になってしまうので、読める名前を直接書く
-        [MenuItem("VGC/Gimmick Setup")]
+        // nameof では「SetupWindow」になってしまうので、読める名前を直接書く。
+        // アバター固有のメニューは VGC/AvatarGimmick にまとめる（gimmicks 本体は VRChat の SDK が無くても使うため）。
+        // 優先度 0 で VGC メニューの先頭に出す
+        [MenuItem("VGC/AvatarGimmick/Setup", false, 0)]
         static void Open()
         {
             var window = GetWindow<SetupWindow>("Gimmick Setup");
