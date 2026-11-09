@@ -151,8 +151,8 @@ git tag gimmicks-v0.2.0 && git push origin gimmicks-v0.2.0
 
 `release.yml` がそのパッケージの `version` とタグの一致を確認したうえで ZIP と
 listing 用の version entry を作り、Release に添付する。
-そのあと `listing.yml` が全 Release から `index.json` を作り直して Pages へ配信する。
-手で `index.json` を管理する必要はない。
+そのあと `listing.yml` が全 Release から `index.json` を作り直して `gh-pages` ブランチへ push し、
+GitHub Pages がそのブランチを配信する。手で `index.json` を管理する必要はない。
 
 - パッケージごとの版なので、**パッケージ間の依存は `^0.4.0` のような狭い範囲にしない。**
   `^0.4.0` は `>=0.4.0 <0.5.0` の意味で、片方だけ版を上げると解決できなくなる。
@@ -171,22 +171,27 @@ listing 用の version entry を作り、Release に添付する。
 git push origin attributes-v0.5.0 core-v0.5.0 game-framework-v0.5.0
 ```
 
-**同じコミットから 2 回目以降に配信した listing は反映されない。**
-GitHub Pages は、配信中のものと同じコミットからのデプロイを受け付けても
-（Actions 上も Pages のデプロイ履歴上も success になる）、配信する中身を置き換えない。
-Pages のデプロイはコミットの SHA を版として扱っているためと思われる。
-同じコミットに複数のタグを打って出すと、最初の 1 本の listing だけが載り、
-残りの版は `index.json` に出てこない。3 回とも同じ形で起きた。
-
-出し終わったら **main に新しいコミットを積んでから**、Actions の
-**Build VPM Listing** を main で 1 回実行する。タグと同じコミットのまま実行しても反映されない。
-listing は毎回すべての Release から作り直すので、1 回走れば全部そろう。
+同じコミットに複数のタグを打って出してよい。listing は毎回すべての Release から作り直し、
+中身が変わったときだけ `gh-pages` に 1 コミット積む。Pages は `gh-pages` のコミットごとに配信する。
 
 - 反映は最大 10 分ほど遅れる。Pages の CDN が `max-age=600` で持っており、
-  URL にクエリ文字列を付けてもキャッシュは避けられない。`Last-Modified` が listing を作った時刻になる。
+  URL にクエリ文字列を付けてもキャッシュは避けられない。
 - `listing.yml` は `concurrency: group: pages` で待ち行列が 1 本しかないので、
   Release が続けて走ると listing のジョブがいくつか cancelled になる。
   `release` ジョブは成功しているので、Release と ZIP には影響しない。
+  最後に走った listing がすべての Release を拾う。載っていない版があれば、
+  Actions の **Build VPM Listing** を手で 1 回実行する。
+- ブランチ方式の Pages には、1 時間に 10 回までという目安の上限がある。
+
+#### Pages の設定（リポジトリの持ち主が 1 度だけ行う）
+
+- Settings > Pages の Source を **Deploy from a branch**、ブランチを **gh-pages** の `/ (root)` にする。
+- Settings > Environments > github-pages の許可するブランチに **gh-pages** を足す
+  （足さないと、Pages の組み込みのデプロイが環境の保護規則で止まる）。
+
+以前は `actions/deploy-pages` で配信していた。これは Pages に渡す版にコミットの SHA をそのまま使うので、
+同じコミットから 2 回目以降に配信した中身が置き換わらず、同じコミットに打った 2 本目以降のタグが
+`index.json` に載らなかった。ブランチ方式に変えたのはこのため。
 
 ### 検査
 

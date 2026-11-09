@@ -1,7 +1,12 @@
 name: Build VPM Listing
 
-# 全 Release の version entry を集めて index.json を作り、GitHub Pages で配信する。
+# 全 Release の version entry を集めて index.json を作り、gh-pages ブランチへ push する。
+# GitHub Pages は gh-pages ブランチをそのまま配信する（Settings > Pages の Source が「Deploy from a branch」）。
 # Release から毎回作り直すので、手で index.json を管理する必要はない。
+#
+# actions/deploy-pages は使わない。Pages に渡す版に GITHUB_SHA をそのまま使うので、
+# 同じコミットから 2 回目以降に配信した中身が置き換わらなかった（同じコミットに複数のタグを打つと 1 本目しか載らない）。
+# ブランチ方式は gh-pages のコミットごとに配信されるので、この問題が起きない。
 #
 # on: release: では起動しない。GITHUB_TOKEN が作成した Release は
 # 他のワークフローをトリガーしない仕様のため、release.yml から uses: で呼ぶ。
@@ -10,10 +15,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
+# gh-pages への push が重ならないように 1 本ずつ動かす
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -22,8 +26,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: index.json を組み立てる
         env:
           GH_TOKEN: ${{ github.token }}
@@ -166,17 +168,34 @@ jobs:
           </html>
           HTML
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
+      - name: gh-pages ブランチへ push
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Jekyll を通さずにそのまま配信させる
+          touch site/.nojekyll
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    steps:
-      - id: deploy
-        uses: actions/deploy-pages@v4
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads "$REMOTE" gh-pages >/dev/null; then
+            git clone --quiet --depth 1 --branch gh-pages "$REMOTE" pages
+          else
+            # 最初の 1 回。履歴の無いブランチを作る
+            git init --quiet --initial-branch gh-pages pages
+            git -C pages remote add origin "$REMOTE"
+          fi
+
+          # 中身を丸ごと入れ替える（.git は残す）
+          find pages -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a site/. pages/
+
+          cd pages
+          git add -A
+          if git diff --cached --quiet; then
+            echo "一覧に変更が無いので push しない"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --quiet -m "一覧を更新（${GITHUB_REF_NAME} ${GITHUB_SHA::7}）"
+          git push origin gh-pages

@@ -121,7 +121,5 @@ jobs:
   listing:
     needs: release
     permissions:
-      contents: read
-      pages: write
-      id-token: write
+      contents: write
     uses: ./.github/workflows/listing.yml
