@@ -71,7 +71,7 @@ Attributes/
 - `IProcessSceneWithReport.OnProcessScene` は「プレイヤービルド時のシーン処理」だけでなく、**エディタで Play モードに入るときにも各シーンに対して呼ばれる**（ビルドでない場合は `BuildReport` が `null`）。
   `AttributeExecutorBuildProcessor` はこの中で `AttributeExecutor.Execute(false)` を **トグルや `EditorApplication.isPlaying` をチェックせず無条件に**呼ぶため、Play モード開始時には設定 OFF でも配線処理が走る。
 - 上表の `[DidReloadScripts]` / シーン / Prefab / コンポーネント追加の各コールバックは、`IsExecuteInUnityEditor` が OFF、または `EditorApplication.isPlaying` のときは早期 return する。
-- フラグの切り替えはメニュー `VGC/Attribute/Executor/TurnON/TurnOFF ExecuteUnityEditor`。状態は `ScriptableSingleton`（`ScriptableSingleton/AttributeExecutorSetting.dat`）に永続化。
+- フラグの切り替えはメニュー `VGC/Attribute/Executor/Execute in Unity Editor`。選ぶたびに ON / OFF が入れ替わり、ON のときはチェックが付く。状態は `ScriptableSingleton`（`ScriptableSingleton/AttributeExecutorSetting.dat`）に永続化。
 - `IProcessSceneWithReport` 経由の実行は `Execute(false)`（`registerUndo = false`）。
 
 > **シーンに配線を焼き付けたくない場合**はトグルを OFF にしてからシーンを保存する。

@@ -33,28 +33,21 @@ namespace VGC.Attributes.Editor
             }
         }
 #if !VGC_DEVELOP
-        [MenuItem("VGC/Attribute/Executor/TurnOFF ExecuteUnityEditor(now ON)")]
-        private static void TurnOffExecuteUnityEditor()
+        // 1 つのメニューで切り替える。ON のときはメニューの左にチェックが付く
+        private const string ExecuteInUnityEditorMenu = "VGC/Attribute/Executor/Execute in Unity Editor";
+
+        [MenuItem(ExecuteInUnityEditorMenu)]
+        private static void ToggleExecuteInUnityEditor()
         {
             instance.IsExecuteInUnityEditor = !instance.IsExecuteInUnityEditor;
         }
 
-        [MenuItem("VGC/Attribute/Executor/TurnOFF ExecuteUnityEditor(now ON)", validate = true)]
-        private static bool TurnOffExecuteUnityEditorValidation()
+        // メニューを開くたびに呼ばれるので、ここでチェックの有無を今の状態に合わせる
+        [MenuItem(ExecuteInUnityEditorMenu, validate = true)]
+        private static bool ToggleExecuteInUnityEditorValidation()
         {
-            return instance.IsExecuteInUnityEditor;
-        }
-
-        [MenuItem("VGC/Attribute/Executor/TurnON ExecuteUnityEditor(now OFF)")]
-        private static void TurnOnExecuteUnityEditor()
-        {
-            instance.IsExecuteInUnityEditor = !instance.IsExecuteInUnityEditor;
-        }
-
-        [MenuItem("VGC/Attribute/Executor/TurnON ExecuteUnityEditor(now OFF)", true)]
-        private static bool TurnOnExecuteUnityEditorValidation()
-        {
-            return !instance.IsExecuteInUnityEditor;
+            Menu.SetChecked(ExecuteInUnityEditorMenu, instance.IsExecuteInUnityEditor);
+            return true;
         }
 #endif
     }
