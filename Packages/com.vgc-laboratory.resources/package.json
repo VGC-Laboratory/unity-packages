@@ -1,7 +1,7 @@
 {
   "name": "com.vgc-laboratory.resources",
   "displayName": "VGC Resources",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "unity": "2022.3",
   "description": "ワールド用・アバター用のどちらからも使う共通アセット。今は空の AnimationClip（EmptyAnimation）だけ。アニメーターのレイヤーを無効化する、Modular Avatar の Merge Animator に渡す、といった用途で使う。",
   "author": {

@@ -1,7 +1,7 @@
 {
   "name": "com.vgc-laboratory.game-framework",
   "displayName": "VGC Game Framework",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "unity": "2022.3",
   "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
   "author": {
