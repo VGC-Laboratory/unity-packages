@@ -2,6 +2,7 @@ name: GUID Check
 
 # Packages/ 配下の .meta の GUID がパッケージをまたいで重複していないか調べる。
 # 重複すると、利用者のプロジェクトでどちらか一方しか解決されず参照が静かに壊れる。
+# あわせて .meta が改行で終わっているかも調べる（終わっていないと Unity が取り込みのたびにエラーを出す）。
 # release.yml からも uses: で呼ばれる（リリース前の門番）。
 on:
   push:
@@ -26,5 +27,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: GUID の重複を調べる
+      - name: GUID の重複と .meta の末尾の改行を調べる
         run: python3 tools/check-guid-duplicates.py Packages

@@ -174,9 +174,12 @@ Release が続けて走ると、先に並んでいた listing が押し出され
 `index.json` が古いままになる。出し終わってから Actions の
 **Build VPM Listing** を手で 1 回実行するのが確実。
 listing は毎回すべての Release から作り直すので、1 回走れば全部そろう。
+
 ### 検査
 
-`guid-check.yml` が `Packages/` 配下の `.meta` の GUID 重複を調べる。
+`guid-check.yml` が `Packages/` 配下の `.meta` の GUID 重複と、`.meta` が改行で終わっているかを調べる。
+`.meta` を手で作ったときに最後の `assetBundleVariant:` の後ろの改行が抜けると、Unity が取り込みのたびに
+`Unable to parse file` を出す（GUID は読めるので参照は壊れないが、利用者には不具合に見える）。
 push / PR で走り、リリースの前にも走る（`release.yml` が待つ）。手元でも同じコマンドで確認できる。
 
 ```bash
