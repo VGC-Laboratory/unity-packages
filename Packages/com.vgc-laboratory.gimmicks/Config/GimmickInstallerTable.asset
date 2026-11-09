@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e562641698401b488d9e892c44cc1eb, type: 3}
-  m_Name: LocalizationTable
+  m_Name: GimmickInstallerTable
   m_EditorClassIdentifier: 
   _sheetName: "\u30E1\u30A4\u30F3\u30A6\u30A3\u30F3\u30C9\u30A6"
   _entries:
