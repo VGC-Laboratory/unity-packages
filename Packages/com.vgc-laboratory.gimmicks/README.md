@@ -1,7 +1,8 @@
 # VGC Gimmicks
 
 ギミックやツールの**版の確認**と、VGC のギミックの**定義・導入**の共通基盤。
-**VRChat の SDK の API を使わない**ので、ワールド用・アバター用のどちらのプロジェクトでも使える
+**VRChat の SDK が無いプロジェクトでも使える**（[後述](#vrchat-の-sdk-が無いプロジェクト)）。
+ワールド用・アバター用のどちらのプロジェクトでも使える
 （`vpmDependencies` は [localization](../com.vgc-laboratory.localization/README.md) だけ）。
 
 ## 版の確認（誰でも使える）
@@ -84,8 +85,8 @@ VGC のギミックを作るときは、`GimmickSetting` の Version Source に�
 Runtime/   asmdef VGC.Gimmicks.Runtime   namespace VGC.Gimmicks
 ├── GimmickSetting.cs     ScriptableObject。配布元・版・取得元・プレハブ・依存・クロスプラットフォーム対応
 ├── VersionSource.cs      ScriptableObject。版の一覧を読むシート
-├── GimmickInstaller.cs   導入用のマーカー MonoBehaviour（IEditorOnly）
-└── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（IEditorOnly）
+├── GimmickInstaller.cs   導入用のマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
+└── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
 Editor/    asmdef VGC.Gimmicks.Editor
 ├── VersionChecker.cs          取得元ごとに版の一覧を読み、手元の版と比べる
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
@@ -112,6 +113,17 @@ Config/
 
 自分のツールを配る場合は、自分の名前やサークル名を入れておくとよい。
 利用者のプロジェクトに他の作者のギミックが入ったときに、どれが自分のものか分かる。
+
+## VRChat の SDK が無いプロジェクト
+
+**0.3.1 から、VRChat の SDK（`com.vrchat.base`）が入っていないプロジェクトでもコンパイルできる。**
+VRChat に依存しないツールも、版の確認（`VersionChecker` / `UpdateNoticeGUI`）にこのパッケージを使える。
+そういうツールの依存は `>=0.3.1 <1.0.0` と書く（0.3.0 までは SDK が無いとコンパイルが通らない）。
+
+- SDK があるときだけ、`GimmickInstaller` と `GimmickMarker` を `VRC.SDKBase.IEditorOnly`（エディタ専用のコンポーネントの印）にする。
+  記号 `VGC_VRCSDK_BASE` は、`VGC.Gimmicks.Runtime` の asmdef の `versionDefines` が `com.vrchat.base` を見て定義する。
+  記号はこの asmdef の中でだけ効く。ほかのアセンブリで使うときは、その asmdef にも同じ `versionDefines` を書く。
+- インターフェースの有無でシリアライズは変わらないので、このコンポーネントを使うプレハブの参照は切れない。
 
 ## プラットフォーム固有の部分
 

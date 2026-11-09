@@ -39,6 +39,9 @@ VPM（VRChat Package Manager）で配信する。
 翻訳表はプロジェクト全体をシート名で探さず、GUID・パス・フォルダで場所を絞って読む。
 別の作者の表と同じシート名でも衝突しない。
 
+`localization` と `gimmicks` は **VRChat の SDK が無いプロジェクトでも使える**。
+VRChat に依存しないツールも、翻訳と版の確認にこの 2 つを使える。
+
 ワールド用かアバター用かは `vpmDependencies` で決まる（`com.vrchat.worlds` ならワールド用、
 `com.vrchat.avatars` ならアバター用、どちらも無ければ両方で使える）。
 [配信ページ](https://vgc-laboratory.github.io/unity-packages/)もこの規則で区分を出し分けている。
@@ -195,6 +198,21 @@ push / PR で走り、リリースの前にも走る（`release.yml` が待つ�
 ```bash
 python3 tools/check-guid-duplicates.py Packages
 ```
+
+#### VRChat の SDK が無いプロジェクトでのコンパイル
+
+VRChat の SDK に依存すると書いていないパッケージ（今は attributes / localization / gimmicks / resources）は、
+SDK の無いプロジェクトでもコンパイルできなければならない。`check-compile-without-vrcsdk.py` で確かめる。
+**Unity エディタは起動しない。** Unity に同梱の C# コンパイラに Unity 本体の参照アセンブリだけを渡して、
+asmdef ごとにコンパイルする。Unity 2022.3 が入っている手元で動かす（CI では動かない）。
+
+```bash
+python3 tools/check-compile-without-vrcsdk.py
+```
+
+- 対象は package.json の依存から決める。VRChat の SDK など、このリポジトリに無いものに（間接的にも）依存するパッケージは対象外。
+- asmdef の `versionDefines` と `defineConstraints` も見る。attributes の Udon 部分は `com.vrchat.worlds` が無いので除外される。
+- エディタでのコンパイル（`UNITY_EDITOR` あり）をまねたもの。最後は Unity で確かめる。
 
 ## ライセンス
 
