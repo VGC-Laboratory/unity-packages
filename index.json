@@ -1,0 +1,890 @@
+{
+  "name": "VGC Laboratory",
+  "id": "com.vgc-laboratory.listing",
+  "author": "VGC-Laboratory",
+  "url": "https://vgc-laboratory.github.io/unity-packages/index.json",
+  "packages": {
+    "com.vgc-laboratory.attributes": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.1.0/com.vgc-laboratory.attributes-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4"
+          },
+          "zipSHA256": "872099e03f29b5280661ddcb4649e869a59a06c30b186e0db0f8053fa2fbb86a"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.2.0/com.vgc-laboratory.attributes-0.2.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4"
+          },
+          "zipSHA256": "dd1171711270d5f3c5872dae535363f59a1ba0863b3dc23b8bd5098798f33686"
+        },
+        "0.3.0": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.3.0",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.3.0/com.vgc-laboratory.attributes-0.3.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4"
+          },
+          "zipSHA256": "dedb2e68140ff58e6925afec2c0fcfc92a4de09020a971efb972636a6753ab9f"
+        },
+        "0.4.0": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.4.0",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.4.0/com.vgc-laboratory.attributes-0.4.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4"
+          },
+          "zipSHA256": "0433b9bb09a8f0918dd87a0266966f8e0cf824f2b71aa4771a0b70ba1b35f4cc"
+        },
+        "0.5.0": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.5.0",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。ワールド用・アバター用のどちらのプロジェクトでも使える。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張（VGC.Attributes.Udon.*）は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/attributes-v0.5.0/com.vgc-laboratory.attributes-0.5.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.attributes/README.md",
+          "zipSHA256": "5ae4820b340d4551d850052348752598a6c0ce0749a8eb595675196532121016"
+        },
+        "0.5.1": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.5.1",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。ワールド用・アバター用のどちらのプロジェクトでも使える。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張（VGC.Attributes.Udon.*）は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/attributes-v0.5.1/com.vgc-laboratory.attributes-0.5.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.attributes/README.md",
+          "zipSHA256": "b593db4564e0f84d7d387479552e0023af96f9383e59e524603934a1256e2eca"
+        },
+        "0.5.2": {
+          "name": "com.vgc-laboratory.attributes",
+          "displayName": "VGC Attributes",
+          "version": "0.5.2",
+          "unity": "2022.3",
+          "description": "Inspector 表示補助と、エディタ／ビルド時にフィールド参照を自動配線する属性群。ワールド用・アバター用のどちらのプロジェクトでも使える。VGC.Attributes.Runtime は依存ゼロ。Udon / uGUI 固有の拡張（VGC.Attributes.Udon.*）は com.vrchat.worlds が入っている場合のみコンパイルされる。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/attributes-v0.5.2/com.vgc-laboratory.attributes-0.5.2.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.attributes/README.md",
+          "zipSHA256": "a38375f6c97aa530718b81c6260bdb23a48b153db9bed7b35f94df30642277ce"
+        }
+      }
+    },
+    "com.vgc-laboratory.core": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.core",
+          "displayName": "VGC Core",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。TimeHelper は VRChat のワールド向け API を使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.1.0/com.vgc-laboratory.core-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4"
+          },
+          "zipSHA256": "a5a5f00d382b78887b5f8b09621822475d897b55434857cb29bdf9d73e61ef87"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.core",
+          "displayName": "VGC Core",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。TimeHelper は VRChat のワールド向け API を使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.2.0/com.vgc-laboratory.core-0.2.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4"
+          },
+          "zipSHA256": "0fee8071fa341e344b625c4814c33f515b98f1727b6f479fe1488033fbd51e72"
+        },
+        "0.3.0": {
+          "name": "com.vgc-laboratory.core",
+          "displayName": "VGC Core",
+          "version": "0.3.0",
+          "unity": "2022.3",
+          "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。TimeHelper は VRChat のワールド向け API を使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.3.0/com.vgc-laboratory.core-0.3.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4"
+          },
+          "zipSHA256": "e7a4f6e19adad941b2cd40b243af5db519905f7370c5091009fd5771cad1041d"
+        },
+        "0.4.0": {
+          "name": "com.vgc-laboratory.core",
+          "displayName": "VGC Core",
+          "version": "0.4.0",
+          "unity": "2022.3",
+          "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。TimeHelper は VRChat のワールド向け API を使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.4.0/com.vgc-laboratory.core-0.4.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4"
+          },
+          "zipSHA256": "f42167f55e41d6831e533074fd325f983f5eeae90b9cc05c9432e0a468adf6df"
+        },
+        "0.5.0": {
+          "name": "com.vgc-laboratory.core",
+          "displayName": "VGC Core (Worlds)",
+          "version": "0.5.0",
+          "unity": "2022.3",
+          "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。ワールド専用（Udon から呼ぶ前提で、asmdef が UdonSharp を参照する）。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/core-v0.5.0/com.vgc-laboratory.core-0.5.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.core/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4"
+          },
+          "zipSHA256": "779b9c7e3419f2b4f78160cbe08d2c7c7bec6ed7fd1e2e52ede9c891ddc00e82"
+        },
+        "0.5.1": {
+          "name": "com.vgc-laboratory.core",
+          "displayName": "VGC Core (Worlds)",
+          "version": "0.5.1",
+          "unity": "2022.3",
+          "description": "サーバー時刻ベースのカウントダウン(TimeHelper)と、TMP の sprite index 連結(SpriteNumberFormatter)。ワールド専用（Udon から呼ぶ前提で、asmdef が UdonSharp を参照する）。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/core-v0.5.1/com.vgc-laboratory.core-0.5.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.core/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4"
+          },
+          "zipSHA256": "c23ee0449d4dfb39b88ff6323ce8de255308835d1caa8ac35655c6b34c3bb3d6"
+        }
+      }
+    },
+    "com.vgc-laboratory.game-framework": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.game-framework",
+          "displayName": "VGC Game Framework",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.1.0/com.vgc-laboratory.game-framework-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.1.0",
+            "com.vgc-laboratory.core": "^0.1.0",
+            "com.vgc-laboratory.ui-extension": "^0.1.0"
+          },
+          "samples": [
+            {
+              "displayName": "Game Framework Sample",
+              "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+              "path": "Samples~/GameFrameworkSample"
+            }
+          ],
+          "zipSHA256": "56ac0b15375d478846f279c901e244f463f8a9c6a48b811926588e005b82a3ef"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.game-framework",
+          "displayName": "VGC Game Framework",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.2.0/com.vgc-laboratory.game-framework-0.2.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.2.0",
+            "com.vgc-laboratory.core": "^0.2.0",
+            "com.vgc-laboratory.ui-extension": "^0.2.0"
+          },
+          "samples": [
+            {
+              "displayName": "Game Framework Sample",
+              "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+              "path": "Samples~/GameFrameworkSample"
+            }
+          ],
+          "zipSHA256": "cca9dd22580010b09c297de11e6d579eda904c13bff236bfc104594fc5cb8055"
+        },
+        "0.3.0": {
+          "name": "com.vgc-laboratory.game-framework",
+          "displayName": "VGC Game Framework",
+          "version": "0.3.0",
+          "unity": "2022.3",
+          "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.3.0/com.vgc-laboratory.game-framework-0.3.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.3.0",
+            "com.vgc-laboratory.core": "^0.3.0",
+            "com.vgc-laboratory.ui-extension": "^0.3.0"
+          },
+          "samples": [
+            {
+              "displayName": "Game Framework Sample",
+              "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+              "path": "Samples~/GameFrameworkSample"
+            }
+          ],
+          "zipSHA256": "75462db84fc8fc0941a9fbd5960d9c14211f7d23f9ae1de216229e479f76cb24"
+        },
+        "0.4.0": {
+          "name": "com.vgc-laboratory.game-framework",
+          "displayName": "VGC Game Framework",
+          "version": "0.4.0",
+          "unity": "2022.3",
+          "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.4.0/com.vgc-laboratory.game-framework-0.4.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.4.0",
+            "com.vgc-laboratory.core": "^0.4.0",
+            "com.vgc-laboratory.ui-extension": "^0.4.0"
+          },
+          "samples": [
+            {
+              "displayName": "Game Framework Sample",
+              "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+              "path": "Samples~/GameFrameworkSample"
+            }
+          ],
+          "zipSHA256": "bca610f4802d36525196374b65ca8639d5cd4d7c0b2659ee3b491d1cd3722044"
+        },
+        "0.5.0": {
+          "name": "com.vgc-laboratory.game-framework",
+          "displayName": "VGC Game Framework",
+          "version": "0.5.0",
+          "unity": "2022.3",
+          "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/game-framework-v0.5.0/com.vgc-laboratory.game-framework-0.5.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.game-framework/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": ">=0.4.0 <1.0.0",
+            "com.vgc-laboratory.core": ">=0.4.0 <1.0.0",
+            "com.vgc-laboratory.ui-extension": ">=0.4.0 <1.0.0"
+          },
+          "samples": [
+            {
+              "displayName": "Game Framework Sample",
+              "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+              "path": "Samples~/GameFrameworkSample"
+            }
+          ],
+          "zipSHA256": "13a5b6c2d060a00115dea2d68870604a489872b79d9bcb81c04053d5832cf3e5"
+        },
+        "0.5.1": {
+          "name": "com.vgc-laboratory.game-framework",
+          "displayName": "VGC Game Framework",
+          "version": "0.5.1",
+          "unity": "2022.3",
+          "description": "VRChat ワールド向けのマルチプレイヤーゲームセッション管理。ホスト決定・エントリー枠管理・ゲーム開始／終了状態の共通処理を提供し、ゲーム固有ロジックはコールバックインターフェース経由で差し込む。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/game-framework-v0.5.1/com.vgc-laboratory.game-framework-0.5.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.game-framework/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": ">=0.4.0 <1.0.0",
+            "com.vgc-laboratory.core": ">=0.4.0 <1.0.0",
+            "com.vgc-laboratory.ui-extension": ">=0.4.0 <1.0.0"
+          },
+          "samples": [
+            {
+              "displayName": "Game Framework Sample",
+              "description": "3秒カウントダウン後に10秒プレイして終了する最小リファレンス実装。",
+              "path": "Samples~/GameFrameworkSample"
+            }
+          ],
+          "zipSHA256": "1e3cdb43ae068c3d9e9a8e493d76532cce9f3afeba3803bdb53ec11ee8e67f7e"
+        }
+      }
+    },
+    "com.vgc-laboratory.gimmicks": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（GimmickVersionManager）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）。VRChat の SDK に依存しないので、ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.1.0/com.vgc-laboratory.gimmicks-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4",
+            "com.vgc-laboratory.localization": ">=0.1.0 <1.0.0"
+          },
+          "zipSHA256": "7c26e63b7c28af285c8084cface013a4a75b74453fe2275d2ede670cfd081f3d"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）。VRChat の SDK の API を使わないので、ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.2.0/com.vgc-laboratory.gimmicks-0.2.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks/README.md",
+          "vpmDependencies": {
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "84a641c333f164e1679687a9300068557aaa6b5193c9f10b64041924d4c13fcc"
+        },
+        "0.3.0": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.3.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）。VRChat の SDK の API を使わないので、ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.3.0/com.vgc-laboratory.gimmicks-0.3.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks/README.md",
+          "vpmDependencies": {
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "1badb8dbd2d4f8cd5aa69c0bdf8a86d4e0c58943b2637663a8e05d612c8fbacc"
+        },
+        "0.3.1": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.3.1",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）。VRChat の SDK が無いプロジェクトでもコンパイルできる（SDK があるときだけ GimmickInstaller / GimmickMarker を IEditorOnly にする）。ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.3.1/com.vgc-laboratory.gimmicks-0.3.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks/README.md",
+          "vpmDependencies": {
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "ac3374698d4f3b27880348c1e65be42bff0ad3e6dc4264d9524107731d174bea"
+        },
+        "0.4.0": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.4.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）。VRChat の SDK が無いプロジェクトでもコンパイルできる（SDK があるときだけ GimmickInstaller / GimmickMarker を IEditorOnly にする）。ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.4.0/com.vgc-laboratory.gimmicks-0.4.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks/README.md",
+          "vpmDependencies": {
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "51180d96c7fada3d74863a49869bcb78fe8677a84ce776541734af6fc54b192f"
+        }
+      }
+    },
+    "com.vgc-laboratory.gimmicks-avatar": {
+      "versions": {
+        "2.0.0": {
+          "name": "com.vgc-laboratory.gimmicks-avatar",
+          "displayName": "VGC Gimmicks (Avatar)",
+          "version": "2.0.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-avatar-v2.0.0/com.vgc-laboratory.gimmicks-avatar-2.0.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.avatars": "^3.10.4",
+            "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+            "com.vgc-laboratory.localization": ">=0.1.0 <1.0.0",
+            "com.vgc-laboratory.gimmicks": ">=0.1.0 <1.0.0",
+            "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
+          },
+          "zipSHA256": "d0a39a9f4a1e1b7862a38b71e6abb236bbf08865e0fbeb806911a12257b109d7"
+        },
+        "2.0.1": {
+          "name": "com.vgc-laboratory.gimmicks-avatar",
+          "displayName": "VGC Gimmicks (Avatar)",
+          "version": "2.0.1",
+          "unity": "2022.3",
+          "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-avatar-v2.0.1/com.vgc-laboratory.gimmicks-avatar-2.0.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks-avatar/README.md",
+          "vpmDependencies": {
+            "com.vrchat.avatars": "^3.10.4",
+            "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.gimmicks": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
+          },
+          "zipSHA256": "1a66e838d3369c0208c6dbd91c6a11df9700bb31bd71e67c24e81734e67845f3"
+        },
+        "2.0.2": {
+          "name": "com.vgc-laboratory.gimmicks-avatar",
+          "displayName": "VGC Gimmicks (Avatar)",
+          "version": "2.0.2",
+          "unity": "2022.3",
+          "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-avatar-v2.0.2/com.vgc-laboratory.gimmicks-avatar-2.0.2.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks-avatar/README.md",
+          "vpmDependencies": {
+            "com.vrchat.avatars": "^3.10.4",
+            "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.gimmicks": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
+          },
+          "zipSHA256": "ef56ac7e3749d8d5385f1898f004e7246a56a5ab47b153641c1e30a911279867"
+        },
+        "2.0.3": {
+          "name": "com.vgc-laboratory.gimmicks-avatar",
+          "displayName": "VGC Gimmicks (Avatar)",
+          "version": "2.0.3",
+          "unity": "2022.3",
+          "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-avatar-v2.0.3/com.vgc-laboratory.gimmicks-avatar-2.0.3.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks-avatar/README.md",
+          "vpmDependencies": {
+            "com.vrchat.avatars": "^3.10.4",
+            "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.gimmicks": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
+          },
+          "zipSHA256": "76239de462771716101b831aece7a8e54b5a94892295393b06485a2cc949d446"
+        },
+        "2.0.4": {
+          "name": "com.vgc-laboratory.gimmicks-avatar",
+          "displayName": "VGC Gimmicks (Avatar)",
+          "version": "2.0.4",
+          "unity": "2022.3",
+          "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-avatar-v2.0.4/com.vgc-laboratory.gimmicks-avatar-2.0.4.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks-avatar/README.md",
+          "vpmDependencies": {
+            "com.vrchat.avatars": "^3.10.4",
+            "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.gimmicks": ">=0.4.0 <1.0.0",
+            "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
+          },
+          "zipSHA256": "267ef55392feb4b0848acba7b25bfc6e727646c5e305b3dc692e4dbf9516817f"
+        }
+      }
+    },
+    "com.vgc-laboratory.localization": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.localization",
+          "displayName": "VGC Localization",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "翻訳テーブル（LocalizationTable）とエディタ言語の設定。VRChat の SDK に依存しないので、ワールド用・アバター用のどちらのプロジェクトでも使える。NDMF / Modular Avatar の言語設定への相乗りは com.vgc-laboratory.gimmicks-avatar 側で行う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/localization-v0.1.0/com.vgc-laboratory.localization-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4"
+          },
+          "zipSHA256": "704ca214a2bb86b0015c7dc475f5117b027de58bcd7da62cece9823a364d9c25"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.localization",
+          "displayName": "VGC Localization",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "翻訳テーブル（LocalizationTable）、スプレッドシートからの取り込み（SpreadsheetSource）、エディタ言語と使用言語の一覧（Project Settings > VGC > Localization）。言語は UnityEngine.SystemLanguage。VRChat の SDK の API を使わないので、ワールド用・アバター用のどちらのプロジェクトでも使える。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/localization-v0.2.0/com.vgc-laboratory.localization-0.2.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.localization/README.md",
+          "zipSHA256": "f962885d0d94f32f34f01ddc3d07a52e035ff9aaf4de0a02184b07d5fcf0b8d2"
+        },
+        "0.2.1": {
+          "name": "com.vgc-laboratory.localization",
+          "displayName": "VGC Localization",
+          "version": "0.2.1",
+          "unity": "2022.3",
+          "description": "翻訳テーブル（LocalizationTable）、スプレッドシートからの取り込み（SpreadsheetSource）、エディタ言語と使用言語の一覧（Project Settings > VGC > Localization）。言語は UnityEngine.SystemLanguage。VRChat の SDK の API を使わないので、ワールド用・アバター用のどちらのプロジェクトでも使える。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/localization-v0.2.1/com.vgc-laboratory.localization-0.2.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.localization/README.md",
+          "zipSHA256": "13121cb7f705a4f888b141c8cafed61246bb7bb49b4d2c06e6aeaccf893c90d3"
+        }
+      }
+    },
+    "com.vgc-laboratory.localization-world": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.localization-world",
+          "displayName": "VGC Localization (World)",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "VRChat ワールドで LocalizationTable の翻訳を使う。LocalizationSystem（表示言語の管理。VRChat 本体の言語に追従）、LocalizedUdonBehaviour（翻訳を受け取る基底）、LocalizationBindings（文字欄とキーの対応）、ビルド時の焼き込み。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/localization-world-v0.1.0/com.vgc-laboratory.localization-world-0.1.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.localization-world/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "8dce30e033a41ca6114e8f3f67ac74a05536ee82122bd8bc9858fd4b8df1492e"
+        },
+        "0.1.1": {
+          "name": "com.vgc-laboratory.localization-world",
+          "displayName": "VGC Localization (World)",
+          "version": "0.1.1",
+          "unity": "2022.3",
+          "description": "VRChat ワールドで LocalizationTable の翻訳を使う。LocalizationSystem（表示言語の管理。VRChat 本体の言語に追従）、LocalizedUdonBehaviour（翻訳を受け取る基底）、LocalizationBindings（文字欄とキーの対応）、ビルド時の焼き込み。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/localization-world-v0.1.1/com.vgc-laboratory.localization-world-0.1.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.localization-world/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "554d6e8b8c6465d82be2325946bf4a6855a12250b9b7f504d533b28f91fe17e5"
+        }
+      }
+    },
+    "com.vgc-laboratory.resources": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.resources",
+          "displayName": "VGC Resources",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "ワールド用・アバター用のどちらからも使う共通アセット。今は空の AnimationClip（EmptyAnimation）だけ。アニメーターのレイヤーを無効化する、Modular Avatar の Merge Animator に渡す、といった用途で使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/resources-v0.1.0/com.vgc-laboratory.resources-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.base": "^3.10.4"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\VGCResources": "f6d57f4e3e4bc244cb83ffa7f9103f0b"
+          },
+          "zipSHA256": "5e81fa8d923208ddcf2453aeed3a3713872416d9a76417f3ef27ec1cf169563e"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.resources",
+          "displayName": "VGC Resources",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "ワールド用・アバター用のどちらからも使う共通アセット。今は空の AnimationClip（EmptyAnimation）だけ。アニメーターのレイヤーを無効化する、Modular Avatar の Merge Animator に渡す、といった用途で使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/resources-v0.2.0/com.vgc-laboratory.resources-0.2.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.resources/README.md",
+          "legacyFolders": {
+            "Assets\\VGC\\VGCResources": "f6d57f4e3e4bc244cb83ffa7f9103f0b"
+          },
+          "zipSHA256": "cc1bcf39c48eaca8fc779f2a36303631fb811764e476b337cebd94c66e532302"
+        },
+        "0.2.1": {
+          "name": "com.vgc-laboratory.resources",
+          "displayName": "VGC Resources",
+          "version": "0.2.1",
+          "unity": "2022.3",
+          "description": "ワールド用・アバター用のどちらからも使う共通アセット。今は空の AnimationClip（EmptyAnimation）だけ。アニメーターのレイヤーを無効化する、Modular Avatar の Merge Animator に渡す、といった用途で使う。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/resources-v0.2.1/com.vgc-laboratory.resources-0.2.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.resources/README.md",
+          "legacyFolders": {
+            "Assets\\VGC\\VGCResources": "f6d57f4e3e4bc244cb83ffa7f9103f0b"
+          },
+          "zipSHA256": "a137b1b13174577a3e42b5a782dc2354a3ae66bcb97bf1a9546f24eaa1a0ec00"
+        }
+      }
+    },
+    "com.vgc-laboratory.ui-extension": {
+      "versions": {
+        "0.1.0": {
+          "name": "com.vgc-laboratory.ui-extension",
+          "displayName": "VGC UI Extension",
+          "version": "0.1.0",
+          "unity": "2022.3",
+          "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.1.0/com.vgc-laboratory.ui-extension-0.1.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.1.0"
+          },
+          "zipSHA256": "cfc422e384b60ba4b8000faf006184eb6b1283a0df06c8c739bd322275d84967"
+        },
+        "0.2.0": {
+          "name": "com.vgc-laboratory.ui-extension",
+          "displayName": "VGC UI Extension",
+          "version": "0.2.0",
+          "unity": "2022.3",
+          "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.2.0/com.vgc-laboratory.ui-extension-0.2.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.2.0"
+          },
+          "zipSHA256": "fd60743511298b814cb3c9b2ee63a8cb66c1ff66d747cce6c756130e78b94da8"
+        },
+        "0.3.0": {
+          "name": "com.vgc-laboratory.ui-extension",
+          "displayName": "VGC UI Extension",
+          "version": "0.3.0",
+          "unity": "2022.3",
+          "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.3.0/com.vgc-laboratory.ui-extension-0.3.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.3.0"
+          },
+          "zipSHA256": "7fceb81f3cb8985b18978b811c1f0be713c1115fd1b5c219cce13fa3b0e7111f"
+        },
+        "0.4.0": {
+          "name": "com.vgc-laboratory.ui-extension",
+          "displayName": "VGC UI Extension",
+          "version": "0.4.0",
+          "unity": "2022.3",
+          "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/v0.4.0/com.vgc-laboratory.ui-extension-0.4.0.zip",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": "^0.4.0"
+          },
+          "zipSHA256": "4b1dd843e7f5c326b4ff16a143a950a08234ea680a9480da4e6c6e282bc41421"
+        },
+        "0.5.0": {
+          "name": "com.vgc-laboratory.ui-extension",
+          "displayName": "VGC UI Extension",
+          "version": "0.5.0",
+          "unity": "2022.3",
+          "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/ui-extension-v0.5.0/com.vgc-laboratory.ui-extension-0.5.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.ui-extension/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": ">=0.4.0 <1.0.0"
+          },
+          "zipSHA256": "e500ae2674537d5a825bfddec48389178894ed21aa188ec1ae9d1d6b8b465636"
+        },
+        "0.5.1": {
+          "name": "com.vgc-laboratory.ui-extension",
+          "displayName": "VGC UI Extension",
+          "version": "0.5.1",
+          "unity": "2022.3",
+          "description": "uGUI Button の UdonSharp 向け拡張。ホバー／クリックのスケール演出を VRCTween で行い、onClick と EventTrigger の配線を VGC Attributes で自動化する。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/ui-extension-v0.5.1/com.vgc-laboratory.ui-extension-0.5.1.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.ui-extension/README.md",
+          "vpmDependencies": {
+            "com.vrchat.worlds": "^3.10.4",
+            "com.vgc-laboratory.attributes": ">=0.4.0 <1.0.0"
+          },
+          "zipSHA256": "152b044f8252ce7ac74c9ba69114dd50bca714b0f21b072a669a3966c817c9e2"
+        }
+      }
+    }
+  }
+}
