@@ -255,3 +255,39 @@ MonoBehaviour:
       text: "\u652F\u6301\u5F53\u524D\u5E73\u53F0"
     - language: ChineseTraditional
       text: "\u652F\u63F4\u76EE\u524D\u5E73\u53F0"
+  - id: SettingsWindow.Title
+    values:
+    - language: Japanese
+      text: "\u30AE\u30DF\u30C3\u30AF\u306E\u8A2D\u5B9A"
+    - language: English
+      text: Gimmick Settings
+    - language: Korean
+      text: "\uAE30\uBBF9 \uC124\uC815"
+    - language: ChineseSimplified
+      text: "\u673A\u5173\u8BBE\u7F6E"
+    - language: ChineseTraditional
+      text: "\u6A5F\u95DC\u8A2D\u5B9A"
+  - id: SettingsWindow.SelectInHierarchy
+    values:
+    - language: Japanese
+      text: "\u30D2\u30A8\u30E9\u30EB\u30AD\u30FC\u3067\u9078\u629E"
+    - language: English
+      text: Select in Hierarchy
+    - language: Korean
+      text: "\uD558\uC774\uC5B4\uB77C\uD0A4\uC5D0\uC11C \uC120\uD0DD"
+    - language: ChineseSimplified
+      text: "\u5728\u5C42\u7EA7\u4E2D\u9009\u62E9"
+    - language: ChineseTraditional
+      text: "\u5728\u968E\u5C64\u4E2D\u9078\u64C7"
+  - id: SettingsWindow.NotFound
+    values:
+    - language: Japanese
+      text: "\u8A2D\u5B9A\u3059\u308B\u30AE\u30DF\u30C3\u30AF\u304C\u898B\u3064\u304B\u308A\u307E\u305B\u3093\u3002Gimmick Setup \u306E\u300C\u8A2D\u5B9A\u300D\u30DC\u30BF\u30F3\u304B\u3089\u958B\u304D\u76F4\u3057\u3066\u304F\u3060\u3055\u3044\u3002"
+    - language: English
+      text: No gimmick settings to show. Open this window again from the Setting button of Gimmick Setup.
+    - language: Korean
+      text: "\uC124\uC815\uD560 \uAE30\uBBF9\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4. Gimmick Setup\uC758 \u300C\uC124\uC815\u300D \uBC84\uD2BC\uC73C\uB85C \uB2E4\uC2DC \uC5F4\uC5B4 \uC8FC\uC138\uC694."
+    - language: ChineseSimplified
+      text: "\u627E\u4E0D\u5230\u8981\u8BBE\u7F6E\u7684\u673A\u5173\u3002\u8BF7\u4ECE Gimmick Setup \u7684\u201C\u8BBE\u7F6E\u201D\u6309\u94AE\u91CD\u65B0\u6253\u5F00\u3002"
+    - language: ChineseTraditional
+      text: "\u627E\u4E0D\u5230\u8981\u8A2D\u5B9A\u7684\u6A5F\u95DC\u3002\u8ACB\u5F9E Gimmick Setup \u7684\u300C\u8A2D\u5B9A\u300D\u6309\u9215\u91CD\u65B0\u958B\u555F\u3002"

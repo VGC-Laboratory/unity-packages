@@ -86,11 +86,14 @@ Runtime/   asmdef VGC.Gimmicks.Runtime   namespace VGC.Gimmicks
 ├── GimmickSetting.cs     ScriptableObject。配布元・版・取得元・プレハブ・依存・クロスプラットフォーム対応
 ├── VersionSource.cs      ScriptableObject。版の一覧を読むシート
 ├── GimmickInstaller.cs   導入用のマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
-└── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
+├── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
+└── IGimmickSettings.cs   設定用のコンポーネントの目印（設定ウィンドウが表示する）
 Editor/    asmdef VGC.Gimmicks.Editor
 ├── VersionChecker.cs          取得元ごとに版の一覧を読み、手元の版と比べる
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
-└── GimmickInstallerEditor.cs  導入 UI（版チェックの表示を含む）
+├── GimmickInstallerEditor.cs  導入 UI（版チェックの表示を含む）
+├── GimmickSettingsWindow.cs   設定ウィンドウ（IGimmickSettings を付けたコンポーネントだけを表示する）
+└── Animation/AnimatorFactory.cs  アニメーターをメモリ上で組み立てる（namespace VGC.Gimmicks.Animation）
 Config/
 ├── GimmickInstallerTable.asset  導入 UI と更新のお知らせの文言（シート「メインウィンドウ」）
 ├── VGCSpreadsheet.asset         VGC の Apps Script（読み取り専用デプロイ）
@@ -130,9 +133,70 @@ EditorGUILayout.EndScrollView();
 ```
 
 - 最後の引数に `LocalizationTable` を渡すと文言を差し替えられる（省くとこのパッケージの表）。
+- 「設定」ボタンは[設定ウィンドウ](#設定ウィンドウ050-から)を開く。
 - 各ギミックのボタン（導入・削除・設定／Prefab 選択・更新）は、**言語によらず同じ幅で横に並ぶ。**
   文字が入りきらないときは文字を小さくし（11 → 8）、それでも入らなければカーソルを乗せると全文が出る。
 - 位置と見た目を自分で決めたい更新ボタンは `UpdateNoticeGUI.DrawOpenButton(Rect, GUIContent, urls, GUIStyle)` で描ける。
+
+### 設定ウィンドウ（0.5.0 から）
+
+導入 UI の「設定」ボタンは、ギミックの設定用コンポーネントだけを出すウィンドウを開く。
+ギミックの GameObject を選ぶと MA のコンポーネントや `GimmickMarker` も並ぶので、設定項目だけを見せるため。
+
+設定用のコンポーネントに、目印の `IGimmickSettings` を付ける（メンバーは無い）。
+
+```csharp
+using VGC.Gimmicks;
+
+public class MyGimmickInstaller : MonoBehaviour, IGimmickSettings
+{
+    [SerializeField] private float _speed = 1f;
+}
+```
+
+- ウィンドウは、インスタンスとその子から目印の付いたコンポーネントを探し、そのインスペクタだけを並べる。
+  表示にはコンポーネントのエディタをそのまま使うので、`[CustomEditor]` があればそれが出る。
+- 同じギミックを複数入れているときは、上部で切り替えられる。「ヒエラルキーで選択」で GameObject を選べる（今までの動き）。
+- **目印の付いたコンポーネントが無いギミックは、今までどおり GameObject を選ぶ。** 既存の配布物の動きは変わらない。
+- 「Prefab選択」ボタン（`GimmickSetting` の Use Setting がオフ）の動きは変わらない。
+- 自分のコードから開くときは `GimmickSettingsWindow.Open(instances)`。あるかどうかは `GimmickSettingsWindow.HasSettings(instance)`。
+- 文言は `Config/GimmickInstallerTable.asset` の `SettingsWindow.Title` / `.SelectInHierarchy` / `.NotFound`。
+  表にキーが無いときは英語で出す。
+
+## アニメーターを組み立てる（AnimatorFactory、0.5.0 から）
+
+`VGC.Gimmicks.Animation.AnimatorFactory` は、メモリ上で `AnimatorController` を組み立てる。
+使うのは `UnityEditor` と `UnityEngine` だけなので、アバターに限らず使える。
+
+`AnimatorController.AddLayer` や `AnimatorStateMachine.AddState` は Undo を記録するので、
+開いているシーンに未保存の印（*）が付く。NDMF のビルドやプレビューのたびに印が付くと利用者が混乱する。
+`AnimatorFactory` は `new` したオブジェクトを配列に入れて代入する形で作るので、印が付かない。
+できたコントローラーはアセットとして保存しない前提（MA Merge Animator などに渡す）。
+
+```csharp
+using VGC.Gimmicks.Animation;
+
+var factory = new AnimatorFactory();
+factory.AddParameter("Enabled", AnimatorControllerParameterType.Bool);   // 同じ名前は 2 回目以降を無視する
+
+var layer = factory.AddLayer("MyGimmick");
+var off = layer.AddState("Off", offClip);                                // 最初に足したステートが既定
+var on = layer.AddState("On", AnimatorFactory.ConstantClip("On", "Body", typeof(GameObject), "m_IsActive", 1f));
+AnimatorFactory.AddTransition(off, on, AnimatorFactory.If("Enabled"));   // 0 秒・exitTime なし
+AnimatorFactory.AddTransition(on, off, AnimatorFactory.IfNot("Enabled"));
+
+AnimatorController controller = factory.Build("MyGimmick");
+```
+
+| 種類 | 関数 |
+|---|---|
+| 組み立て | `AddParameter` / `AddLayer` / `Build` |
+| レイヤー（`LayerBuilder`） | `AddState`（Write Defaults は既定でオフ） / `AddAnyStateTransition` / `DefaultState` |
+| 条件 | `If` / `IfNot` / `IntEquals` / `IntNotEqual` / `Greater` / `Less` |
+| 遷移 | `AddTransition` / `AddExitTimeTransition` |
+| そのほか | `AddBehaviour` / `ConstantClip`（1 つのプロパティを一定の値にする、キー 1 個のクリップ） |
+
+使う側の Editor の asmdef に `VGC.Gimmicks.Editor` の参照を足す。依存は `>=0.5.0 <1.0.0` と書く。
 
 ## VRChat の SDK が無いプロジェクト
 

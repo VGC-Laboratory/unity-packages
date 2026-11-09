@@ -312,7 +312,12 @@ namespace VGC.Gimmicks
                             {
                                 if (RowButton(localize.Get("Setting", instances.Count)))
                                 {
-                                    Selection.objects = instances.ToArray();
+                                    // 設定用のコンポーネント(IGimmickSettings)があれば、それだけを出すウィンドウを開く。
+                                    // 目印を付けていないギミックは、今までどおり GameObject を選ぶ
+                                    if (instances.Any(GimmickSettingsWindow.HasSettings))
+                                        GimmickSettingsWindow.Open(instances.ToArray());
+                                    else
+                                        Selection.objects = instances.ToArray();
                                 }
                             }
                             else
