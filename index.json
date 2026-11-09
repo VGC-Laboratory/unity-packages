@@ -488,6 +488,24 @@
             "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
           },
           "zipSHA256": "51180d96c7fada3d74863a49869bcb78fe8677a84ce776541734af6fc54b192f"
+        },
+        "0.5.0": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.5.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）、設定用のコンポーネントだけを出す設定ウィンドウ（IGimmickSettings / GimmickSettingsWindow）、シーンに未保存の印を付けずにアニメーターを組み立てる AnimatorFactory。VRChat の SDK が無いプロジェクトでもコンパイルできる（SDK があるときだけ GimmickInstaller / GimmickMarker を IEditorOnly にする）。ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.5.0/com.vgc-laboratory.gimmicks-0.5.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks/README.md",
+          "vpmDependencies": {
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "06243e34e74f878cacc2d45cc2778f25c70e8b3af10a2af733dfcdb24cb890e5"
         }
       }
     },
