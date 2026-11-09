@@ -168,12 +168,22 @@ listing 用の version entry を作り、Release に添付する。
 git push origin attributes-v0.5.0 core-v0.5.0 game-framework-v0.5.0
 ```
 
-**`listing.yml` は `concurrency: group: pages` で待ち行列が 1 本しかない。**
-Release が続けて走ると、先に並んでいた listing が押し出されて cancelled になる。
-`release` ジョブ自体は成功しているので Release と ZIP は出来ているが、
-`index.json` が古いままになる。出し終わってから Actions の
-**Build VPM Listing** を手で 1 回実行するのが確実。
+**同じコミットから 2 回目以降に配信した listing は反映されない。**
+GitHub Pages は、配信中のものと同じコミットからのデプロイを受け付けても
+（Actions 上も Pages のデプロイ履歴上も success になる）、配信する中身を置き換えない。
+Pages のデプロイはコミットの SHA を版として扱っているためと思われる。
+同じコミットに複数のタグを打って出すと、最初の 1 本の listing だけが載り、
+残りの版は `index.json` に出てこない。3 回とも同じ形で起きた。
+
+出し終わったら **main に新しいコミットを積んでから**、Actions の
+**Build VPM Listing** を main で 1 回実行する。タグと同じコミットのまま実行しても反映されない。
 listing は毎回すべての Release から作り直すので、1 回走れば全部そろう。
+
+- 反映は最大 10 分ほど遅れる。Pages の CDN が `max-age=600` で持っており、
+  URL にクエリ文字列を付けてもキャッシュは避けられない。`Last-Modified` が listing を作った時刻になる。
+- `listing.yml` は `concurrency: group: pages` で待ち行列が 1 本しかないので、
+  Release が続けて走ると listing のジョブがいくつか cancelled になる。
+  `release` ジョブは成功しているので、Release と ZIP には影響しない。
 
 ### 検査
 
