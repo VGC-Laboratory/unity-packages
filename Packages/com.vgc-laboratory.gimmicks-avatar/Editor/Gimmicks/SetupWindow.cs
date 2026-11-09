@@ -14,7 +14,8 @@ namespace VGC.Gimmicks.Avatar
         private GameObject _targetAvatar;
         private VRCAvatarDescriptor _descriptor;
         private GimmickInstaller _installer;
-        
+        private Vector2 _scroll;
+
         // nameof では「SetupWindow」になってしまうので、読める名前を直接書く。
         // アバター固有のメニューは VGC/AvatarGimmick にまとめる（gimmicks 本体は VRChat の SDK が無くても使うため）。
         // 優先度 0 で VGC メニューの先頭に出す
@@ -77,7 +78,13 @@ namespace VGC.Gimmicks.Avatar
 
             if (_targetAvatar)
             {
-                GimmickInstallerEditor.DrawSettings(_targetAvatar, _settings, _localize);
+                // ギミックが増えると縦に収まらないので、「更新確認」より下だけをスクロールさせる
+                GimmickInstallerEditor.DrawVersionCheckButton(_settings, _localize);
+                EditorGUILayout.Space(4);
+
+                _scroll = EditorGUILayout.BeginScrollView(_scroll);
+                GimmickInstallerEditor.DrawGimmickList(_targetAvatar, _settings, _localize);
+                EditorGUILayout.EndScrollView();
             }
         }
     }
