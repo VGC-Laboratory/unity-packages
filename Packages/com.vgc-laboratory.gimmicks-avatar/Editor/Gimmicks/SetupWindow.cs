@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -46,7 +47,17 @@ namespace VGC.Gimmicks.Avatar
             _targetAvatar = EditorGUILayout.ObjectField(_localize.Get("TargetAvatar"), _targetAvatar, typeof(GameObject), true) as GameObject;
             if (EditorGUI.EndChangeCheck())
             {
-                if (_targetAvatar)
+                // Project ウィンドウのプレハブ(アセット)は受け付けない。
+                // アセットの中には子としてギミックを置けず、消すこともできないため。
+                // プレハブ編集モードで開いた中のオブジェクトはアセットではないので通る
+                if (_targetAvatar && EditorUtility.IsPersistent(_targetAvatar))
+                {
+                    EditorUtility.DisplayDialog(_localize.Get("DialogTitle"), Text("TargetAvatar.NotInScene"), _localize.Get("DialogOK"));
+                    _targetAvatar = null;
+                    _descriptor = null;
+                    _installer = null;
+                }
+                else if (_targetAvatar)
                 {
                     _descriptor = _targetAvatar.GetComponent<VRCAvatarDescriptor>();
                     if (_descriptor)
@@ -67,6 +78,9 @@ namespace VGC.Gimmicks.Avatar
                 }
             }
             
+            if (!_targetAvatar)
+                EditorGUILayout.HelpBox(Text("TargetAvatar.Help"), MessageType.Info);
+
             if (!_installer && _targetAvatar)
             {
                 _installer = _targetAvatar.GetComponent<GimmickInstaller>();
@@ -86,6 +100,18 @@ namespace VGC.Gimmicks.Avatar
                 GimmickInstallerEditor.DrawGimmickList(_targetAvatar, _settings, _localize);
                 EditorGUILayout.EndScrollView();
             }
+        }
+
+        // 翻訳表にキーが無いとき(gimmicks 本体が古いときなど)はキーがそのまま出てしまうので、英語で出す
+        private static readonly Dictionary<string, string> Fallback = new Dictionary<string, string>
+        {
+            { "TargetAvatar.Help", "Assign an avatar in the scene. Prefabs in the Project window cannot be assigned." },
+            { "TargetAvatar.NotInScene", "Prefabs in the Project window cannot be assigned. Assign an avatar placed in the scene." },
+        };
+
+        private string Text(string key)
+        {
+            return _localize != null && _localize.ContainsKey(key) ? _localize.Get(key) : Fallback[key];
         }
     }
 }
