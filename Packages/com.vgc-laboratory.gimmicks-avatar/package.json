@@ -1,7 +1,7 @@
 {
   "name": "com.vgc-laboratory.gimmicks-avatar",
   "displayName": "VGC Gimmicks (Avatar)",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "unity": "2022.3",
   "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
   "author": {

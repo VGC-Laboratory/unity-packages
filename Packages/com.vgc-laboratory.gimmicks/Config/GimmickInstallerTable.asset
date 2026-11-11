@@ -74,6 +74,30 @@ MonoBehaviour:
       text: "\u65E0\u6CD5\u6307\u5B9A Project \u7A97\u53E3\u4E2D\u7684\u9884\u5236\u4EF6\u3002\u8BF7\u6307\u5B9A\u653E\u7F6E\u5728\u573A\u666F\u4E2D\u7684\u89D2\u8272\u3002"
     - language: ChineseTraditional
       text: "\u7121\u6CD5\u6307\u5B9A Project \u8996\u7A97\u4E2D\u7684\u9810\u88FD\u7269\u4EF6\u3002\u8ACB\u6307\u5B9A\u653E\u7F6E\u5728\u5834\u666F\u4E2D\u7684\u89D2\u8272\u3002"
+  - id: TargetAvatar.SelectFromScene
+    values:
+    - language: Japanese
+      text: "\u30B7\u30FC\u30F3\u304B\u3089\u9078\u629E"
+    - language: English
+      text: Select from Scene
+    - language: Korean
+      text: "\uC52C\uC5D0\uC11C \uC120\uD0DD"
+    - language: ChineseSimplified
+      text: "\u4ECE\u573A\u666F\u4E2D\u9009\u62E9"
+    - language: ChineseTraditional
+      text: "\u5F9E\u5834\u666F\u4E2D\u9078\u64C7"
+  - id: TargetAvatar.NoneInScene
+    values:
+    - language: Japanese
+      text: "\u30B7\u30FC\u30F3\u4E0A\u306B\u30A2\u30D0\u30BF\u30FC\u304C\u3042\u308A\u307E\u305B\u3093"
+    - language: English
+      text: No avatars in the scene
+    - language: Korean
+      text: "\uC52C\uC5D0 \uC544\uBC14\uD0C0\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4"
+    - language: ChineseSimplified
+      text: "\u573A\u666F\u4E2D\u6CA1\u6709\u89D2\u8272"
+    - language: ChineseTraditional
+      text: "\u5834\u666F\u4E2D\u6C92\u6709\u89D2\u8272"
   - id: DialogOK
     values:
     - language: Japanese

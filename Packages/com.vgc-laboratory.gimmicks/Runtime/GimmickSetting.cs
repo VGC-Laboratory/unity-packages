@@ -7,7 +7,7 @@ namespace VGC.Gimmicks
     /// ギミック 1 つの定義(版・プレハブ・依存)。
     ///
     /// 同じフォルダに LocalizationTable を置く。表の "GimmickName" の訳が表示名になる。
-    /// 版チェックのキーは <see cref="VersionKey"/>(未設定なら表のシート名)。
+    /// 最新バージョンの確認のキーは <see cref="VersionKey"/>(未設定なら表のシート名)。
     ///
     /// <see cref="Publisher"/> に配布元の名前を入れると、導入 UI がその名前ごとに
     /// まとめて並べる。別々の配布元のギミックが同じプロジェクトに入っても混ざらない。
@@ -21,7 +21,7 @@ namespace VGC.Gimmicks
 
         [SerializeField] private string _version = "1.0.0";
 
-        [Tooltip("最新版の一覧を読む取得元。空なら版の確認をしない。VGC のギミックなら com.vgc-laboratory.gimmicks の Config/VGCAvatarGimmicks か VGCWorldGimmicks を入れる")]
+        [Tooltip("最新版の一覧を読む取得元。空なら最新バージョンの確認をしない。VGC のギミックなら com.vgc-laboratory.gimmicks の Config/VGCAvatarGimmicks か VGCWorldGimmicks を入れる")]
         [SerializeField] private VersionSource _versionSource;
 
         [Tooltip("版の一覧でのキー。空なら同じフォルダの LocalizationTable のシート名")]

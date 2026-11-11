@@ -47,6 +47,12 @@ NDMF が無いワールド用プロジェクトではこのアセンブリ自体
 シーンに置いたプレハブのインスタンスと、プレハブ編集モードで開いた中のオブジェクトは指定できる。
 未指定のあいだは欄の下にその旨を出す（文言は `TargetAvatar.Help` / `TargetAvatar.NotInScene`）。
 
+欄の右の **「シーンから選択」**（2.0.6 から）は、シーン上のアバター（`VRCAvatarDescriptor` の付いたもの）だけを並べたメニューを出す。
+欄の ◎ から開く選択ウィンドウは、シーンの GameObject を全部並べるので探しにくいため。
+- 非アクティブのアバターも並ぶ。読み込んでいるシーンが複数あれば、全部から探す。
+- プレハブ編集モードでは、開いているプレハブの中だけを探す。
+- 文言は `TargetAvatar.SelectFromScene` / `TargetAvatar.NoneInScene`（gimmicks 0.6.1 から。表に無いときは英語で出す）。
+
 一覧は **配布元（`GimmickSetting.Publisher`）ごとにまとめて並ぶ。**
 別々の配布元のギミックが同じプロジェクトに入っていても取り違えない。
 詳しくは [gimmicks の README](../com.vgc-laboratory.gimmicks/README.md) を参照。

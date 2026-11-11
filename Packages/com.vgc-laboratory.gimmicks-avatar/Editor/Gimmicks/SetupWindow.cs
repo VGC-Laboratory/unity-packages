@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VGC.Localization;
 using VRC.SDK3.Avatars.Components;
 
@@ -43,41 +45,21 @@ namespace VGC.Gimmicks.Avatar
             
             LocalizeUIHelper.InspectorGUI();
             
-            EditorGUI.BeginChangeCheck();
-            _targetAvatar = EditorGUILayout.ObjectField(_localize.Get("TargetAvatar"), _targetAvatar, typeof(GameObject), true) as GameObject;
-            if (EditorGUI.EndChangeCheck())
+            using (new EditorGUILayout.HorizontalScope())
             {
-                // Project ウィンドウのプレハブ(アセット)は受け付けない。
-                // アセットの中には子としてギミックを置けず、消すこともできないため。
-                // プレハブ編集モードで開いた中のオブジェクトはアセットではないので通る
-                if (_targetAvatar && EditorUtility.IsPersistent(_targetAvatar))
-                {
-                    EditorUtility.DisplayDialog(_localize.Get("DialogTitle"), Text("TargetAvatar.NotInScene"), _localize.Get("DialogOK"));
-                    _targetAvatar = null;
-                    _descriptor = null;
-                    _installer = null;
-                }
-                else if (_targetAvatar)
-                {
-                    _descriptor = _targetAvatar.GetComponent<VRCAvatarDescriptor>();
-                    if (_descriptor)
-                    {
-                        _installer = _targetAvatar.GetComponent<GimmickInstaller>();
-                    }
-                    else
-                    {
-                        EditorUtility.DisplayDialog(_localize.Get("DialogTitle"), _localize.Get("DialogMessage"), _localize.Get("DialogOK"));
-                        _targetAvatar = null;
-                        _installer = null;
-                    }
-                }
-                else
-                {
-                    _descriptor = null;
-                    _installer = null;
-                }
+                EditorGUI.BeginChangeCheck();
+                var picked = EditorGUILayout.ObjectField(_localize.Get("TargetAvatar"), _targetAvatar, typeof(GameObject), true) as GameObject;
+                if (EditorGUI.EndChangeCheck())
+                    SetTargetAvatar(picked);
+
+                // ObjectField の選択ウィンドウは、シーンの GameObject を全部並べるので探しにくい。
+                // シーン上のアバター(VRCAvatarDescriptor)だけを並べたメニューを横に出す
+                var content = new GUIContent(Text("TargetAvatar.SelectFromScene"));
+                var rect = GUILayoutUtility.GetRect(content, EditorStyles.popup, GUILayout.ExpandWidth(false));
+                if (EditorGUI.DropdownButton(rect, content, FocusType.Keyboard, EditorStyles.popup))
+                    ShowSceneAvatarMenu(rect);
             }
-            
+
             if (!_targetAvatar)
                 EditorGUILayout.HelpBox(Text("TargetAvatar.Help"), MessageType.Info);
 
@@ -102,9 +84,105 @@ namespace VGC.Gimmicks.Avatar
             }
         }
 
+        /// <summary>
+        /// インストール先を変える。欄に入れたときも、メニューから選んだときも、同じ確認を通す。
+        /// </summary>
+        private void SetTargetAvatar(GameObject target)
+        {
+            _targetAvatar = target;
+
+            // Project ウィンドウのプレハブ(アセット)は受け付けない。
+            // アセットの中には子としてギミックを置けず、消すこともできないため。
+            // プレハブ編集モードで開いた中のオブジェクトはアセットではないので通る
+            if (_targetAvatar && EditorUtility.IsPersistent(_targetAvatar))
+            {
+                EditorUtility.DisplayDialog(_localize.Get("DialogTitle"), Text("TargetAvatar.NotInScene"), _localize.Get("DialogOK"));
+                _targetAvatar = null;
+                _descriptor = null;
+                _installer = null;
+            }
+            else if (_targetAvatar)
+            {
+                _descriptor = _targetAvatar.GetComponent<VRCAvatarDescriptor>();
+                if (_descriptor)
+                {
+                    _installer = _targetAvatar.GetComponent<GimmickInstaller>();
+                }
+                else
+                {
+                    EditorUtility.DisplayDialog(_localize.Get("DialogTitle"), _localize.Get("DialogMessage"), _localize.Get("DialogOK"));
+                    _targetAvatar = null;
+                    _installer = null;
+                }
+            }
+            else
+            {
+                _descriptor = null;
+                _installer = null;
+            }
+        }
+
+        /// <summary>
+        /// シーン上のアバターを並べたメニューを出す。選ぶとインストール先になる。
+        /// </summary>
+        private void ShowSceneAvatarMenu(Rect rect)
+        {
+            var avatars = FindSceneAvatars();
+            var menu = new GenericMenu();
+            if (avatars.Count == 0)
+                menu.AddDisabledItem(new GUIContent(Text("TargetAvatar.NoneInScene")));
+
+            for (var i = 0; i < avatars.Count; i++)
+            {
+                var avatar = avatars[i];
+                // 同じ名前はメニューで 1 つにまとまってしまうので番号を付ける。"/" は階層の区切りになるので置き換える
+                var label = $"{i + 1}: {avatar.name.Replace('/', '∕')}";
+                menu.AddItem(new GUIContent(label), avatar == _targetAvatar, () =>
+                {
+                    // メニューを開いている間に消えていることがある
+                    if (!avatar)
+                        return;
+
+                    SetTargetAvatar(avatar);
+                    Repaint();
+                });
+            }
+
+            menu.DropDown(rect);
+        }
+
+        /// <summary>
+        /// 今編集している場所にあるアバターを、ヒエラルキーの上から順に返す(非アクティブも含む)。
+        /// プレハブ編集モードではその中だけ、それ以外は読み込んでいるシーン全部から探す。
+        /// </summary>
+        private static List<GameObject> FindSceneAvatars()
+        {
+            var roots = new List<GameObject>();
+            var stage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (stage != null)
+            {
+                roots.Add(stage.prefabContentsRoot);
+            }
+            else
+            {
+                for (var i = 0; i < SceneManager.sceneCount; i++)
+                {
+                    var scene = SceneManager.GetSceneAt(i);
+                    if (scene.isLoaded)
+                        roots.AddRange(scene.GetRootGameObjects());
+                }
+            }
+
+            return roots.SelectMany(root => root.GetComponentsInChildren<VRCAvatarDescriptor>(true))
+                        .Select(descriptor => descriptor.gameObject)
+                        .ToList();
+        }
+
         // 翻訳表にキーが無いとき(gimmicks 本体が古いときなど)はキーがそのまま出てしまうので、英語で出す
         private static readonly Dictionary<string, string> Fallback = new Dictionary<string, string>
         {
+            { "TargetAvatar.SelectFromScene", "Select from Scene" },
+            { "TargetAvatar.NoneInScene", "No avatars in the scene" },
             { "TargetAvatar.Help", "Assign an avatar in the scene. Prefabs in the Project window cannot be assigned." },
             { "TargetAvatar.NotInScene", "Prefabs in the Project window cannot be assigned. Assign an avatar placed in the scene." },
         };
