@@ -6,7 +6,7 @@ VPM（VRChat Package Manager）で配信する。
 
 ## パッケージ
 
-二種類ある。**ワールド制作に使えるライブラリ**と、**翻訳・版の確認・ギミックの導入の基盤**。
+二種類ある。**ワールド制作に使えるライブラリ**と、**翻訳・最新バージョンの確認・ギミックの導入の基盤**。
 どちらも外部のクリエイターが使える。
 
 ### 外部のクリエイター向け
@@ -22,17 +22,17 @@ VPM（VRChat Package Manager）で配信する。
 
 各パッケージの README に属性の一覧や設計の意図を書いてある。
 
-### 翻訳・版の確認・ギミックの導入の基盤
+### 翻訳・最新バージョンの確認・ギミックの導入の基盤
 
 **スプレッドシートの ID を設定すれば、誰のツールでも使える。**
-[VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)で配布している VGC のギミックや
-ワールド拡張メニュー（VGCWExM）もこれを使っている。
+[VRC 合法チート研究会](https://goho-cheat-vrc.booth.pm/)で配布する VGC のアバターギミック v2 以降と、
+ワールド拡張メニュー（VGCWExM）の v4 以降で、これを使用する予定。
 
 | パッケージ | 内容 |
 |---|---|
 | [`localization`](Packages/com.vgc-laboratory.localization) | スプレッドシートから取り込む翻訳表、エディタの表示言語、使用言語の一覧（Project Settings） |
 | [`localization-world`](Packages/com.vgc-laboratory.localization-world) | ワールドの実行時（Udon）の翻訳。VRChat 本体の言語に追従、ビルド時に焼き込み |
-| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | スプレッドシートで管理する版の確認と更新のお知らせ。VGC のギミックの定義・導入 |
+| [`gimmicks`](Packages/com.vgc-laboratory.gimmicks) | スプレッドシートで管理する最新バージョンの確認と更新のお知らせ。VGC のギミックの定義・導入 |
 | [`gimmicks-avatar`](Packages/com.vgc-laboratory.gimmicks-avatar) | 上のアバター側（導入ウィンドウ、NDMF / Modular Avatar 連携） |
 | [`resources`](Packages/com.vgc-laboratory.resources) | 共通アセット（中身が空の AnimationClip） |
 
@@ -40,7 +40,7 @@ VPM（VRChat Package Manager）で配信する。
 別の作者の表と同じシート名でも衝突しない。
 
 `localization` と `gimmicks` は **VRChat の SDK が無いプロジェクトでも使える**。
-VRChat に依存しないツールも、翻訳と版の確認にこの 2 つを使える。
+VRChat に依存しないツールも、翻訳と最新バージョンの確認にこの 2 つを使える。
 
 ワールド用かアバター用かは `vpmDependencies` で決まる（`com.vrchat.worlds` ならワールド用、
 `com.vrchat.avatars` ならアバター用、どちらも無ければ両方で使える）。
@@ -57,7 +57,7 @@ VRChat に依存しないツールも、翻訳と版の確認にこの 2 つを�
   core
       └── game-framework
 
-翻訳・版の確認・ギミックの導入の基盤
+翻訳・最新バージョンの確認・ギミックの導入の基盤
   localization
       ├── localization-world
       ├── gimmicks

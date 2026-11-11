@@ -96,7 +96,7 @@ var ja = _texts.Get("Title", SystemLanguage.Japanese);      // 言語を指定
 | `AppsScript` | Apps Script の Web アプリ（`?sheet=シート名` で GET） | 書き込みや整形を Apps Script でしたい |
 
 Apps Script の応答は、翻訳の配列 `[{id, values:[{language, text}]}]` か、版の一覧 `{items:[{sheetName, version, url}]}`
-（[gimmicks](../com.vgc-laboratory.gimmicks/README.md) の版チェック用）。どちらも行の配列に直してから扱うので、
+（[gimmicks](../com.vgc-laboratory.gimmicks/README.md) の最新バージョンの確認用）。どちらも行の配列に直してから扱うので、
 取得方法が違っても同じシートの形で使える。
 
 ## 言語

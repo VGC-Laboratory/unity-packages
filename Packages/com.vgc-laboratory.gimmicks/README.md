@@ -1,11 +1,11 @@
 # VGC Gimmicks
 
-ギミックやツールの**版の確認**と、VGC のギミックの**定義・導入**の共通基盤。
+ギミックやツールの**最新バージョンの確認**と、VGC のギミックの**定義・導入**の共通基盤。
 **VRChat の SDK が無いプロジェクトでも使える**（[後述](#vrchat-の-sdk-が無いプロジェクト)）。
 ワールド用・アバター用のどちらのプロジェクトでも使える
 （`vpmDependencies` は [localization](../com.vgc-laboratory.localization/README.md) だけ）。
 
-## 版の確認（誰でも使える）
+## 最新バージョンの確認（誰でも使える）
 
 自分のツールの最新版をスプレッドシートで管理し、インスペクタに更新のお知らせを出せる。
 
@@ -29,7 +29,7 @@ if (VersionChecker.HasUpdate(_versionSource, "MyTool", "1.0.0", out var latest))
 - 取得は最初に問い合わせたときに始まり、結果を取得元ごとに `EditorPrefs` へ残す。`CacheLifetime`（既定 6 時間）を過ぎるまで取り直さない。
 - 版の比較は数値で行う（`1.10.0 > 1.9.0`）。先頭の `v`、`-beta` や `+build` 以降は比べない。数値でない部分は 0 として扱い、例外にしない。
 - 配布先が複数あるときは `VersionChecker.GetUrls` で全部取れる。`GetUrl` は最初の 1 つを返す。
-- **`VersionSource` が null のときは版の確認をしない。** 他人のシートを黙って見に行くことはない。
+- **`VersionSource` が null のときは最新バージョンの確認をしない。** 他人のシートを黙って見に行くことはない。
 
 **書き込み（スプレッドシートの更新）はこのパッケージに入っていない。**
 
@@ -61,7 +61,7 @@ C 列には **配布先をいくつでも書ける。** Booth と GitHub、日�
 
 - キャッシュは「取得元 ＋ タブ名」ごとに分かれる。
 - 導入 UI は使われている取得元をすべて取りに行くので、**1 つの画面に複数の取得元が混在してよい。**
-- **Version Source が空のギミックは版の確認をしない。** 確認したいなら必ず設定する。
+- **Version Source が空のギミックは最新バージョンの確認をしない。** 確認したいなら必ず設定する。
 
 取得元の作り方と、自分で GAS を書くときの仕様は
 [localization の README](../com.vgc-laboratory.localization/README.md) にある。
@@ -91,7 +91,7 @@ Runtime/   asmdef VGC.Gimmicks.Runtime   namespace VGC.Gimmicks
 Editor/    asmdef VGC.Gimmicks.Editor
 ├── VersionChecker.cs          取得元ごとに版の一覧を読み、手元の版と比べる
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
-├── GimmickInstallerEditor.cs  導入 UI（版チェックの表示を含む）
+├── GimmickInstallerEditor.cs  導入 UI（最新バージョンの確認の表示を含む）
 ├── GimmickSettingsWindow.cs   設定ウィンドウ（IGimmickSettings を付けたコンポーネントだけを表示する）
 ├── IGimmickSettingsWindowGUI.cs  設定ウィンドウでのレイアウトとスクロールを、エディタが受け持つときの目印
 └── Animation/AnimatorFactory.cs  アニメーターをメモリ上で組み立てる（namespace VGC.Gimmicks.Animation）
@@ -103,7 +103,7 @@ Config/
 ```
 
 - `GimmickSetting` と同じフォルダに `LocalizationTable` を置く。表の `GimmickName` の訳が表示名になる。
-- 版チェックのキーは `GimmickSetting` の Version Key（空なら同じフォルダの表のシート名）。取得元は Version Source（空なら確認しない）。
+- 最新バージョンの確認のキーは `GimmickSetting` の Version Key（空なら同じフォルダの表のシート名）。取得元は Version Source（空なら確認しない）。
 - 導入 UI は、プロジェクトにある `GimmickSetting` をすべて一覧に出す（型で探す）。
   ギミックのアセットを置くだけで一覧に並ぶので、登録作業は要らない。
 
@@ -250,7 +250,7 @@ AnimatorController controller = factory.Build("MyGimmick");
 ## VRChat の SDK が無いプロジェクト
 
 **0.3.1 から、VRChat の SDK（`com.vrchat.base`）が入っていないプロジェクトでもコンパイルできる。**
-VRChat に依存しないツールも、版の確認（`VersionChecker` / `UpdateNoticeGUI`）にこのパッケージを使える。
+VRChat に依存しないツールも、最新バージョンの確認（`VersionChecker` / `UpdateNoticeGUI`）にこのパッケージを使える。
 そういうツールの依存は `>=0.3.1 <1.0.0` と書く（0.3.0 までは SDK が無いとコンパイルが通らない）。
 
 - SDK があるときだけ、`GimmickInstaller` と `GimmickMarker` を `VRC.SDKBase.IEditorOnly`（エディタ専用のコンポーネントの印）にする。
