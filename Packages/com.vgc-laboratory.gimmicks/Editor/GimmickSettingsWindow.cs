@@ -23,6 +23,9 @@ namespace VGC.Gimmicks
         // 表示中のエディタ。対象が変わったときとウィンドウを閉じたときに破棄する
         private readonly List<Editor> _editors = new();
 
+        // レイアウトとスクロールをエディタに任せているか(IGimmickSettingsWindowGUI)。レイアウトのたびに決め直す
+        private bool _editorOwnsLayout;
+
         /// <summary>
         /// インスタンス(とその子)に、設定用のコンポーネント(<see cref="IGimmickSettings"/>)があるか。
         /// </summary>
@@ -136,27 +139,53 @@ namespace VGC.Gimmicks
             EditorGUIUtility.wideMode = position.width > 330f;
             EditorGUIUtility.labelWidth = Mathf.Max(position.width * 0.45f - 40f, 120f);
 
-            _scroll = EditorGUILayout.BeginScrollView(_scroll);
-            for (var i = 0; i < _editors.Count; i++)
+            // レイアウトと描画で囲み方が食い違わないように、エディタに任せるかどうかはレイアウトのときだけ読む
+            if (Event.current.type == EventType.Layout)
+                _editorOwnsLayout = EditorOwnsLayout();
+
+            // 途中で対象が消えたときは(Undo など)、何も描かずに次のレイアウトで作り直す
+            if (_editorOwnsLayout && _editors.Count == 1 && _editors[0] != null && _editors[0].target != null &&
+                _editors[0] is IGimmickSettingsWindowGUI own)
             {
-                var editor = _editors[i];
-                // 描いている途中で対象が消えることがある(Undo など)。次のレイアウトで作り直す
-                if (editor == null || editor.target == null)
-                    continue;
-
-                if (_editors.Count > 1)
-                {
-                    if (i > 0)
-                        EditorGUILayout.Space(8);
-                    EditorGUILayout.LabelField(ObjectNames.GetInspectorTitle(editor.target), EditorStyles.boldLabel);
-                }
-
-                editor.OnInspectorGUI();
+                // ウィンドウはスクロールせず、残りの高さをそのままエディタに渡す
+                using (new EditorGUILayout.VerticalScope(GUILayout.ExpandHeight(true)))
+                    own.OnSettingsWindowGUI();
             }
-            EditorGUILayout.EndScrollView();
+            else if (!_editorOwnsLayout)
+            {
+                _scroll = EditorGUILayout.BeginScrollView(_scroll);
+                for (var i = 0; i < _editors.Count; i++)
+                {
+                    var editor = _editors[i];
+                    // 描いている途中で対象が消えることがある(Undo など)。次のレイアウトで作り直す
+                    if (editor == null || editor.target == null)
+                        continue;
+
+                    if (_editors.Count > 1)
+                    {
+                        if (i > 0)
+                            EditorGUILayout.Space(8);
+                        EditorGUILayout.LabelField(ObjectNames.GetInspectorTitle(editor.target), EditorStyles.boldLabel);
+                    }
+
+                    editor.OnInspectorGUI();
+                }
+                EditorGUILayout.EndScrollView();
+            }
 
             EditorGUIUtility.wideMode = oldWide;
             EditorGUIUtility.labelWidth = oldLabelWidth;
+        }
+
+        /// <summary>
+        /// レイアウトとスクロールをエディタに任せるか。対象が 1 つで、そのエディタが
+        /// <see cref="IGimmickSettingsWindowGUI"/> でウィンドウのスクロールを断ったときだけ任せる。
+        /// 対象が 2 つ以上あるときは、1 つが高さを取るとほかが見えなくなるので、ウィンドウがスクロールする。
+        /// </summary>
+        private bool EditorOwnsLayout()
+        {
+            return _editors.Count == 1 && _editors[0] != null && _editors[0].target != null &&
+                   _editors[0] is IGimmickSettingsWindowGUI own && !own.UseWindowScroll;
         }
 
         /// <summary>今までの動き(GameObject を選ぶ)。MA のコンポーネントなどを見たい人向け。</summary>

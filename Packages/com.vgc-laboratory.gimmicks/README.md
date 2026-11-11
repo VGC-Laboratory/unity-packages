@@ -93,6 +93,7 @@ Editor/    asmdef VGC.Gimmicks.Editor
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
 ├── GimmickInstallerEditor.cs  導入 UI（版チェックの表示を含む）
 ├── GimmickSettingsWindow.cs   設定ウィンドウ（IGimmickSettings を付けたコンポーネントだけを表示する）
+├── IGimmickSettingsWindowGUI.cs  設定ウィンドウでのレイアウトとスクロールを、エディタが受け持つときの目印
 └── Animation/AnimatorFactory.cs  アニメーターをメモリ上で組み立てる（namespace VGC.Gimmicks.Animation）
 Config/
 ├── GimmickInstallerTable.asset  導入 UI と更新のお知らせの文言（シート「メインウィンドウ」）
@@ -162,6 +163,54 @@ public class MyGimmickInstaller : MonoBehaviour, IGimmickSettings
 - 自分のコードから開くときは `GimmickSettingsWindow.Open(instances)`。あるかどうかは `GimmickSettingsWindow.HasSettings(instance)`。
 - 文言は `Config/GimmickInstallerTable.asset` の `SettingsWindow.Title` / `.SelectInHierarchy` / `.NotFound`。
   表にキーが無いときは英語で出す。
+
+#### スクロールをエディタが受け持つ（0.6.0 から）
+
+ウィンドウは、設定全体を 1 つのスクロールで囲む。
+縦に長い設定で、上の一部（言語の切り替えや説明など）を固定して残りだけを動かしたいときは、
+コンポーネントのエディタに `IGimmickSettingsWindowGUI` を付ける。
+
+```csharp
+using UnityEditor;
+using UnityEngine;
+using VGC.Gimmicks;
+
+[CustomEditor(typeof(MyGimmickInstaller))]
+public class MyGimmickInstallerEditor : Editor, IGimmickSettingsWindowGUI
+{
+    private Vector2 _scroll;
+
+    // false にすると、ウィンドウはスクロールせずに OnSettingsWindowGUI を呼ぶ
+    public bool UseWindowScroll => false;
+
+    public void OnSettingsWindowGUI()
+    {
+        DrawHeader();   // 固定する部分
+
+        // 残りの高さいっぱいに広がる
+        _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.ExpandHeight(true));
+        DrawBody();
+        EditorGUILayout.EndScrollView();
+    }
+
+    // Unity の Inspector ウィンドウでは、今までどおり 1 列に描く
+    public override void OnInspectorGUI()
+    {
+        DrawHeader();
+        DrawBody();
+    }
+}
+```
+
+- **付けていないエディタは、今までと同じ見た目と動きのまま。**
+- `UseWindowScroll` が `true` のあいだは、付けていても今までどおりウィンドウのスクロールの中で `OnInspectorGUI` が呼ばれる。
+  ウィンドウはレイアウトのたびに読むので、途中で切り替えてよい。
+- `OnSettingsWindowGUI` は設定ウィンドウでだけ呼ばれる。Inspector ウィンドウは全体をスクロールで囲むので、
+  そこで自分のスクロールを作ると二重になる。エディタからはどちらで描かれているかが分からないので、関数を分けてある。
+- 目印の付いたコンポーネントが 2 つ以上あるギミックでは、付けていてもウィンドウがスクロールする。
+  1 つのエディタが高さを取ると、ほかが見えなくなるため。
+- ラベルの幅などは、どちらの場合もウィンドウが Inspector と同じ見た目に合わせる。
+- 使う側の Editor の asmdef に `VGC.Gimmicks.Editor` の参照を足す。依存は `>=0.6.0 <1.0.0` と書く。
 
 ## アニメーターを組み立てる（AnimatorFactory、0.5.0 から）
 
