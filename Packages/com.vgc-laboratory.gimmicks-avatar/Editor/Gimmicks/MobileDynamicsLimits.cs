@@ -135,6 +135,7 @@ namespace VGC.Gimmicks.Avatar
         private static readonly Color Yellow = new Color(0.95f, 0.75f, 0.2f);
         private static readonly Color Red = new Color(0.85f, 0.25f, 0.25f);
         private static readonly Color Divider = new Color(1f, 1f, 1f, 0.6f);
+        private static readonly Color TextBackground = new Color(0f, 0f, 0f, 0.55f);
 
         /// <summary>
         /// 欄を描く。開いているかどうかを返す。limits が null のときは、計算できなかった旨を出す。
@@ -152,8 +153,22 @@ namespace VGC.Gimmicks.Avatar
                 return foldout;
             }
 
-            // 畳んでいても様子が分かるように、見出しの行に Contact の数と一番悪いランクを出す
-            var summary = $"Contact {limits.Contact.Count}/{limits.Contact.PoorLimit} · {MobileDynamicsLimits.RankNames[limits.WorstRank]}";
+            // 畳んでいても様子が分かるように、見出しの行に要約を出す。
+            // ふだんは Contact の数(ギミックで増えやすい)と一番悪いランク。
+            // Very Poor のときは、原因の項目の名前を出す(Contact の数と並べると、Contact が原因に読めるため)
+            string summary;
+            if (limits.AnyVeryPoor)
+            {
+                var causes = limits.All.Where(item => item.IsVeryPoor).ToList();
+                summary = $"{MobileDynamicsLimits.RankNames[MobileDynamicsLimits.VeryPoorRank]}: {causes[0].Label}";
+                if (causes.Count > 1)
+                    summary += $" +{causes.Count - 1}";
+            }
+            else
+            {
+                summary = $"Contact {limits.Contact.Count}/{limits.Contact.PoorLimit} · {MobileDynamicsLimits.RankNames[limits.WorstRank]}";
+            }
+
             var summaryStyle = new GUIStyle(EditorStyles.miniBoldLabel) { alignment = TextAnchor.MiddleRight };
             if (limits.AnyVeryPoor)
                 summaryStyle.normal.textColor = Red;
@@ -245,12 +260,20 @@ namespace VGC.Gimmicks.Avatar
             var detail = remaining >= 0
                 ? string.Format(Text(localize, "MobileLimits.Remaining"), remaining)
                 : string.Format(Text(localize, "MobileLimits.Over"), -remaining);
-            var style = new GUIStyle(EditorStyles.miniBoldLabel) { normal = { textColor = Color.white } };
-            style.alignment = TextAnchor.MiddleLeft;
-            GUI.Label(new Rect(bar.x + 4, bar.y, bar.width - 8, bar.height), $"{MobileDynamicsLimits.RankNames[rank]} · {detail}", style);
-            style.alignment = TextAnchor.MiddleRight;
-            GUI.Label(new Rect(bar.x + 4, bar.y, bar.width - 8, bar.height),
-                      item.IsVeryPoor ? $"{item.Count} / {item.PoorLimit} +" : $"{item.Count} / {item.PoorLimit}", style);
+            var style = new GUIStyle(EditorStyles.miniBoldLabel) { alignment = TextAnchor.MiddleCenter, normal = { textColor = Color.white } };
+            DrawBarText(bar, $"{MobileDynamicsLimits.RankNames[rank]} · {detail}", style, false);
+            DrawBarText(bar, item.IsVeryPoor ? $"{item.Count} / {item.PoorLimit} +" : $"{item.Count} / {item.PoorLimit}", style, true);
+        }
+
+        /// <summary>
+        /// バーの中の文字。区切りの線や明るい塗りの上でも読めるように、文字の後ろに暗い下地を敷く。
+        /// </summary>
+        private static void DrawBarText(Rect bar, string text, GUIStyle style, bool right)
+        {
+            var width = Mathf.Min(style.CalcSize(new GUIContent(text)).x + 14f, bar.width);
+            var rect = new Rect(right ? bar.xMax - width : bar.x, bar.y + 1, width, bar.height - 2);
+            EditorGUI.DrawRect(rect, TextBackground);
+            GUI.Label(rect, text, style);
         }
 
         // 翻訳表にキーが無いとき(gimmicks 本体が古いときなど)はキーがそのまま出てしまうので、英語で出す

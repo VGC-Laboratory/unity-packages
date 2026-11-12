@@ -70,7 +70,8 @@ NDMF が無いワールド用プロジェクトではこのアセンブリ自体
 |---|---|
 | PhysBone（コンポーネントの数）・Contact・Constraint | PhysBone の Transform・コライダー・Collision Check、Constraint の深さ |
 
-- **畳める欄で、最初は畳んでいる。** 見出しの行に Contact の数と、一番悪いランクが出る。
+- **畳める欄で、最初は畳んでいる。** 見出しの行に Contact の数と、一番悪いランクが出る（`Contact 5/16 · Medium`）。
+  Very Poor のときは、代わりに原因の項目の名前が出る（`Very Poor: PhysBone +1`。`+1` は、ほかにも 1 項目あるという意味。2.1.1 から）。
 - 開くと 1 項目ずつゲージが出る。ランクの境目に区切りがあり、Medium までは青、Poor は黄、Very Poor は赤。
   バーの中に、ランクと Poor の上限までの残りが出る。
 - **Very Poor になった変わり目で、自動で開く。** ウィンドウを開いたときとアバターを選び直したときも、Very Poor なら 1 回開く。
