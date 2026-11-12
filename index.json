@@ -578,6 +578,24 @@
             "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
           },
           "zipSHA256": "ccfda982126ef3a21c5e207e6ccd1a4ccadbb084a248520c94d9629127b6f584"
+        },
+        "0.6.2": {
+          "name": "com.vgc-laboratory.gimmicks",
+          "displayName": "VGC Gimmicks",
+          "version": "0.6.2",
+          "unity": "2022.3",
+          "description": "VGC のギミックの共通基盤。どのギミックがあるか（GimmickSetting）、何版か（VersionSource / VersionChecker / UpdateNoticeGUI。版の一覧を読むスプレッドシートは設定できる）、プロジェクトへ入れる（GimmickInstaller / GimmickInstallerEditor）、設定用のコンポーネントだけを出す設定ウィンドウ（IGimmickSettings / GimmickSettingsWindow。スクロールをエディタが受け持つときは IGimmickSettingsWindowGUI）、シーンに未保存の印を付けずにアニメーターを組み立てる AnimatorFactory。VRChat の SDK が無いプロジェクトでもコンパイルできる（SDK があるときだけ GimmickInstaller / GimmickMarker を IEditorOnly にする）。ワールド用・アバター用のどちらのプロジェクトでも使える。プラットフォーム固有の部分は com.vgc-laboratory.gimmicks-avatar（と将来の -world）にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-v0.6.2/com.vgc-laboratory.gimmicks-0.6.2.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks/README.md",
+          "vpmDependencies": {
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0"
+          },
+          "zipSHA256": "3f61efec5e8127d8f4383e28cc89551b0978a6265e914a062b6c769fdace957a"
         }
       }
     },
@@ -756,6 +774,31 @@
             "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
           },
           "zipSHA256": "7b6e40438b46f6d53bb9e27b6e2a5f06e7450ed98e7483bba2e8699039a4080d"
+        },
+        "2.1.0": {
+          "name": "com.vgc-laboratory.gimmicks-avatar",
+          "displayName": "VGC Gimmicks (Avatar)",
+          "version": "2.1.0",
+          "unity": "2022.3",
+          "description": "VGC のギミックのアバター固有の部分。アバターの探索と導入ウィンドウ（モバイルでの PhysBone・Contact・Constraint の数と上限の表示を含む）、NDMF / Modular Avatar の言語設定への相乗り、エクスプレッションメニューの翻訳。共通部分は com.vgc-laboratory.gimmicks と com.vgc-laboratory.localization にある。",
+          "author": {
+            "name": "VGC-Laboratory",
+            "url": "https://github.com/VGC-Laboratory"
+          },
+          "license": "MIT",
+          "url": "https://github.com/VGC-Laboratory/unity-packages/releases/download/gimmicks-avatar-v2.1.0/com.vgc-laboratory.gimmicks-avatar-2.1.0.zip",
+          "documentationUrl": "https://github.com/VGC-Laboratory/unity-packages/blob/main/Packages/com.vgc-laboratory.gimmicks-avatar/README.md",
+          "vpmDependencies": {
+            "com.vrchat.avatars": "^3.10.4",
+            "nadena.dev.modular-avatar": ">=1.18.0 <2.0.0-a",
+            "com.vgc-laboratory.localization": ">=0.2.0 <1.0.0",
+            "com.vgc-laboratory.gimmicks": ">=0.6.2 <1.0.0",
+            "com.vgc-laboratory.resources": ">=0.1.0 <1.0.0"
+          },
+          "legacyFolders": {
+            "Assets\\VGC\\Gimmicks_MA\\Lib": "c6dcaad7d767b274c85fc33f805b383f"
+          },
+          "zipSHA256": "43b4d192c5a3017e348843a6da915da8ad9ab44460eeb002aaab10dde70f196e"
         }
       }
     },
