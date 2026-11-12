@@ -19,6 +19,16 @@ namespace VGC.Gimmicks.Avatar
         private GimmickInstaller _installer;
         private Vector2 _scroll;
 
+        // モバイルの制限の欄。開閉と「前回 Very Poor だったか」は、ドメインのリロードで開き直さないようにシリアライズする
+        [SerializeField] private bool _mobileFoldout;
+        [SerializeField] private bool _mobileWasVeryPoor;
+        private MobileDynamicsLimits _mobileLimits;
+        private bool _mobileDirty = true;
+        private double _mobileCalculatedAt;
+
+        // 計算は軽くないので、ヒエラルキーが続けて変わるときも、この間隔より細かくは計算し直さない
+        private const double MobileRecalculateInterval = 0.5;
+
         // nameof では「SetupWindow」になってしまうので、読める名前を直接書く。
         // アバター固有のメニューは VGC/AvatarGimmick にまとめる（gimmicks 本体は VRChat の SDK が無くても使うため）。
         // 優先度 0 で VGC メニューの先頭に出す
@@ -74,6 +84,13 @@ namespace VGC.Gimmicks.Avatar
 
             if (_targetAvatar)
             {
+                // ギミックを入れた結果がいつも見えるように、スクロールの外に置く。
+                // レイアウトと描画で中身が食い違わないように、計算し直すのはレイアウトのときだけ
+                if (Event.current.type == EventType.Layout)
+                    UpdateMobileLimits();
+                _mobileFoldout = MobileDynamicsLimitsGUI.Draw(_mobileLimits, _mobileFoldout, _localize);
+                EditorGUILayout.Space(4);
+
                 // ギミックが増えると縦に収まらないので、「更新確認」より下だけをスクロールさせる
                 GimmickInstallerEditor.DrawVersionCheckButton(_settings, _localize);
                 EditorGUILayout.Space(4);
@@ -84,12 +101,61 @@ namespace VGC.Gimmicks.Avatar
             }
         }
 
+        // ギミックを入れた・外した、コンポーネントを足した、などで数が変わる
+        private void OnHierarchyChange()
+        {
+            _mobileDirty = true;
+            Repaint();
+        }
+
+        // 間隔を空けるために計算を見送った分を、あとで拾う
+        private void OnInspectorUpdate()
+        {
+            if (_mobileDirty && _targetAvatar)
+                Repaint();
+        }
+
+        /// <summary>
+        /// モバイルの制限を、変わったときだけ計算し直す。Very Poor になった変わり目で欄を開く。
+        /// </summary>
+        private void UpdateMobileLimits()
+        {
+            if (!_mobileDirty || EditorApplication.timeSinceStartup - _mobileCalculatedAt < MobileRecalculateInterval)
+                return;
+
+            _mobileDirty = false;
+            _mobileCalculatedAt = EditorApplication.timeSinceStartup;
+            try
+            {
+                _mobileLimits = MobileDynamicsLimits.Calculate(_targetAvatar);
+            }
+            catch (System.Exception e)
+            {
+                // SDK の計算が落ちても、導入の操作は続けられるようにする
+                _mobileLimits = null;
+                Debug.LogWarning($"[VGC] モバイルの制限を計算できませんでした: {e.Message}");
+                return;
+            }
+
+            // 開くのは変わり目だけ。Very Poor のまま利用者が畳んだら、そのままにする
+            var veryPoor = _mobileLimits.AnyVeryPoor;
+            if (veryPoor && !_mobileWasVeryPoor)
+                _mobileFoldout = true;
+            _mobileWasVeryPoor = veryPoor;
+        }
+
         /// <summary>
         /// インストール先を変える。欄に入れたときも、メニューから選んだときも、同じ確認を通す。
         /// </summary>
         private void SetTargetAvatar(GameObject target)
         {
             _targetAvatar = target;
+
+            // 選び直したら、Very Poor なら 1 回開く(前のアバターの状態は持ち越さない)
+            _mobileLimits = null;
+            _mobileDirty = true;
+            _mobileCalculatedAt = 0;
+            _mobileWasVeryPoor = false;
 
             // Project ウィンドウのプレハブ(アセット)は受け付けない。
             // アセットの中には子としてギミックを置けず、消すこともできないため。

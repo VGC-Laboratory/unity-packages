@@ -98,6 +98,90 @@ MonoBehaviour:
       text: "\u573A\u666F\u4E2D\u6CA1\u6709\u89D2\u8272"
     - language: ChineseTraditional
       text: "\u5834\u666F\u4E2D\u6C92\u6709\u89D2\u8272"
+  - id: MobileLimits.Title
+    values:
+    - language: Japanese
+      text: "\u30E2\u30D0\u30A4\u30EB\u306E\u5236\u9650\uFF08Android / iOS\uFF09"
+    - language: English
+      text: Mobile limits (Android / iOS)
+    - language: Korean
+      text: "\uBAA8\uBC14\uC77C \uC81C\uD55C (Android / iOS)"
+    - language: ChineseSimplified
+      text: "\u79FB\u52A8\u7AEF\u9650\u5236\uFF08Android / iOS\uFF09"
+    - language: ChineseTraditional
+      text: "\u884C\u52D5\u88DD\u7F6E\u9650\u5236\uFF08Android / iOS\uFF09"
+  - id: MobileLimits.Tooltip
+    values:
+    - language: Japanese
+      text: "Quest \u3082 Android \u306B\u542B\u307E\u308C\u307E\u3059\u3002\u3069\u308C\u304B 1 \u3064\u3067\u3082 Very Poor \u306B\u306A\u308B\u3068\u3001\u30E2\u30D0\u30A4\u30EB\u3067\u306F PhysBone\u30FBContact\u30FBVRC Constraint \u304C\u5168\u90E8\u53D6\u308A\u9664\u304B\u308C\u307E\u3059\u3002"
+    - language: English
+      text: Quest is also Android. If any of these becomes Very Poor, all PhysBones, Contacts and VRChat Constraints are removed on mobile.
+    - language: Korean
+      text: "Quest\uB3C4 Android\uC5D0 \uD3EC\uD568\uB429\uB2C8\uB2E4. \uD558\uB098\uB77C\uB3C4 Very Poor\uAC00 \uB418\uBA74 \uBAA8\uBC14\uC77C\uC5D0\uC11C\uB294 PhysBone, Contact, VRC Constraint\uAC00 \uBAA8\uB450 \uC81C\uAC70\uB429\uB2C8\uB2E4."
+    - language: ChineseSimplified
+      text: "Quest \u4E5F\u5C5E\u4E8E Android\u3002\u53EA\u8981\u6709\u4E00\u9879\u8FBE\u5230 Very Poor\uFF0C\u79FB\u52A8\u7AEF\u5C31\u4F1A\u79FB\u9664\u5168\u90E8 PhysBone\u3001Contact \u548C VRC Constraint\u3002"
+    - language: ChineseTraditional
+      text: "Quest \u4E5F\u5C6C\u65BC Android\u3002\u53EA\u8981\u6709\u4E00\u9805\u9054\u5230 Very Poor\uFF0C\u884C\u52D5\u88DD\u7F6E\u5C31\u6703\u79FB\u9664\u5168\u90E8 PhysBone\u3001Contact \u548C VRC Constraint\u3002"
+  - id: MobileLimits.Remaining
+    values:
+    - language: Japanese
+      text: "\u6B8B\u308A {0}"
+    - language: English
+      text: '{0} left'
+    - language: Korean
+      text: "\uB0A8\uC740 \uC218 {0}"
+    - language: ChineseSimplified
+      text: "\u5269\u4F59 {0}"
+    - language: ChineseTraditional
+      text: "\u5269\u9918 {0}"
+  - id: MobileLimits.Over
+    values:
+    - language: Japanese
+      text: "{0} \u8D85\u904E"
+    - language: English
+      text: '{0} over'
+    - language: Korean
+      text: "{0} \uCD08\uACFC"
+    - language: ChineseSimplified
+      text: "\u8D85\u51FA {0}"
+    - language: ChineseTraditional
+      text: "\u8D85\u51FA {0}"
+  - id: MobileLimits.Removed
+    values:
+    - language: Japanese
+      text: "\u30E2\u30D0\u30A4\u30EB\u3067\u306F PhysBone\u30FBContact\u30FBVRC Constraint \u304C\u5168\u90E8\u53D6\u308A\u9664\u304B\u308C\u3001\u30AE\u30DF\u30C3\u30AF\u3082\u63FA\u308C\u7269\u3082\u52D5\u304D\u307E\u305B\u3093\u3002"
+    - language: English
+      text: On mobile, all PhysBones, Contacts and VRChat Constraints will be removed. Gimmicks and swaying parts will not work.
+    - language: Korean
+      text: "\uBAA8\uBC14\uC77C\uC5D0\uC11C\uB294 PhysBone, Contact, VRC Constraint\uAC00 \uBAA8\uB450 \uC81C\uAC70\uB418\uC5B4 \uAE30\uBBF9\uACFC \uD754\uB4E4\uB9AC\uB294 \uBD80\uBD84\uC774 \uC791\uB3D9\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+    - language: ChineseSimplified
+      text: "\u5728\u79FB\u52A8\u7AEF\uFF0C\u5168\u90E8 PhysBone\u3001Contact \u548C VRC Constraint \u90FD\u4F1A\u88AB\u79FB\u9664\uFF0C\u673A\u5173\u548C\u6447\u52A8\u90E8\u4EF6\u90FD\u4E0D\u4F1A\u5DE5\u4F5C\u3002"
+    - language: ChineseTraditional
+      text: "\u5728\u884C\u52D5\u88DD\u7F6E\u4E0A\uFF0C\u5168\u90E8 PhysBone\u3001Contact \u548C VRC Constraint \u90FD\u6703\u88AB\u79FB\u9664\uFF0C\u6A5F\u95DC\u548C\u6416\u52D5\u90E8\u4EF6\u90FD\u4E0D\u6703\u904B\u4F5C\u3002"
+  - id: MobileLimits.BuildNote
+    values:
+    - language: Japanese
+      text: "\u30D3\u30EB\u30C9\u306E\u3068\u304D\u306B\u30AE\u30DF\u30C3\u30AF\u304C\u8DB3\u3059\u5206\u306F\u542B\u307F\u307E\u305B\u3093\u3002"
+    - language: English
+      text: Components added by gimmicks at build time are not included.
+    - language: Korean
+      text: "\uBE4C\uB4DC\uD560 \uB54C \uAE30\uBBF9\uC774 \uCD94\uAC00\uD558\uB294 \uBD84\uC740 \uD3EC\uD568\uB418\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+    - language: ChineseSimplified
+      text: "\u4E0D\u5305\u542B\u673A\u5173\u5728\u6784\u5EFA\u65F6\u6DFB\u52A0\u7684\u90E8\u5206\u3002"
+    - language: ChineseTraditional
+      text: "\u4E0D\u5305\u542B\u6A5F\u95DC\u5728\u5EFA\u7F6E\u6642\u52A0\u5165\u7684\u90E8\u5206\u3002"
+  - id: MobileLimits.Failed
+    values:
+    - language: Japanese
+      text: "\u30E2\u30D0\u30A4\u30EB\u306E\u5236\u9650\u3092\u8A08\u7B97\u3067\u304D\u307E\u305B\u3093\u3067\u3057\u305F\u3002"
+    - language: English
+      text: Could not calculate the mobile limits.
+    - language: Korean
+      text: "\uBAA8\uBC14\uC77C \uC81C\uD55C\uC744 \uACC4\uC0B0\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: ChineseSimplified
+      text: "\u65E0\u6CD5\u8BA1\u7B97\u79FB\u52A8\u7AEF\u9650\u5236\u3002"
+    - language: ChineseTraditional
+      text: "\u7121\u6CD5\u8A08\u7B97\u884C\u52D5\u88DD\u7F6E\u9650\u5236\u3002"
   - id: DialogOK
     values:
     - language: Japanese
