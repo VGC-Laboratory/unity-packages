@@ -92,6 +92,8 @@ Editor/    asmdef VGC.Gimmicks.Editor
 ├── VersionChecker.cs          取得元ごとに版の一覧を読み、手元の版と比べる
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
 ├── GimmickInstallerEditor.cs  導入 UI（最新バージョンの確認の表示を含む）
+├── IGimmickInstallCheck.cs    ギミックごとのインストール前チェック（結果の型も）
+├── GimmickInstallChecks.cs    ↑ を型から探して呼ぶ
 ├── GimmickSettingsWindow.cs   設定ウィンドウ（IGimmickSettings を付けたコンポーネントだけを表示する）
 ├── IGimmickSettingsWindowGUI.cs  設定ウィンドウでのレイアウトとスクロールを、エディタが受け持つときの目印
 └── Animation/AnimatorFactory.cs  アニメーターをメモリ上で組み立てる（namespace VGC.Gimmicks.Animation）
@@ -138,6 +140,59 @@ EditorGUILayout.EndScrollView();
 - 各ギミックのボタン（導入・削除・設定／Prefab 選択・更新）は、**言語によらず同じ幅で横に並ぶ。**
   文字が入りきらないときは文字を小さくし（11 → 8）、それでも入らなければカーソルを乗せると全文が出る。
 - 位置と見た目を自分で決めたい更新ボタンは `UpdateNoticeGUI.DrawOpenButton(Rect, GUIContent, urls, GUIStyle)` で描ける。
+
+### ギミックごとのインストール前チェック（0.7.0 から）
+
+「このアバターには入れられない」「入れられるが注意が要る」を、ギミックの側から導入 UI に伝えられる。
+入れた後でないと気づけない条件（必要な骨が無い、など）を、導入する画面で知らせるため。
+
+ギミックの Editor アセンブリに、`IGimmickInstallCheck` を実装したクラスを置く。**登録は要らない。**
+導入 UI が型から探して呼ぶ（`TypeCache`）。
+
+```csharp
+using UnityEngine;
+using VGC.Gimmicks;
+
+public class EyesMovingInstallCheck : IGimmickInstallCheck
+{
+    // どのギミックのチェックか。一覧の行ごとに呼ばれるので軽くする
+    public bool Applies(GimmickSetting setting) => setting.name == "EyesMovingSystem";
+
+    // root は入れる先（アバターならアバターのルート）
+    public GimmickInstallCheckResult Check(GimmickSetting setting, GameObject root)
+    {
+        var animator = root.GetComponent<Animator>();
+        if (animator == null || !animator.isHuman || animator.GetBoneTransform(HumanBodyBones.LeftEye) == null)
+            return GimmickInstallCheckResult.Error(setting.Table.Get("NoEyeBones"));
+
+        return GimmickInstallCheckResult.Ok;
+    }
+}
+```
+
+| 結果 | 導入 UI での扱い |
+|---|---|
+| `GimmickInstallCheckResult.Ok` | 何も出さない |
+| `.Info(文言)` / `.Warning(文言)` | ギミックの行（ボタン列の上）に出す。導入はできる |
+| `.Error(文言)` | 同じ場所に出し、**導入ボタンを押せなくする**。行の背景を赤くする |
+
+- **チェックを置いていないギミックは、今までと同じ見た目と動きのまま。**
+- 文言は、訳したものをチェックの側が返す（ギミックの `LocalizationTable` は `setting.Table`）。
+- **入れた後にも呼ばれて、結果が出る。** 後からアバターを変えた場合にも気づける。
+- 1 つのギミックに複数のチェックが当てはまるときは、全部出す。1 つでもエラーなら導入できない。
+- 引数なしのコンストラクタが要る。インスタンスは 1 つだけ作って使い回すので、状態は持たない。
+- 結果は最長 0.5 秒使い回す（ヒエラルキーの変更・Undo・アセットの変更があれば、次の描画で調べ直す）。
+  それでも描くたびに呼ばれうるので、`Check` で重い処理はしない。
+- `Check` が例外を投げても導入の操作は続けられる（Console に 1 回だけ出し、そのチェックは無かったものとして扱う）。
+- このパッケージは VRChat の SDK なしでもコンパイルできる決まりなので、アバター固有の型を使うチェックは
+  ギミックの側（か `gimmicks-avatar`）に置く。
+- 自分のコードから結果を使うときは `GimmickInstallChecks.Check(setting, root)`（問題なしのものは含まない）と
+  `GimmickInstallChecks.HasError(results)`。
+- 使う側の Editor の asmdef に `VGC.Gimmicks.Editor` の参照を足す。依存は `>=0.7.0 <1.0.0` と書く。
+
+「Android, iOS では使用できません」（`GimmickSetting` の Cross Platform Ready）は、この仕組みには移していない。
+チェックボックス 1 つで済む設定を、ギミックごとにクラスを書く形にすると手間が増えるうえ、
+クロスプラットフォーム用のプレハブへの切り替えとつながっているため。
 
 ### 設定ウィンドウ（0.5.0 から）
 

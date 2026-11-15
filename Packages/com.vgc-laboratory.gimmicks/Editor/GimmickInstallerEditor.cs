@@ -157,10 +157,16 @@ namespace VGC.Gimmicks
                 bool hasUpdate = VersionChecker.HasUpdate(setting.VersionSource, setting.VersionKey, setting.Version, out string sheetVersion);
                 string[] urls = VersionChecker.GetUrls(setting.VersionSource, setting.VersionKey);
 
+                // ギミックごとのチェック(IGimmickInstallCheck)。置いていないギミックでは空
+                var checks = GimmickInstallChecks.Check(setting, avatarRoot);
+                bool blocked = GimmickInstallChecks.HasError(checks);
+
                 // ===== 色決定 =====
                 Color bgColor = Color.clear;
 
-                if (!validDeps)
+                if (blocked)
+                    bgColor = new Color(1f, 0.3f, 0.3f, 0.1f);
+                else if (!validDeps)
                     bgColor = new Color(1f, 1f, 0f, 0.1f);
                 else if (installed)
                     bgColor = new Color(0.3f, 0.6f, 1f, 0.1f);
@@ -279,10 +285,21 @@ namespace VGC.Gimmicks
                         }
                     }
 
+                    // ===== ギミックごとのチェックの結果 =====
+                    // 入れた後にも出す(後からアバターを変えた場合にも気づけるように)
+                    foreach (var check in checks)
+                    {
+                        var type = check.Level == GimmickInstallCheckLevel.Error ? MessageType.Error
+                            : check.Level == GimmickInstallCheckLevel.Warning ? MessageType.Warning
+                            : MessageType.Info;
+                        EditorGUILayout.HelpBox(check.Message ?? "", type);
+                    }
+
                     // ===== ボタン列 =====
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        using (new EditorGUI.DisabledScope(!validDeps || installed))
+                        // チェックがエラーのときは入れられない(注意だけなら入れられる)
+                        using (new EditorGUI.DisabledScope(!validDeps || installed || blocked))
                         {
                             if (RowButton(localize.Get("Install")))
                             {
