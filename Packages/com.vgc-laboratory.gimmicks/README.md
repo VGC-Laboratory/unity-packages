@@ -83,7 +83,7 @@ VGC のギミックを作るときは、`GimmickSetting` の Version Source に�
 
 ```
 Runtime/   asmdef VGC.Gimmicks.Runtime   namespace VGC.Gimmicks
-├── GimmickSetting.cs     ScriptableObject。配布元・版・取得元・プレハブ・依存・クロスプラットフォーム対応
+├── GimmickSetting.cs     ScriptableObject。配布元・版・取得元・プレハブ・依存（と無いときの文言）・クロスプラットフォーム対応
 ├── VersionSource.cs      ScriptableObject。版の一覧を読むシート
 ├── GimmickInstaller.cs   導入用のマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
 ├── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
@@ -193,6 +193,29 @@ public class EyesMovingInstallCheck : IGimmickInstallCheck
 「Android, iOS では使用できません」（`GimmickSetting` の Cross Platform Ready）は、この仕組みには移していない。
 チェックボックス 1 つで済む設定を、ギミックごとにクラスを書く形にすると手間が増えるうえ、
 クロスプラットフォーム用のプレハブへの切り替えとつながっているため。
+
+### 依存が無いときの文言（0.8.0 から）
+
+`GimmickSetting` の Dependencies に入れたプレハブがアバターに無いと、導入 UI は導入ボタンを押せなくし、
+「必要なアセットが未インストール」の下に、無い依存を 1 行ずつ出す。行の文言は次の順に決まる。
+
+1. **Dependency Messages**（`_dependencyMessages`、`string[]`）に指定があれば、それを出す。
+   Dependencies と**同じ並び**で、同じ番号の依存に対応する。
+   同じフォルダの `LocalizationTable` のキーを入れると、その訳を出す。表に無い文字は、そのまま出す。
+2. 指定が無ければ、その依存を Prefab か Cross Platform Prefab に持つ `GimmickSetting` を探し、
+   名前（`GimmickName` の訳）を入れて「〇〇 がインストールされていません」と出す（翻訳キー `DependencyNotInstalled`）。
+3. それも無ければ、今までどおりプレハブの名前を出す。
+
+```
+Dependencies         [0] VRCSleepingSystem_MA
+Dependency Messages  [0] SleepingSystemMissing    ← 翻訳表に「VRC睡眠システムがインストールされていません」など
+```
+
+- **省略できる。** 空・null・Dependencies より短いときは、足りない分を 2. と 3. で補う。
+- 0.7.0 までで開いても壊れない（足したフィールドは無視され、プレハブの名前が出る）。
+  指定した文言を出したいギミックは、依存を `>=0.8.0 <1.0.0` と書く。
+- コードからは `GimmickSetting.DependencyMessages`（指定そのまま）と
+  `GimmickSetting.GetDependencyMessage(index)`（エディタのみ。訳した文言か null）。
 
 ### 設定ウィンドウ（0.5.0 から）
 

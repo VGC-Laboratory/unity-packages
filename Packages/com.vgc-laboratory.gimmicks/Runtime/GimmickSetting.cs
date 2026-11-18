@@ -29,6 +29,11 @@ namespace VGC.Gimmicks
 
         [SerializeField] private GameObject _maPrefab;
         [SerializeField] private GameObject[] _dependencies;
+
+        [Tooltip("依存が無いときに導入 UI に出す文言。Dependencies と同じ並び（同じ番号の依存に対応）。" +
+                 "同じフォルダの LocalizationTable のキーを入れると訳を出し、表に無い文字はそのまま出す。" +
+                 "空や足りない分は、依存を持つギミックの名前から「〇〇 がインストールされていません」と出す")]
+        [SerializeField] private string[] _dependencyMessages;
         [SerializeField] private GameObject _crossPlatformPrefab;
         [SerializeField] private bool _crossPlatformReady;
         [SerializeField] private bool _useSetting;
@@ -40,6 +45,12 @@ namespace VGC.Gimmicks
         public VersionSource VersionSource => _versionSource;
         public GameObject Prefab => _maPrefab;
         public GameObject[] Dependencies => _dependencies;
+
+        /// <summary>
+        /// 依存が無いときの文言(<see cref="Dependencies"/> と同じ並び)。翻訳表のキーか、そのまま出す文字。
+        /// 省略できる(null・空・要素が足りないものは指定なし)。
+        /// </summary>
+        public string[] DependencyMessages => _dependencyMessages;
         public GameObject CrossPlatformPrefab => _crossPlatformPrefab;
         public bool CrossPlatformReady => _crossPlatformReady;
         public bool UseSetting => _useSetting;
@@ -53,6 +64,23 @@ namespace VGC.Gimmicks
         public string VersionKey => string.IsNullOrEmpty(_versionKey) ? SheetName : _versionKey;
 
         public string Name => Table != null ? Table.Get("GimmickName") : name;
+
+        /// <summary>
+        /// <see cref="Dependencies"/> の index 番目が無いときに出す文言。指定が無ければ null。
+        /// 翻訳表にキーがあれば訳を、無ければ指定した文字をそのまま返す。
+        /// </summary>
+        public string GetDependencyMessage(int index)
+        {
+            if (_dependencyMessages == null || index < 0 || index >= _dependencyMessages.Length)
+                return null;
+
+            var key = _dependencyMessages[index];
+            if (string.IsNullOrWhiteSpace(key))
+                return null;
+
+            var table = Table;
+            return table != null && table.ContainsKey(key) ? table.Get(key) : key;
+        }
 #else
         public string Name => name;
 #endif

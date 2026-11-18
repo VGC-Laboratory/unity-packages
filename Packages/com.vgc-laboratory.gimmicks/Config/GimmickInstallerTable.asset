@@ -291,6 +291,18 @@ MonoBehaviour:
       text: "\u4F9D\u8D56\u9879/Dependencies"
     - language: ChineseTraditional
       text: "\u76F8\u4F9D\u9805/Dependencies"
+  - id: DependencyNotInstalled
+    values:
+    - language: Japanese
+      text: "{0} \u304C\u30A4\u30F3\u30B9\u30C8\u30FC\u30EB\u3055\u308C\u3066\u3044\u307E\u305B\u3093"
+    - language: English
+      text: "{0} is not installed"
+    - language: Korean
+      text: "{0}\uC774(\uAC00) \uC124\uCE58\uB418\uC5B4 \uC788\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4"
+    - language: ChineseSimplified
+      text: "\u672A\u5B89\u88C5 {0}"
+    - language: ChineseTraditional
+      text: "\u672A\u5B89\u88DD {0}"
   - id: Missing
     values:
     - language: Japanese

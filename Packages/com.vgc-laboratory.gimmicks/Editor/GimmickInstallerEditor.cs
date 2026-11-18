@@ -361,8 +361,9 @@ namespace VGC.Gimmicks
 
                         if (deps != null)
                         {
-                            foreach (var dep in deps)
+                            for (var i = 0; i < deps.Length; i++)
                             {
+                                var dep = deps[i];
                                 EditorGUILayout.BeginHorizontal();
 
                                 if (dep == null)
@@ -375,7 +376,7 @@ namespace VGC.Gimmicks
 
                                     if (!found)
                                     {
-                                        EditorGUILayout.LabelField($"• {dep.name}", EditorStyles.miniLabel);
+                                        EditorGUILayout.LabelField($"• {DependencyMessage(setting, i, dep, settings, localize)}", EditorStyles.miniLabel);
 
                                         // PrefabのAssetsPingはオフ
                                         /*if (GUILayout.Button("Select", GUILayout.Width(60)))
@@ -414,6 +415,25 @@ namespace VGC.Gimmicks
                     Undo.DestroyObjectImmediate(t.gameObject);
                 }
             }
+        }
+
+        /// <summary>
+        /// 依存が無いときに出す文言。ギミックの指定(<see cref="GimmickSetting.DependencyMessages"/>)、
+        /// 依存をプレハブに持つギミックの名前、プレハブの名前の順に使う。
+        /// </summary>
+        private static string DependencyMessage(GimmickSetting setting, int index, GameObject dep,
+                                                GimmickSetting[] settings, LocalizationTable localize)
+        {
+            var message = setting.GetDependencyMessage(index);
+            if (!string.IsNullOrEmpty(message))
+                return message;
+
+            const string key = "DependencyNotInstalled";
+            var owner = settings.FirstOrDefault(s => s != null && (s.Prefab == dep || s.CrossPlatformPrefab == dep));
+            if (owner != null && localize.ContainsKey(key))
+                return localize.Get(key, owner.Name);
+
+            return dep.name;
         }
 
         private static bool HasValidDependencies(GimmickMarker[] markers, GameObject[] deps)
