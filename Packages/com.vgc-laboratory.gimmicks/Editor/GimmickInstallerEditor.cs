@@ -126,18 +126,21 @@ namespace VGC.Gimmicks
                 .Where(s => s != null && s.Prefab != null)
                 .GroupBy(s => string.IsNullOrWhiteSpace(s.Publisher) ? "" : s.Publisher.Trim())
                 .OrderBy(g => g.Key == "" ? 0 : 1)
-                .ThenBy(g => g.Key, System.StringComparer.OrdinalIgnoreCase);
+                .ThenBy(g => g.Key, System.StringComparer.OrdinalIgnoreCase)
+                .ToList();
+            var total = groups.Sum(g => g.Count());
 
             foreach (var group in groups)
             {
                 // 配布元が 1 つしか無いときは見出しを出さない(今までの見た目のまま)
-                if (group.Key != "" && settings.Count(s => s != null && s.Prefab != null) > group.Count())
+                if (group.Key != "" && total > group.Count())
                 {
                     EditorGUILayout.Space(4);
                     EditorGUILayout.LabelField(group.Key, EditorStyles.boldLabel);
                 }
 
-            foreach (var setting in group)
+            // 配布元の中は、並び順(Order)・渡された順・依存先のすぐ後ろ、で並べる
+            foreach (var setting in GimmickListOrder.Sort(group))
             {
                 if (setting == null) continue;
 

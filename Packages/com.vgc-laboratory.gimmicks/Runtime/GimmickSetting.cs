@@ -19,6 +19,10 @@ namespace VGC.Gimmicks
         [Tooltip("配布元の名前。導入 UI はこの名前ごとにギミックをまとめて並べる。自分の名前やサークル名を入れる。空でも動くが、他の配布元のギミックと並んだときに見分けが付かない")]
         [SerializeField] private string _publisher;
 
+        [Tooltip("導入 UI での並び順。小さいほど上。同じ値なら今の順（アセットのパスの順）。" +
+                 "依存しているギミックは、この値によらず依存先のすぐ後ろに並ぶ")]
+        [SerializeField] private int _order;
+
         [SerializeField] private string _version = "1.0.0";
 
         [Tooltip("最新版の一覧を読む取得元。空なら最新バージョンの確認をしない。VGC のギミックなら com.vgc-laboratory.gimmicks の Config/VGCAvatarGimmicks か VGCWorldGimmicks を入れる")]
@@ -40,6 +44,11 @@ namespace VGC.Gimmicks
 
         /// <summary>配布元の名前。導入 UI のまとめ方に使う。空でもよい。</summary>
         public string Publisher => _publisher;
+
+        /// <summary>
+        /// 導入 UI での並び順。小さいほど上。既定は 0(欄が無い古いアセットも 0 になり、今までの並びのまま)。
+        /// </summary>
+        public int Order => _order;
 
         public string Version => _version;
         public VersionSource VersionSource => _versionSource;

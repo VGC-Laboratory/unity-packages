@@ -83,7 +83,7 @@ VGC のギミックを作るときは、`GimmickSetting` の Version Source に�
 
 ```
 Runtime/   asmdef VGC.Gimmicks.Runtime   namespace VGC.Gimmicks
-├── GimmickSetting.cs     ScriptableObject。配布元・版・取得元・プレハブ・依存（と無いときの文言）・クロスプラットフォーム対応
+├── GimmickSetting.cs     ScriptableObject。配布元・並び順・版・取得元・プレハブ・依存（と無いときの文言）・クロスプラットフォーム対応
 ├── VersionSource.cs      ScriptableObject。版の一覧を読むシート
 ├── GimmickInstaller.cs   導入用のマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
 ├── GimmickMarker.cs      導入済みのマーカー MonoBehaviour（VRChat の SDK があれば IEditorOnly）
@@ -92,6 +92,7 @@ Editor/    asmdef VGC.Gimmicks.Editor
 ├── VersionChecker.cs          取得元ごとに版の一覧を読み、手元の版と比べる
 ├── UpdateNoticeGUI.cs         更新のお知らせ / 更新を確認ボタン / このパッケージの翻訳表（GimmickTexts）
 ├── GimmickInstallerEditor.cs  導入 UI（最新バージョンの確認の表示を含む）
+├── GimmickListOrder.cs        導入 UI でのギミックの並び順を決める
 ├── IGimmickInstallCheck.cs    ギミックごとのインストール前チェック（結果の型も）
 ├── GimmickInstallChecks.cs    ↑ を型から探して呼ぶ
 ├── GimmickSettingsWindow.cs   設定ウィンドウ（IGimmickSettings を付けたコンポーネントだけを表示する）
@@ -119,6 +120,21 @@ Config/
 
 自分のツールを配る場合は、自分の名前やサークル名を入れておくとよい。
 利用者のプロジェクトに他の作者のギミックが入ったときに、どれが自分のものか分かる。
+
+### 並び順
+
+配布元の中は、次の順に並ぶ（`GimmickListOrder.Sort`）。
+
+1. `GimmickSetting` の **Order**（並び順）の小さい順。既定は 0。
+2. 同じ値なら、今までと同じ順（アセットのパスの順）。
+3. 最後に、**依存しているギミックを依存先のすぐ後ろへ動かす。**
+   依存先は、Dependencies のプレハブを Prefab か Cross Platform Prefab に持つギミック。
+   拡張（例: 画像共有のジェスチャー操作）が、パスの順のせいで本体より上に出ないようにするため。
+   - 依存先が一覧に無い（入っていない・別の配布元）ときは動かさない。
+   - 依存先が複数あるときは、2. までの並びで一番後ろにあるものの後ろへ。連鎖していれば順につながる。
+   - 依存が循環しているギミックは動かさない。
+
+Order の欄が無い古いアセットは 0 として読まれるので、今までと同じ並びになる。
 
 ### 自分のウィンドウに導入 UI を出す
 
